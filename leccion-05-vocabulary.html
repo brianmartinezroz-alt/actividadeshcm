@@ -27,6 +27,34 @@ h3{color:var(--vino2);margin:24px 0 4px;font-size:20px}
 .card{background:var(--claro);border-radius:10px;padding:12px 14px;border-top:4px solid var(--oro)}
 .card b{display:block;color:var(--vino);font-size:20px;line-height:1.2}
 .card span{font-size:14.5px;color:#6f6f6f}
+.bl{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
+.bl .caja{border-radius:12px;overflow:hidden;background:var(--claro);border:2px solid #e0d7db}
+.bl .caja h4{margin:0;padding:11px 14px;color:#fff;font-size:21px;letter-spacing:.3px}
+.bl .b h4{background:var(--vino)}
+.bl .l h4{background:var(--verde)}
+.bl .cuerpo{padding:12px 14px}
+.bl .es{font-size:17px;font-weight:700;color:var(--vino2);margin:0 0 14px}
+.esc{display:flex;align-items:center;gap:10px;margin:26px 0 14px;flex-wrap:nowrap}
+.per{background:#fff;border:2px solid #cfc6ca;border-radius:50%;width:56px;height:56px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:var(--vino);flex:none}
+.flecha{flex:1;min-width:70px;height:5px;position:relative;border-radius:3px}
+.bl .b .flecha{background:var(--vino);color:var(--vino)}
+.bl .l .flecha{background:var(--verde);color:var(--verde)}
+.flecha::after{content:"";position:absolute;top:-7px;width:0;height:0;border-top:9px solid transparent;border-bottom:9px solid transparent}
+.flecha.der::after{right:-6px;border-left:14px solid currentColor}
+.flecha.izq::after{left:-6px;border-right:14px solid currentColor}
+.cosa{position:absolute;top:-26px;left:50%;transform:translateX(-50%);background:var(--oro);color:#fff;font-size:12.5px;font-weight:700;border-radius:20px;padding:3px 11px;white-space:nowrap}
+.patron{background:#fff;border-radius:8px;padding:9px 12px;font-size:16px;margin:10px 0 8px;border:1px dashed #c7c0c3}
+.patron b{color:var(--vino)}
+.bl ul{margin:6px 0 0;padding-left:20px}
+.bl li{margin-bottom:8px;font-size:16px}
+.bl li i{display:block;font-style:normal;color:#777;font-size:13.5px}
+.error-box{background:#fdeceb;border-left:6px solid #c0392b;border-radius:8px;padding:12px 15px;margin:12px 0}
+.error-box p{margin:0 0 7px;font-size:16px}
+.error-box .mal2{color:#c0392b;font-weight:700}
+.error-box .bien2{color:var(--verde);font-weight:700}
+.truco{background:var(--oro);color:#fff;border-radius:10px;padding:12px 15px;margin:14px 0;font-size:16.5px}
+.truco b.t{font-size:18px;display:block;margin-bottom:3px}
+@media(max-width:720px){.bl{grid-template-columns:1fr}}
 .banco{background:#fff;border:2px dashed #c7c0c3;border-radius:10px;padding:9px;margin:8px 0 14px;min-height:56px}
 .banco.vacio::after{content:"— ya usaste todas las palabras —";color:#b5adb0;font-size:14px}
 .ficha{display:inline-block;background:var(--vino);color:#fff;border:0;border-radius:8px;padding:8px 13px;margin:4px;font:inherit;font-weight:700;cursor:grab;user-select:none}
@@ -80,6 +108,59 @@ footer{background:var(--claro);padding:18px 16px 36px;text-align:center;color:#7
 <h2>Presentation <span class="etapa">VOCABULARY</span></h2>
 <p class="sub">Repite las palabras en voz alta &middot; p&aacute;ginas 51, 53, 55 y 56 del libro</p>
 <h3>In the garage</h3><div class="pg">Student Text · page 51</div><div class="cards"><div class="card"><b>fix</b><span>arreglar, componer</span></div><div class="card"><b>garage</b><span>taller mecánico</span></div><div class="card"><b>repair</b><span>reparar</span></div><div class="card"><b>fast</b><span>rápido</span></div><div class="card"><b>tools</b><span>herramientas</span></div><div class="card"><b>park</b><span>estacionar</span></div><div class="card"><b>lend</b><span>prestar (yo te doy)</span></div><div class="card"><b>borrow</b><span>pedir prestado (yo tomo)</span></div></div><h3>My roommate</h3><div class="pg">Student Text · page 53</div><div class="cards"><div class="card"><b>roommate</b><span>compañero de cuarto</span></div><div class="card"><b>friendship</b><span>amistad</span></div><div class="card"><b>advice</b><span>consejo</span></div><div class="card"><b>party</b><span>fiesta</span></div><div class="card"><b>excited</b><span>emocionado</span></div><div class="card"><b>stories</b><span>historias</span></div><div class="card"><b>going out</b><span>salir (a comer, al cine)</span></div><div class="card"><b>cares about</b><span>se preocupa por</span></div></div><h3>A little white lie</h3><div class="pg">Student Text · page 55</div><div class="cards"><div class="card"><b>lie</b><span>mentira / mentir</span></div><div class="card"><b>a little white lie</b><span>una mentira piadosa</span></div><div class="card"><b>hurt his feelings</b><span>herir sus sentimientos</span></div><div class="card"><b>tell you the truth</b><span>decirte la verdad</span></div><div class="card"><b>don't care for</b><span>no me gusta</span></div><div class="card"><b>anyone</b><span>alguien / nadie</span></div><div class="card"><b>someone</b><span>alguien</span></div></div><h3>Conversations</h3><div class="pg">Student Text · page 56</div><div class="cards"><div class="card"><b>enjoy</b><span>disfrutar</span></div><div class="card"><b>in my opinion</b><span>en mi opinión</span></div><div class="card"><b>hurt</b><span>lastimar, doler</span></div><div class="card"><b>secret</b><span>secreto</span></div><div class="card"><b>guess</b><span>suponer, creer</span></div><div class="card"><b>tell me the time</b><span>decirme la hora</span></div></div>
+
+<h3>Borrow vs. Lend</h3>
+<div class="pg">Student Text &middot; page 51 y Exercise B, page 52</div>
+<p>Las dos se traducen con &laquo;prestar&raquo;, pero van en direcci&oacute;n contraria. Mira qui&eacute;n <b>da</b> y qui&eacute;n <b>recibe</b>:</p>
+
+<div class="bl">
+  <div class="caja b">
+    <h4>BORROW &mdash; yo recibo</h4>
+    <div class="cuerpo">
+      <p class="es">pedir prestado &middot; tomar algo de alguien</p>
+      <div class="esc">
+        <div class="per">YO</div>
+        <div class="flecha izq"><span class="cosa">the pen</span></div>
+        <div class="per">&Eacute;L</div>
+      </div>
+      <div class="patron"><b>borrow</b> + cosa + <b>from</b> + persona</div>
+      <ul>
+        <li>I borrowed a pen <b>from</b> Ramos.<i>Le ped&iacute; prestada una pluma a Ramos.</i></li>
+        <li>Can I borrow your tools?<i>&iquest;Me prestas tus herramientas?</i></li>
+        <li>Sue wants to borrow the CDs.<i>Sue quiere que le presten los CD.</i></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="caja l">
+    <h4>LEND &mdash; yo doy</h4>
+    <div class="cuerpo">
+      <p class="es">prestar &middot; dar algo a alguien</p>
+      <div class="esc">
+        <div class="per">YO</div>
+        <div class="flecha der"><span class="cosa">the pen</span></div>
+        <div class="per">&Eacute;L</div>
+      </div>
+      <div class="patron"><b>lend</b> + persona + cosa &nbsp;/&nbsp; <b>lend</b> + cosa + <b>to</b> + persona</div>
+      <ul>
+        <li>I lent Ramos a pen.<i>Le prest&eacute; una pluma a Ramos.</i></li>
+        <li>I lent a pen <b>to</b> Ramos.<i>Misma idea, otro orden.</i></li>
+        <li>Will Sam lend them to her?<i>&iquest;Sam se los va a prestar?</i></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="truco"><b class="t">El truco para no confundirse</b>
+Pregunta siempre: &iquest;la cosa sale de mis manos o llega a mis manos?
+Si <b>llega</b> a mis manos &rarr; <i>borrow</i>. Si <b>sale</b> de mis manos &rarr; <i>lend</i>.</div>
+
+<div class="error-box">
+  <p><span class="mal2">&#10007; Can you borrow me a pen?</span> &nbsp;&rarr;&nbsp; <span class="bien2">&#10003; Can you lend me a pen?</span></p>
+  <p><span class="mal2">&#10007; I lent a pen from him.</span> &nbsp;&rarr;&nbsp; <span class="bien2">&#10003; I borrowed a pen from him.</span></p>
+  <p><span class="mal2">&#10007; He borrowed me his car.</span> &nbsp;&rarr;&nbsp; <span class="bien2">&#10003; He lent me his car.</span></p>
+  <p style="margin:0;color:#7a3a35;font-size:14.5px">Pasado irregular: borrow &rarr; borrow<b>ed</b> &middot; lend &rarr; <b>lent</b>.</p>
+</div>
 
 <h3>Drag the word · arrastra la palabra</h3>
 <div class="pg">Vocabulary · pages 51 y 53</div>

@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, user-scalable=yes">
 <title>Lesson IV - Indirect commands and requests</title>
 <style>
 :root{--vino:#631132;--vino2:#7d1b42;--oro:#AE8420;--gris:#3b3b3b;--claro:#F5F1F3;--verde:#4E7B31}
@@ -97,6 +97,11 @@ footer{background:var(--claro);padding:20px 16px 40px;text-align:center;color:#7
 .pasos li{counter-increment:p;position:relative;padding:8px 0 8px 44px;border-bottom:1px solid #eee}
 .pasos li::before{content:counter(p);position:absolute;left:0;top:7px;width:30px;height:30px;line-height:30px;text-align:center;background:var(--oro);color:#fff;border-radius:50%;font-weight:700}
 @media print{nav,.barra,button{display:none!important}body{font-size:12pt}header.top{color:#000;background:#fff}}
+
+html{-webkit-text-size-adjust:100%;touch-action:manipulation}
+body{touch-action:pan-x pan-y pinch-zoom}
+.ficha,.chip,.per,.opc,.play,button{touch-action:manipulation}
+img{max-width:100%;height:auto}
 </style>
 </head>
 <body>

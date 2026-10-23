@@ -448,8 +448,9 @@ document.getElementById('clave').onclick=function(){
         var u = d && (d.thumbnail && d.thumbnail.source);
         if(!u) return;
         var img = document.createElement('img');
-        img.className = 'foto'; img.loading = 'lazy'; img.alt = titulo;
-        img.src = u.replace(/\/\d+px-/, '/480px-');
+        img.className = 'foto'; img.loading = 'lazy'; img.alt = '';
+        img.onerror = function(){ img.remove(); };
+        img.src = u;                       // tal cual la entrega Wikipedia
         t.insertBefore(img, t.firstChild);
       })
       .catch(function(){});

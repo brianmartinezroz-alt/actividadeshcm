@@ -86,8 +86,15 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
   }
   addEventListener('resize', medir); medir();
 
+  var cargando=false, espera=[];
+  marco.addEventListener('load', function(){
+    cargando=false;
+    var q=espera; espera=[];
+    q.forEach(function(op){ setTimeout(function(){ aplicar(op); }, 60); });
+  });
   function abrir(archivo){
     if(!archivo) return;
+    cargando = true; espera = [];
     marco.src = archivo;
     blec.textContent = archivo.replace('.html','').replace(/-/g,' ');
     aviso.style.display='none';
@@ -96,6 +103,8 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
 
   function aplicar(op){
     aviso.style.display='none';
+    // si la lección aún está cargando, la orden espera su turno
+    if(cargando && op.t!=='lec' && op.t!=='tapa' && op.t!=='borrar'){ espera.push(op); return; }
     var d = doc();
     switch(op.t){
       case 'lec':   abrir(op.v); break;

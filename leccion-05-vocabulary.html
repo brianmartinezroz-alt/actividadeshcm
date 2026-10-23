@@ -27,6 +27,18 @@ h3{color:var(--vino2);margin:24px 0 4px;font-size:20px}
 .card{background:var(--claro);border-radius:10px;padding:12px 14px;border-top:4px solid var(--oro)}
 .card b{display:block;color:var(--vino);font-size:20px;line-height:1.2}
 .card span{font-size:14.5px;color:#6f6f6f}
+.card{position:relative}
+.card .foto{display:block;width:100%;height:96px;object-fit:cover;border-radius:7px;margin:0 0 8px;background:#e7dde1}
+.yg{background:var(--claro);border-radius:12px;padding:14px;margin:10px 0 6px}
+.yg .q{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:11px}
+.yg .q button{background:#fff;border:1px solid #cfc6ca;border-radius:20px;padding:8px 15px;font:inherit;
+  font-weight:700;color:var(--vino);cursor:pointer}
+.yg .q button.sel,.yg .q button:hover{background:var(--vino);color:#fff;border-color:var(--vino)}
+.yg .caja{background:#000;border-radius:10px;overflow:hidden;min-height:240px;display:flex;
+  align-items:center;justify-content:center;color:#888;font-size:15px;text-align:center;padding:16px}
+.yg .caja iframe{width:100%;border:0;display:block}
+.yg .pie{font-size:13.5px;color:#777;margin:9px 0 0}
+.yg .pie a{color:var(--vino);font-weight:700}
 .bl{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
 .bl .caja{border-radius:12px;overflow:hidden;background:var(--claro);border:2px solid #e0d7db}
 .bl .caja h4{margin:0;padding:11px 14px;color:#fff;font-size:21px;letter-spacing:.3px}
@@ -134,7 +146,7 @@ img{max-width:100%;height:auto}
 <section id="p1">
 <h2>Presentation <span class="etapa">VOCABULARY</span></h2>
 <p class="sub">Repite las palabras en voz alta &middot; p&aacute;ginas 51 a 57 del libro</p>
-<h3>In the garage</h3><div class="pg">Student Text · page 51</div><div class="cards"><div class="card"><b>fix</b><span>arreglar, componer</span></div><div class="card"><b>garage</b><span>taller mecánico</span></div><div class="card"><b>repair</b><span>reparar</span></div><div class="card"><b>fast</b><span>rápido</span></div><div class="card"><b>tools</b><span>herramientas</span></div><div class="card"><b>park</b><span>estacionar</span></div><div class="card"><b>lend</b><span>prestar (yo te doy)</span></div><div class="card"><b>borrow</b><span>pedir prestado (yo tomo)</span></div></div><h3>My roommate</h3><div class="pg">Student Text · page 53</div><div class="cards"><div class="card"><b>roommate</b><span>compañero de cuarto</span></div><div class="card"><b>friendship</b><span>amistad</span></div><div class="card"><b>advice</b><span>consejo</span></div><div class="card"><b>party</b><span>fiesta</span></div><div class="card"><b>excited</b><span>emocionado</span></div><div class="card"><b>stories</b><span>historias</span></div><div class="card"><b>going out</b><span>salir (a comer, al cine)</span></div><div class="card"><b>cares about</b><span>se preocupa por</span></div></div><h3>A little white lie</h3><div class="pg">Student Text · page 55</div><div class="cards"><div class="card"><b>lie</b><span>mentira / mentir</span></div><div class="card"><b>a little white lie</b><span>una mentira piadosa</span></div><div class="card"><b>hurt his feelings</b><span>herir sus sentimientos</span></div><div class="card"><b>tell you the truth</b><span>decirte la verdad</span></div><div class="card"><b>don't care for</b><span>no me gusta</span></div><div class="card"><b>anyone</b><span>alguien / nadie</span></div><div class="card"><b>someone</b><span>alguien</span></div></div><h3>Conversations</h3><div class="pg">Student Text · page 56</div><div class="cards"><div class="card"><b>enjoy</b><span>disfrutar</span></div><div class="card"><b>in my opinion</b><span>en mi opinión</span></div><div class="card"><b>hurt</b><span>lastimar, doler</span></div><div class="card"><b>secret</b><span>secreto</span></div><div class="card"><b>guess</b><span>suponer, creer</span></div><div class="card"><b>tell me the time</b><span>decirme la hora</span></div></div>
+<h3>In the garage</h3><div class="pg">Student Text · page 51</div><div class="cards"><div class="card"><b>fix</b><span>arreglar, componer</span></div><div class="card" data-foto="Automobile repair shop"><b>garage</b><span>taller mecánico</span></div><div class="card" data-foto="Mechanic"><b>repair</b><span>reparar</span></div><div class="card" data-foto="Speed"><b>fast</b><span>rápido</span></div><div class="card" data-foto="Tool"><b>tools</b><span>herramientas</span></div><div class="card" data-foto="Parking"><b>park</b><span>estacionar</span></div><div class="card"><b>lend</b><span>prestar (yo te doy)</span></div><div class="card"><b>borrow</b><span>pedir prestado (yo tomo)</span></div></div><h3>My roommate</h3><div class="pg">Student Text · page 53</div><div class="cards"><div class="card" data-foto="Roommate"><b>roommate</b><span>compañero de cuarto</span></div><div class="card" data-foto="Friendship"><b>friendship</b><span>amistad</span></div><div class="card"><b>advice</b><span>consejo</span></div><div class="card" data-foto="Party"><b>party</b><span>fiesta</span></div><div class="card" data-foto="Happiness"><b>excited</b><span>emocionado</span></div><div class="card" data-foto="Storytelling"><b>stories</b><span>historias</span></div><div class="card"><b>going out</b><span>salir (a comer, al cine)</span></div><div class="card"><b>cares about</b><span>se preocupa por</span></div></div><h3>A little white lie</h3><div class="pg">Student Text · page 55</div><div class="cards"><div class="card" data-foto="Lie"><b>lie</b><span>mentira / mentir</span></div><div class="card"><b>a little white lie</b><span>una mentira piadosa</span></div><div class="card"><b>hurt his feelings</b><span>herir sus sentimientos</span></div><div class="card"><b>tell you the truth</b><span>decirte la verdad</span></div><div class="card"><b>don't care for</b><span>no me gusta</span></div><div class="card"><b>anyone</b><span>alguien / nadie</span></div><div class="card"><b>someone</b><span>alguien</span></div></div><h3>Conversations</h3><div class="pg">Student Text · page 56</div><div class="cards"><div class="card" data-foto="Laughter"><b>enjoy</b><span>disfrutar</span></div><div class="card"><b>in my opinion</b><span>en mi opinión</span></div><div class="card" data-foto="Pain"><b>hurt</b><span>lastimar, doler</span></div><div class="card" data-foto="Secrecy"><b>secret</b><span>secreto</span></div><div class="card"><b>guess</b><span>suponer, creer</span></div><div class="card" data-foto="Clock"><b>tell me the time</b><span>decirme la hora</span></div></div>
 
 <h3>Borrow vs. Lend</h3>
 <div class="pg">Student Text &middot; page 51 y Exercise B, page 52</div>
@@ -236,6 +248,18 @@ Si quieres poner la cosa primero, entonces s&iacute; necesitas <i>to</i>: <i>Tel
   <p><span class="mal2">&#10007; He told to me a lie.</span> &nbsp;&rarr;&nbsp; <span class="bien2">&#10003; He told me a lie.</span></p>
   <p><span class="mal2">&#10007; Tell she the secret.</span> &nbsp;&rarr;&nbsp; <span class="bien2">&#10003; Tell her the secret.</span></p>
   <p style="margin:0;color:#7a3a35;font-size:14.5px">Pasado irregular: tell &rarr; <b>told</b>. &nbsp; <i>I told them a story.</i></p>
+</div>
+
+<h3>Videos &middot; escucha a hablantes reales</h3>
+<div class="pg">YouGlish &middot; gente real diciendo estas estructuras</div>
+<p>Toca una estructura y el video salta directo al momento en que alguien la dice. Con las flechas del
+reproductor pasas al siguiente hablante, que trae otro acento.</p>
+<div class="yg">
+  <div class="q" id="ygq"></div>
+  <div class="caja" id="ygcaja">Toca una estructura de arriba para ver los videos.</div>
+  <p class="pie">Si el reproductor no abre en el sal&oacute;n,
+     <a id="ygfuera" href="https://youglish.com/pronounce/tell%20me%20the%20truth/english/us" target="_blank" rel="noopener">
+     &aacute;brelo directo en YouGlish</a>.</p>
 </div>
 
 <h3>Drag the word · arrastra la palabra</h3>
@@ -412,6 +436,73 @@ document.getElementById('clave').onclick=function(){
   document.querySelectorAll('.pista').forEach(function(p){p.classList.toggle('ver',v)});
   document.querySelectorAll('.ejemplo').forEach(function(p){p.style.display=v?'block':'none'});
   this.textContent=v?'Ocultar clave (docente)':'Mostrar clave (docente)';};
+
+/* ── fotos del vocabulario (Wikipedia, con respaldo silencioso) ──────────── */
+(function(){
+  var tarjetas = document.querySelectorAll('.card[data-foto]');
+  tarjetas.forEach(function(t){
+    var titulo = t.dataset.foto;
+    fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(titulo))
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        var u = d && (d.thumbnail && d.thumbnail.source);
+        if(!u) return;
+        var img = document.createElement('img');
+        img.className = 'foto'; img.loading = 'lazy'; img.alt = titulo;
+        img.src = u.replace(/\/\d+px-/, '/480px-');
+        t.insertBefore(img, t.firstChild);
+      })
+      .catch(function(){});
+  });
+})();
+
+/* ── videos de YouGlish ──────────────────────────────────────────────────── */
+(function(){
+  var BUSQUEDAS = ['tell me the truth','tell him a lie','ask him to','told me a story',
+                   'can I borrow','lend me','give me the','show her the'];
+  var cq = document.getElementById('ygq'), caja = document.getElementById('ygcaja'),
+      fuera = document.getElementById('ygfuera'), widget = null, pendiente = null;
+
+  BUSQUEDAS.forEach(function(q, i){
+    var b = document.createElement('button');
+    b.textContent = '“' + q + '”';
+    b.onclick = function(){
+      cq.querySelectorAll('button').forEach(function(x){ x.classList.remove('sel'); });
+      b.classList.add('sel');
+      fuera.href = 'https://youglish.com/pronounce/' + encodeURIComponent(q) + '/english/us';
+      buscar(q);
+    };
+    cq.appendChild(b);
+  });
+
+  function buscar(q){
+    if (widget) { try { widget.fetch(q, 'english'); return; } catch(e){} }
+    pendiente = q;
+    if (!window.__ygCargando) {
+      window.__ygCargando = true;
+      caja.textContent = 'Abriendo el reproductor…';
+      caja.innerHTML = '<div id="yg-caja-int" style="width:100%"></div>';
+      var s = document.createElement('script');
+      s.src = 'https://youglish.com/public/emb/widget.js';
+      s.charset = 'utf-8';
+      s.onerror = function(){
+        caja.innerHTML = 'No se pudo abrir el reproductor aquí. Usa el enlace de abajo para verlo en YouGlish.';
+      };
+      document.head.appendChild(s);
+    }
+  }
+
+  window.onYouglishAPIReady = function(){
+    try {
+      widget = new YG.Widget('yg-caja-int', {
+        width: 0, components: 9, autoStart: 1, zones: 'us,uk,aus'
+      });
+      if (pendiente) widget.fetch(pendiente, 'english');
+    } catch(e){
+      caja.innerHTML = 'No se pudo abrir el reproductor aquí. Usa el enlace de abajo para verlo en YouGlish.';
+    }
+  };
+})();
 </script>
 </body>
 </html>

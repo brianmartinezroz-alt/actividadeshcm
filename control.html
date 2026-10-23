@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Control de clase · HCM</title>
+<link rel="manifest" href="control.webmanifest">
+<meta name="theme-color" content="#631132">
+<style>
+:root{--vino:#631132;--vino2:#7d1b42;--oro:#AE8420;--verde:#4E7B31;--claro:#F5F1F3}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overscroll-behavior:none;background:#fff;color:#333;
+  font-family:Calibri,"Segoe UI",system-ui,sans-serif;font-size:17px}
+body{display:flex;flex-direction:column}
+header{background:var(--vino);color:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px}
+header b{font-size:16px;letter-spacing:.5px}
+header .sala{margin-left:auto;background:var(--oro);border-radius:20px;padding:4px 14px;font-weight:700;letter-spacing:2px}
+header .cfg{background:rgba(255,255,255,.18);border:0;color:#fff;border-radius:8px;padding:6px 10px;font:inherit}
+#luz{width:11px;height:11px;border-radius:50%;background:#c0392b;flex:none}
+#luz.ok{background:#49c06a}
+nav{display:flex;border-bottom:2px solid var(--oro)}
+nav button{flex:1;background:#fff;border:0;padding:13px 4px;font:inherit;font-weight:700;color:var(--vino);border-bottom:4px solid transparent}
+nav button.act{border-bottom-color:var(--vino);background:var(--claro)}
+main{flex:1;overflow:auto;padding:12px 12px 26px}
+.pag{display:none}.pag.act{display:block}
+h3{color:var(--vino2);margin:16px 0 7px;font-size:16px;text-transform:uppercase;letter-spacing:.5px}
+h3:first-child{margin-top:2px}
+.rej{display:grid;gap:9px}
+.r2{grid-template-columns:1fr 1fr}.r3{grid-template-columns:1fr 1fr 1fr}.r5{grid-template-columns:repeat(5,1fr)}
+button.b{background:var(--claro);border:1px solid #e0d7db;border-radius:12px;padding:16px 8px;font:inherit;
+  font-weight:700;color:var(--vino);min-height:58px}
+button.b:active{background:var(--vino);color:#fff}
+button.b.on{background:var(--vino);color:#fff;border-color:var(--vino)}
+button.b.g{background:var(--verde);color:#fff;border-color:var(--verde)}
+button.b small{display:block;font-weight:400;font-size:12.5px;opacity:.75;margin-top:2px}
+#pad{position:relative;width:100%;aspect-ratio:16/9;background:#fff;border:3px dashed #c7c0c3;border-radius:14px;
+  touch-action:none;overflow:hidden;margin:4px 0 10px}
+#pad canvas{position:absolute;inset:0;width:100%;height:100%}
+#pad .ayuda{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#b9b0b4;
+  font-size:15px;pointer-events:none;text-align:center;padding:0 20px}
+.colores{display:flex;gap:9px;margin-bottom:9px}
+.colores span{flex:1;height:44px;border-radius:11px;border:3px solid transparent}
+.colores span.sel{border-color:#333}
+.gros{display:flex;gap:9px;margin-bottom:9px}
+.gros button{flex:1;background:var(--claro);border:1px solid #e0d7db;border-radius:11px;padding:10px;font:inherit}
+.gros button.sel{background:var(--vino);color:#fff}
+.nota{font-size:13.5px;color:#888;margin:8px 0 0}
+dialog{border:0;border-radius:16px;padding:0;width:92%;max-width:420px}
+dialog .in{padding:18px}
+dialog h2{margin:0 0 8px;color:var(--vino);font-size:20px}
+dialog label{display:block;font-size:14px;color:#777;margin:12px 0 4px}
+dialog input{width:100%;font:inherit;padding:11px;border:1px solid #c7c0c3;border-radius:9px}
+dialog .fin{display:flex;gap:9px;margin-top:16px}
+dialog .fin button{flex:1;border:0;border-radius:10px;padding:13px;font:inherit;font-weight:700}
+dialog .fin .ok{background:var(--vino);color:#fff}
+dialog .fin .no{background:var(--claro);color:#555}
+dialog p{font-size:14px;color:#666;line-height:1.45}
+</style>
+</head>
+<body>
+<header>
+  <div id="luz"></div><b>CONTROL DE CLASE</b>
+  <span class="sala" id="hsala">301</span>
+  <button class="cfg" id="bcfg">⚙</button>
+</header>
+<nav>
+  <button class="act" data-p="nav">Navegar</button>
+  <button data-p="piz">Pizarrón</button>
+  <button data-p="lec">Lección</button>
+</nav>
+<main>
+
+<section class="pag act" id="p-nav">
+  <h3>Secciones</h3>
+  <div class="rej r5" id="secs"></div>
+  <h3>Mover la pantalla</h3>
+  <div class="rej r2">
+    <button class="b" data-op='{"t":"desp","v":-1}'>▲ Subir</button>
+    <button class="b" data-op='{"t":"desp","v":1}'>▼ Bajar</button>
+    <button class="b" data-op='{"t":"tope","v":"inicio"}'>⤒ Inicio</button>
+    <button class="b" data-op='{"t":"tope","v":"fin"}'>⤓ Final</button>
+  </div>
+  <h3>Tamaño de letra</h3>
+  <div class="rej r3">
+    <button class="b" data-zoom="-">A −</button>
+    <button class="b" data-zoom="0">100%</button>
+    <button class="b" data-zoom="+">A +</button>
+  </div>
+  <h3>En clase</h3>
+  <div class="rej r2">
+    <button class="b" data-op='{"t":"clic","v":"#clave"}'>Clave docente</button>
+    <button class="b" id="btapa">Pantalla en negro</button>
+  </div>
+  <h3>Revisar ejercicios</h3>
+  <div class="rej r3" id="revs"></div>
+</section>
+
+<section class="pag" id="p-piz">
+  <div id="pad"><canvas></canvas><div class="ayuda">Dibuja aquí con el dedo.<br>Lo que trazas aparece en la pantalla.</div></div>
+  <div class="colores" id="cols"></div>
+  <div class="gros" id="gr">
+    <button data-g="3">fino</button><button data-g="6" class="sel">medio</button><button data-g="12">grueso</button>
+  </div>
+  <div class="rej r3">
+    <button class="b" id="blaser">🔴 Láser</button>
+    <button class="b" data-op='{"t":"deshacer"}'>↶ Deshacer</button>
+    <button class="b g" data-op='{"t":"borrar"}'>Borrar todo</button>
+  </div>
+  <p class="nota">El láser mueve un punto rojo sin dejar marca. Con el lápiz, cada trazo se queda hasta que borres.
+  Nada de esto detiene los audios ni los videos de la pantalla.</p>
+</section>
+
+<section class="pag" id="p-lec">
+  <h3>Abrir en la pantalla</h3>
+  <div class="rej" id="lecs"></div>
+  <p class="nota">Si la pantalla apenas se abrió, primero manda una lección desde aquí.</p>
+</section>
+
+</main>
+
+<dialog id="dcfg"><div class="in">
+  <h2>Ajustes</h2>
+  <label>Código de sala (el mismo que muestra la pantalla)</label>
+  <input id="icsala" maxlength="8" autocapitalize="characters">
+  <label>Dirección del servidor del HCM (para controlar otra computadora)</label>
+  <input id="icep" placeholder="https://script.google.com/macros/s/…/exec">
+  <p>Si el celular está conectado al proyector, déjala vacía: funciona sin internet.
+     Para controlar la computadora del salón, pega aquí la dirección de tu Apps Script del HCM.</p>
+  <div class="fin"><button class="no" id="bno">Cerrar</button><button class="ok" id="bok">Guardar</button></div>
+</div></dialog>
+
+<script src="canal.js"></script>
+<script>
+(function(){
+  var par = new URLSearchParams(location.search);
+  var sala = (par.get('sala') || localStorage.getItem('hcm_aula_sala') || '301').toUpperCase();
+  localStorage.setItem('hcm_aula_sala', sala);
+  document.getElementById('hsala').textContent = sala;
+
+  var canal = new Canal(sala, 'control', function(){});
+  function manda(op){ canal.enviar(op); vibra(); }
+  function vibra(){ try{ navigator.vibrate && navigator.vibrate(12); }catch(e){} }
+
+  /* secciones y ejercicios por lección */
+  var LECCIONES = [
+    {f:'leccion-05-vocabulary.html', n:'Lección 5 · Vocabulary',
+     secs:[['1','Presentation','#p1'],['2','Practice','#p2'],['3','Production','#p3']],
+     revs:[['Palabras','#rev-d1'],['Ej. A','#rev-ea'],['Ej. B','#rev-eb'],['Caja','#rev-ec'],['Tell','#rev-ed']]},
+    {f:'leccion-04-indirect-commands.html', n:'Lección 4 · Indirect commands',
+     secs:[['1','Presentation','#p1'],['2','Listening','#p2'],['3','Preguntas','#p3'],['4','Ejercicios','#p4'],['5','Production','#p5']],
+     revs:[['Preguntas','#revisarQ'],['A','#revA'],['B','#revB'],['C','#revC'],['D','#revD'],['E','#revE'],['F','#revF']]},
+    {f:'index.html', n:'Índice de actividades', secs:[], revs:[]}
+  ];
+  var actual = LECCIONES[0];
+
+  function pinta(){
+    var s = document.getElementById('secs'); s.innerHTML='';
+    s.className = 'rej r' + Math.min(5, Math.max(2, actual.secs.length));
+    actual.secs.forEach(function(x){
+      var b=document.createElement('button'); b.className='b';
+      b.innerHTML = x[0] + '<small>'+x[1]+'</small>';
+      b.onclick=function(){ manda({t:'ir', v:x[2]}); };
+      s.appendChild(b);
+    });
+    var r = document.getElementById('revs'); r.innerHTML='';
+    actual.revs.forEach(function(x){
+      var b=document.createElement('button'); b.className='b'; b.textContent=x[0];
+      b.onclick=function(){ manda({t:'clic', v:x[1]}); };
+      r.appendChild(b);
+    });
+  }
+  var cl = document.getElementById('lecs');
+  LECCIONES.forEach(function(L){
+    var b=document.createElement('button'); b.className='b'; b.textContent=L.n;
+    b.onclick=function(){ actual=L; pinta(); manda({t:'lec', v:L.f}); };
+    cl.appendChild(b);
+  });
+  pinta();
+
+  /* botones con op fija */
+  document.querySelectorAll('[data-op]').forEach(function(b){
+    b.onclick=function(){ manda(JSON.parse(b.dataset.op)); };
+  });
+
+  /* zoom */
+  var z = 1;
+  document.querySelectorAll('[data-zoom]').forEach(function(b){
+    b.onclick=function(){
+      var d=b.dataset.zoom;
+      z = d==='0' ? 1 : Math.min(2.2, Math.max(0.6, z + (d==='+' ? 0.15 : -0.15)));
+      manda({t:'zoom', v:Math.round(z*100)/100});
+    };
+  });
+
+  /* pantalla en negro */
+  var tapado=false, bt=document.getElementById('btapa');
+  bt.onclick=function(){ tapado=!tapado; bt.classList.toggle('on',tapado); manda({t:'tapa', v:tapado}); };
+
+  /* pestañas */
+  document.querySelectorAll('nav button').forEach(function(b){
+    b.onclick=function(){
+      document.querySelectorAll('nav button').forEach(function(x){x.classList.remove('act')});
+      document.querySelectorAll('.pag').forEach(function(x){x.classList.remove('act')});
+      b.classList.add('act'); document.getElementById('p-'+b.dataset.p).classList.add('act');
+    };
+  });
+
+  /* ── pizarrón ─────────────────────────────────────────────────────────── */
+  var COLORES=['#e11d2e','#631132','#1b6ac9','#2e9e4f','#AE8420','#111111'];
+  var color=COLORES[0], grosor=6, laser=false;
+  var cc=document.getElementById('cols');
+  COLORES.forEach(function(c,i){
+    var s=document.createElement('span'); s.style.background=c; if(i===0) s.className='sel';
+    s.onclick=function(){ color=c; manda({t:'pluma',c:color,g:grosor});
+      cc.querySelectorAll('span').forEach(function(x){x.classList.remove('sel')}); s.classList.add('sel'); };
+    cc.appendChild(s);
+  });
+  document.querySelectorAll('#gr button').forEach(function(b){
+    b.onclick=function(){ grosor=+b.dataset.g; manda({t:'pluma',c:color,g:grosor});
+      document.querySelectorAll('#gr button').forEach(function(x){x.classList.remove('sel')}); b.classList.add('sel'); };
+  });
+  var bl=document.getElementById('blaser');
+  bl.onclick=function(){ laser=!laser; bl.classList.toggle('on',laser); if(!laser) manda({t:'laser', v:null}); };
+
+  var pad=document.getElementById('pad'), lz=pad.querySelector('canvas'), lx=lz.getContext('2d'), ayuda=pad.querySelector('.ayuda');
+  function medirPad(){ var r=devicePixelRatio||1, b=pad.getBoundingClientRect();
+    lz.width=b.width*r; lz.height=b.height*r; lx.setTransform(r,0,0,r,0,0); lx.lineCap='round'; lx.lineJoin='round'; }
+  addEventListener('resize', medirPad); setTimeout(medirPad, 50);
+
+  var dibujando=false, buffer=[], ultimo=0, prev=null;
+  function pos(e){ var b=pad.getBoundingClientRect();
+    return [Math.min(1,Math.max(0,(e.clientX-b.left)/b.width)), Math.min(1,Math.max(0,(e.clientY-b.top)/b.height))]; }
+  function soltar(){
+    if(buffer.length){ manda({t:'sigue', v:buffer}); buffer=[]; }
+    dibujando=false; prev=null;
+  }
+  pad.addEventListener('pointerdown', function(e){
+    pad.setPointerCapture(e.pointerId); ayuda.style.display='none';
+    var p=pos(e);
+    if(laser){ manda({t:'laser', v:p}); dibujando=true; return; }
+    dibujando=true; buffer=[]; prev=p;
+    manda({t:'trazo', v:[p], c:color, g:grosor});
+    lx.strokeStyle=color; lx.lineWidth=grosor; lx.beginPath();
+    lx.moveTo(p[0]*pad.clientWidth, p[1]*pad.clientHeight);
+  });
+  pad.addEventListener('pointermove', function(e){
+    if(!dibujando) return;
+    var p=pos(e);
+    if(laser){ if(Date.now()-ultimo>90){ ultimo=Date.now(); canal.enviar({t:'laser', v:p}); } return; }
+    lx.lineTo(p[0]*pad.clientWidth, p[1]*pad.clientHeight); lx.stroke();
+    buffer.push(p);
+    if(Date.now()-ultimo>140 && buffer.length){ ultimo=Date.now(); canal.enviar({t:'sigue', v:buffer}); buffer=[]; }
+  });
+  pad.addEventListener('pointerup', soltar);
+  pad.addEventListener('pointercancel', soltar);
+  document.querySelector('[data-op=\'{"t":"borrar"}\']').addEventListener('click', function(){
+    lx.clearRect(0,0,lz.width,lz.height); ayuda.style.display='flex';
+  });
+
+  /* ── ajustes ──────────────────────────────────────────────────────────── */
+  var d=document.getElementById('dcfg');
+  document.getElementById('bcfg').onclick=function(){
+    document.getElementById('icsala').value=sala;
+    document.getElementById('icep').value=Canal.endpoint();
+    d.showModal();
+  };
+  document.getElementById('bno').onclick=function(){ d.close(); };
+  document.getElementById('bok').onclick=function(){
+    var ns=(document.getElementById('icsala').value||'301').toUpperCase().trim();
+    Canal.guardarEndpoint(document.getElementById('icep').value);
+    localStorage.setItem('hcm_aula_sala', ns);
+    location.search='?sala='+encodeURIComponent(ns);
+  };
+
+  setInterval(function(){
+    var ok = canal.estado.remoto==='conectado' || canal.estado.remoto==='apagado';
+    document.getElementById('luz').classList.toggle('ok', ok);
+  }, 1200);
+
+  manda({t:'hola'});
+})();
+</script>
+</body>
+</html>

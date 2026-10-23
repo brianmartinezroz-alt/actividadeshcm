@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, user-scalable=yes">
+<title>Clase en vivo · Pantalla</title>
+<style>
+:root{--vino:#631132;--oro:#AE8420;--claro:#F5F1F3}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calibri,"Segoe UI",system-ui,sans-serif}
+#marco{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
+#pizarra{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5}
+#laser{position:absolute;width:26px;height:26px;border-radius:50%;background:rgba(255,40,40,.85);
+  box-shadow:0 0 18px 6px rgba(255,40,40,.55);pointer-events:none;z-index:6;display:none;transform:translate(-50%,-50%)}
+#tapa{position:absolute;inset:0;background:#0b0b0b;z-index:7;display:none}
+#tapa span{position:absolute;bottom:40px;left:0;right:0;text-align:center;color:#555;font-size:18px}
+#barra{position:absolute;top:0;left:0;right:0;z-index:9;background:var(--vino);color:#fff;
+  display:flex;align-items:center;gap:14px;padding:9px 16px;font-size:15px;transition:transform .3s;transform:translateY(-110%)}
+#barra.ver{transform:none}
+#barra b{font-size:19px;letter-spacing:1px}
+#barra .sala{background:var(--oro);border-radius:20px;padding:3px 14px;font-weight:700;font-size:17px;letter-spacing:2px}
+#barra .der{margin-left:auto;opacity:.85;font-size:13.5px}
+#zona{position:absolute;top:0;left:0;right:0;height:26px;z-index:10}
+#aviso{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:8;background:#fff;
+  border-radius:16px;padding:28px 34px;max-width:620px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+#aviso h1{color:var(--vino);margin:0 0 6px;font-size:28px}
+#aviso p{color:#555;font-size:17px;margin:8px 0}
+#aviso .sala{display:inline-block;background:var(--vino);color:#fff;border-radius:12px;
+  padding:10px 26px;font-size:40px;font-weight:700;letter-spacing:8px;margin:10px 0}
+#aviso small{color:#999;display:block;margin-top:10px;font-size:13.5px}
+</style>
+</head>
+<body>
+<iframe id="marco" title="Lección"></iframe>
+<canvas id="pizarra"></canvas>
+<div id="laser"></div>
+<div id="tapa"><span>Pantalla en pausa</span></div>
+<div id="zona"></div>
+<div id="barra">
+  <b>CLASE EN VIVO</b><span class="sala" id="bsala">301</span>
+  <span id="blec">—</span>
+  <span class="der" id="bestado">esperando el control…</span>
+</div>
+<div id="aviso">
+  <h1>Clase en vivo</h1>
+  <p>Abre el control en tu celular y escribe este código de sala:</p>
+  <div class="sala" id="asala">301</div>
+  <p>Cuando mandes la primera orden desde el celular, esta pantalla la obedece.</p>
+  <small>Mueve el puntero arriba para ver la barra. Si el control está en este mismo equipo, funciona sin internet.</small>
+</div>
+
+<script src="canal.js"></script>
+<script>
+(function(){
+  var par = new URLSearchParams(location.search);
+  var sala = (par.get('sala') || '301').toUpperCase();
+  var lec  = par.get('lec') || '';
+  document.getElementById('asala').textContent = sala;
+  document.getElementById('bsala').textContent = sala;
+
+  var marco = document.getElementById('marco'),
+      cv = document.getElementById('pizarra'), cx = cv.getContext('2d'),
+      laser = document.getElementById('laser'), tapa = document.getElementById('tapa'),
+      aviso = document.getElementById('aviso'), barra = document.getElementById('barra'),
+      blec = document.getElementById('blec'), bestado = document.getElementById('bestado');
+
+  var trazos = [];        // se guardan normalizados para redibujar al cambiar de tamaño
+  var pluma = {c:'#e11d2e', g:5};
+
+  function medir(){
+    var r = window.devicePixelRatio || 1;
+    cv.width = Math.round(innerWidth*r); cv.height = Math.round(innerHeight*r);
+    cx.setTransform(r,0,0,r,0,0); redibujar();
+  }
+  function redibujar(){
+    cx.clearRect(0,0,cv.width,cv.height);
+    cx.lineCap='round'; cx.lineJoin='round';
+    trazos.forEach(function(t){
+      cx.strokeStyle=t.c; cx.lineWidth=t.g; cx.beginPath();
+      t.p.forEach(function(q,i){
+        var x=q[0]*innerWidth, y=q[1]*innerHeight;
+        if(i===0) cx.moveTo(x,y); else cx.lineTo(x,y);
+      });
+      cx.stroke();
+    });
+  }
+  addEventListener('resize', medir); medir();
+
+  function abrir(archivo){
+    if(!archivo) return;
+    marco.src = archivo;
+    blec.textContent = archivo.replace('.html','').replace(/-/g,' ');
+    aviso.style.display='none';
+  }
+  function doc(){ try { return marco.contentDocument; } catch(e){ return null; } }
+
+  function aplicar(op){
+    aviso.style.display='none';
+    var d = doc();
+    switch(op.t){
+      case 'lec':   abrir(op.v); break;
+      case 'ir':    if(d){ var e=d.querySelector(op.v); if(e) e.scrollIntoView({behavior:'smooth',block:'start'}); } break;
+      case 'desp':  if(d&&d.defaultView) d.defaultView.scrollBy({top: op.v*innerHeight*0.8, behavior:'smooth'}); break;
+      case 'tope':  if(d&&d.defaultView) d.defaultView.scrollTo({top: op.v==='fin'? d.body.scrollHeight : 0, behavior:'smooth'}); break;
+      case 'clic':  if(d){ var b=d.querySelector(op.v); if(b) b.click(); } break;
+      case 'zoom':  if(d&&d.body) d.body.style.zoom = op.v; break;
+      case 'pluma': pluma = {c:op.c||pluma.c, g:op.g||pluma.g}; break;
+      case 'trazo': trazos.push({c:op.c||pluma.c, g:op.g||pluma.g, p:op.v}); redibujar(); break;
+      case 'sigue': var u=trazos[trazos.length-1]; if(u){ u.p=u.p.concat(op.v); redibujar(); } break;
+      case 'borrar':trazos=[]; redibujar(); break;
+      case 'deshacer': trazos.pop(); redibujar(); break;
+      case 'laser': if(op.v){ laser.style.display='block'; laser.style.left=(op.v[0]*innerWidth)+'px'; laser.style.top=(op.v[1]*innerHeight)+'px'; }
+                    else laser.style.display='none'; break;
+      case 'tapa':  tapa.style.display = op.v ? 'block':'none'; break;
+      case 'hola':  break;
+    }
+  }
+
+  var canal = new Canal(sala, 'pantalla', aplicar);
+  setInterval(function(){
+    var e = canal.estado;
+    bestado.textContent = (e.remoto==='conectado' ? 'control remoto conectado' :
+                           e.remoto==='error' ? 'sin conexión con el servidor del HCM' :
+                           e.remoto==='esperando' ? 'buscando el control…' : 'control en este equipo')
+                          + ' · ' + trazos.length + ' trazos';
+  }, 1500);
+
+  var t; document.getElementById('zona').addEventListener('mouseenter', function(){
+    barra.classList.add('ver'); clearTimeout(t); t=setTimeout(function(){barra.classList.remove('ver');},4000);
+  });
+  addEventListener('keydown', function(e){ if(e.key==='b'||e.key==='B') barra.classList.toggle('ver'); });
+
+  if(lec) abrir(lec);
+})();
+</script>
+</body>
+</html>

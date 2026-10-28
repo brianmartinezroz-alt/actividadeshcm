@@ -65,6 +65,22 @@ button.b small{display:block;font-weight:400;font-size:12.5px;opacity:.75;margin
 .secpills button.on{background:var(--oro);color:#2a2226}
 .pie{color:#8d8086;font-size:12.5px;margin:9px 2px 0;text-align:center}
 
+.modos{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.modos button{background:var(--claro);border:1px solid #e0d7db;border-radius:11px;padding:12px 6px;font:inherit;
+  font-weight:700;color:var(--vino);font-size:14.5px}
+.modos button.on{background:var(--vino);color:#fff;border-color:var(--vino)}
+.modos button small{display:block;font-weight:400;font-size:11.5px;opacity:.75}
+#tocar{width:100%;background:var(--verde);color:#fff;border:0;border-bottom:5px solid #33521f;border-radius:14px;
+  padding:19px;font:inherit;font-weight:700;font-size:19px;letter-spacing:1px;margin-bottom:10px;display:none}
+#tocar:active{transform:translateY(2px);filter:brightness(1.15)}
+#tocar.ver{display:block}
+.escribir{display:flex;gap:8px;margin:10px 0}
+.escribir input{flex:1;font:inherit;padding:12px;border:1px solid #c7c0c3;border-radius:10px}
+.escribir button{background:var(--vino);color:#fff;border:0;border-radius:10px;padding:0 16px;font:inherit;font-weight:700}
+.anchos{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:9px}
+.anchos button{background:#413539;border:0;border-bottom:4px solid #241d20;color:#f3ecee;font:inherit;
+  font-weight:700;border-radius:12px;padding:13px 6px;font-size:14.5px}
+.anchos button.on{background:var(--oro);color:#2a2226}
 #pad{position:relative;width:100%;aspect-ratio:16/9;background:#fff;border:3px dashed #c7c0c3;border-radius:14px;
   touch-action:none;overflow:hidden;margin:4px 0 10px}
 #pad canvas{position:absolute;inset:0;width:100%;height:100%}
@@ -160,23 +176,43 @@ dialog p{font-size:14px;color:#666;line-height:1.45}
       </div>
     </div>
 
+    <div class="anchos">
+      <button id="mlienzo">&#9634; Lienzo blanco</button>
+      <button id="mpuntero">&#128070; Puntero / escribir</button>
+    </div>
     <div class="secpills" id="mpills"></div>
     <p class="pie">La cruz mueve la pantalla y cambia de secci&oacute;n. Mantén &#9650;&#9660; presionado para avanzar seguido.</p>
   </div>
 </section>
 
 <section class="pag" id="p-piz">
+  <div class="modos" id="modos">
+    <button data-m="lapiz" class="on">&#9999; L&aacute;piz<small>escribe en la pantalla</small></button>
+    <button data-m="laser">&#128308; L&aacute;ser<small>se&ntilde;ala sin marcar</small></button>
+    <button data-m="puntero">&#128070; Puntero<small>mueve y toca la lecci&oacute;n</small></button>
+    <button data-m="giro">&#128241; Con el cel<small>mueve inclinando</small></button>
+  </div>
+  <button id="tocar">TOCAR AQU&Iacute;</button>
   <div id="pad"><canvas></canvas><div class="ayuda">Dibuja aqu&iacute; con el dedo.<br>Lo que trazas aparece en la pantalla.</div></div>
   <div class="colores" id="cols"></div>
   <div class="gros" id="gr">
     <button data-g="3">fino</button><button data-g="6" class="sel">medio</button><button data-g="12">grueso</button>
   </div>
   <div class="rej r3">
-    <button class="b" id="blaser">&#128308; L&aacute;ser</button>
+    <button class="b" id="blienzo">&#9634; Lienzo</button>
     <button class="b" data-op='{"t":"deshacer"}'>&#8630; Deshacer</button>
     <button class="b g" data-op='{"t":"borrar"}'>Borrar todo</button>
   </div>
-  <p class="nota">El l&aacute;ser mueve un punto rojo sin dejar marca. Con el l&aacute;piz, cada trazo se queda hasta que borres.
+  <div class="escribir">
+    <input id="itxt" placeholder="Escribe aqu&iacute; y s&uacute;belo al recuadro" autocapitalize="none">
+    <button id="btxt">Enviar</button>
+    <button id="bborra">&#9003;</button>
+  </div>
+  <p class="nota">Con <b>Puntero</b> mueves el dedo en el recuadro y tocas: as&iacute; arrastras las palabras,
+  abres los audios y marcas respuestas sin levantarte. Con <b>Con el cel</b> el puntero sigue c&oacute;mo inclinas
+  el tel&eacute;fono y tocas con el bot&oacute;n verde. El <b>Lienzo</b> pone una hoja en blanco encima para explicar
+  gram&aacute;tica, sin cerrar la lecci&oacute;n: el audio y el video siguen corriendo abajo.
+  El l&aacute;ser mueve un punto rojo sin dejar marca. Con el l&aacute;piz, cada trazo se queda hasta que borres.
   Nada de esto detiene los audios ni los videos de la pantalla.</p>
 </section>
 
@@ -394,7 +430,7 @@ dialog p{font-size:14px;color:#666;line-height:1.45}
 
   /* ── pizarrón ─────────────────────────────────────────────────────────── */
   var COLORES=['#e11d2e','#631132','#1b6ac9','#2e9e4f','#AE8420','#111111'];
-  var color=COLORES[0], grosor=6, laser=false;
+  var color=COLORES[0], grosor=6;
   var cc=document.getElementById('cols');
   COLORES.forEach(function(c,i){
     var s=document.createElement('span'); s.style.background=c; if(i===0) s.className='sel';
@@ -406,50 +442,120 @@ dialog p{font-size:14px;color:#666;line-height:1.45}
     b.onclick=function(){ grosor=+b.dataset.g; manda({t:'pluma',c:color,g:grosor});
       document.querySelectorAll('#gr button').forEach(function(x){x.classList.remove('sel')}); b.classList.add('sel'); };
   });
-  var bl=document.getElementById('blaser'), bl2=document.getElementById('mlaser');
-  function alLaser(irAlPad){
-    laser=!laser; bl.classList.toggle('on',laser); bl2.classList.toggle('on',laser);
-    if(!laser) manda({t:'laser', v:null});
-    else if(irAlPad) vePizarron();
-  }
-  bl.onclick=function(){ alLaser(false); };
-  bl2.onclick=function(){ alLaser(true); };
+  /* ── modos del recuadro: lapiz | laser | puntero | giro ───────────── */
+  var modo='lapiz';
+  var pad=document.getElementById('pad'), lz=pad.querySelector('canvas'), lx=lz.getContext('2d'),
+      ayuda=pad.querySelector('.ayuda'), bTocar=document.getElementById('tocar');
+  var bl2=document.getElementById('mlaser');
 
-  var pad=document.getElementById('pad'), lz=pad.querySelector('canvas'), lx=lz.getContext('2d'), ayuda=pad.querySelector('.ayuda');
+  function ponModo(m){
+    if(modo==='laser' && m!=='laser') manda({t:'laser', v:null});
+    if(modo==='giro' && m!=='giro') apagaGiro();
+    modo=m;
+    document.querySelectorAll('#modos button').forEach(function(b){ b.classList.toggle('on', b.dataset.m===m); });
+    bl2.classList.toggle('on', m==='laser');
+    bTocar.classList.toggle('ver', m==='puntero' || m==='giro');
+    ayuda.textContent = m==='lapiz' ? 'Dibuja aquí con el dedo. Lo que trazas aparece en la pantalla.' :
+                        m==='laser' ? 'Arrastra el dedo: el punto rojo te sigue en la pantalla.' :
+                        m==='puntero'? 'Mueve el dedo para llevar el puntero. Un toque corto = clic en la pantalla.' :
+                                       'Inclina el teléfono para mover el puntero y usa el botón verde para tocar.';
+    ayuda.style.display='flex';
+    if(m==='giro') prendeGiro();
+    vePizarron();
+  }
+  document.querySelectorAll('#modos button').forEach(function(b){ b.onclick=function(){ ponModo(b.dataset.m); }; });
+  bl2.onclick=function(){ ponModo(modo==='laser' ? 'lapiz' : 'laser'); };
+  document.getElementById('mpuntero').onclick=function(){ ponModo('puntero'); };
+
+  /* lienzo blanco */
+  var enLienzo=false, bli=document.getElementById('blienzo'), bli2=document.getElementById('mlienzo');
+  function alLienzo(){
+    enLienzo=!enLienzo;
+    bli.classList.toggle('on',enLienzo); bli2.classList.toggle('on',enLienzo);
+    manda({t:'lienzo', v:enLienzo});
+  }
+  bli.onclick=alLienzo; bli2.onclick=alLienzo;
+
+  /* escribir en el recuadro que esté seleccionado en la pantalla */
+  var itxt=document.getElementById('itxt');
+  document.getElementById('btxt').onclick=function(){
+    var t=itxt.value; if(!t) return; manda({t:'tecla', v:t}); itxt.value='';
+  };
+  document.getElementById('bborra').onclick=function(){ manda({t:'tecla', v:'\b'}); };
+  itxt.addEventListener('keydown', function(e){ if(e.key==='Enter') document.getElementById('btxt').click(); });
+
   function medirPad(){ var r=devicePixelRatio||1, b=pad.getBoundingClientRect();
     if(!b.width) return;
     lz.width=b.width*r; lz.height=b.height*r; lx.setTransform(r,0,0,r,0,0); lx.lineCap='round'; lx.lineJoin='round'; }
   addEventListener('resize', medirPad); setTimeout(medirPad, 50);
 
-  var dibujando=false, buffer=[], ultimo=0;
+  var dibujando=false, buffer=[], ultimo=0, donde=[0.5,0.5], t0=0, p0=null, movido=false;
   function pos(e){ var b=pad.getBoundingClientRect();
     return [Math.min(1,Math.max(0,(e.clientX-b.left)/b.width)), Math.min(1,Math.max(0,(e.clientY-b.top)/b.height))]; }
-  function soltar(){
+  function soltar(e){
+    if(modo==='puntero'){
+      if(!movido && Date.now()-t0 < 400) manda({t:'tap', v:donde});
+      dibujando=false; return;
+    }
     if(buffer.length){ manda({t:'sigue', v:buffer}); buffer=[]; }
     dibujando=false;
   }
   pad.addEventListener('pointerdown', function(e){
+    if(modo==='giro') return;
     pad.setPointerCapture(e.pointerId); ayuda.style.display='none';
-    var p=pos(e);
-    if(laser){ manda({t:'laser', v:p}); dibujando=true; return; }
-    dibujando=true; buffer=[];
+    var p=pos(e); dibujando=true; t0=Date.now(); p0=p; movido=false; donde=p;
+    if(modo==='laser'){ manda({t:'laser', v:p}); return; }
+    if(modo==='puntero'){ manda({t:'cur', v:p}); return; }
+    buffer=[];
     manda({t:'trazo', v:[p], c:color, g:grosor});
     lx.strokeStyle=color; lx.lineWidth=grosor; lx.beginPath();
     lx.moveTo(p[0]*pad.clientWidth, p[1]*pad.clientHeight);
   });
   pad.addEventListener('pointermove', function(e){
-    if(!dibujando) return;
+    if(!dibujando || modo==='giro') return;
     var p=pos(e);
-    if(laser){ if(Date.now()-ultimo>90){ ultimo=Date.now(); canal.enviar({t:'laser', v:p}); } return; }
+    if(p0 && (Math.abs(p[0]-p0[0])>0.02 || Math.abs(p[1]-p0[1])>0.02)) movido=true;
+    if(modo==='laser'){ if(Date.now()-ultimo>90){ ultimo=Date.now(); canal.enviar({t:'laser', v:p}); } return; }
+    if(modo==='puntero'){ donde=p; if(Date.now()-ultimo>70){ ultimo=Date.now(); canal.enviar({t:'cur', v:p}); } return; }
     lx.lineTo(p[0]*pad.clientWidth, p[1]*pad.clientHeight); lx.stroke();
     buffer.push(p);
     if(Date.now()-ultimo>140 && buffer.length){ ultimo=Date.now(); canal.enviar({t:'sigue', v:buffer}); buffer=[]; }
   });
   pad.addEventListener('pointerup', soltar);
   pad.addEventListener('pointercancel', soltar);
+  bTocar.onclick=function(){ manda({t:'tap', v:donde}); };
   document.querySelector('[data-op=\'{"t":"borrar"}\']').addEventListener('click', function(){
     lx.clearRect(0,0,lz.width,lz.height); ayuda.style.display='flex';
   });
+
+  /* ── mover el puntero inclinando el teléfono ──────────────────────── */
+  var giroOn=false, ref=null, ultG=0;
+  function alGiro(e){
+    if(e.beta===null || e.gamma===null) return;
+    if(!ref) ref={b:e.beta, g:e.gamma};
+    var x=0.5+(e.gamma-ref.g)/55, y=0.5+(e.beta-ref.b)/55;
+    donde=[Math.min(1,Math.max(0,x)), Math.min(1,Math.max(0,y))];
+    if(Date.now()-ultG>70){ ultG=Date.now(); canal.enviar({t:'cur', v:donde}); }
+  }
+  function prendeGiro(){
+    if(giroOn) return;
+    ref=null;
+    function engancha(){ addEventListener('deviceorientation', alGiro); giroOn=true; }
+    try{
+      if(typeof DeviceOrientationEvent!=='undefined' && DeviceOrientationEvent.requestPermission){
+        DeviceOrientationEvent.requestPermission().then(function(r){
+          if(r==='granted') engancha();
+          else { ayuda.textContent='El teléfono no dio permiso para el sensor. Usa el modo Puntero.'; }
+        }).catch(function(){ ayuda.textContent='El teléfono no dio permiso para el sensor. Usa el modo Puntero.'; });
+      } else engancha();
+    }catch(err){ ayuda.textContent='Este teléfono no trae sensor de movimiento. Usa el modo Puntero.'; }
+  }
+  function apagaGiro(){
+    if(!giroOn) return;
+    removeEventListener('deviceorientation', alGiro); giroOn=false; ref=null;
+    manda({t:'cur', v:null});
+  }
+  pad.addEventListener('dblclick', function(){ if(modo==='giro') ref=null; });
 
   /* ── ajustes ──────────────────────────────────────────────────────────── */
   var d=document.getElementById('dcfg');

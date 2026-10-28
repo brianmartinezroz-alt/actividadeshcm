@@ -21,13 +21,27 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
 #barra .sala{background:var(--oro);border-radius:20px;padding:3px 14px;font-weight:700;font-size:17px;letter-spacing:2px}
 #barra .der{margin-left:auto;opacity:.85;font-size:13.5px}
 #zona{position:absolute;top:0;left:0;right:0;height:26px;z-index:10}
-#aviso{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:8;background:#fff;
-  border-radius:16px;padding:28px 34px;max-width:620px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4)}
-#aviso h1{color:var(--vino);margin:0 0 6px;font-size:28px}
-#aviso p{color:#555;font-size:17px;margin:8px 0}
-#aviso .sala{display:inline-block;background:var(--vino);color:#fff;border-radius:12px;
-  padding:10px 26px;font-size:40px;font-weight:700;letter-spacing:8px;margin:10px 0}
-#aviso small{color:#999;display:block;margin-top:10px;font-size:13.5px}
+#aviso{position:absolute;inset:0;z-index:8;background:var(--vino);color:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3vh 4vw}
+#aviso h1{margin:0 0 2px;font-size:clamp(26px,3.6vw,44px);letter-spacing:.5px}
+#aviso .sub{margin:0 0 2.4vh;font-size:clamp(15px,1.5vw,21px);opacity:.88}
+#aviso .caja{display:flex;align-items:center;gap:clamp(20px,4vw,56px);background:rgba(255,255,255,.08);
+  border-radius:22px;padding:clamp(16px,2.4vh,30px) clamp(20px,3vw,44px)}
+#aviso .izq{text-align:center}
+#aviso .et{font-size:clamp(12px,1.1vw,16px);letter-spacing:3px;text-transform:uppercase;opacity:.8;margin-bottom:6px}
+#aviso .sala{display:block;background:#fff;color:var(--vino);border-radius:16px;
+  padding:clamp(6px,1.4vh,16px) clamp(16px,2.4vw,34px);font-size:clamp(54px,9vw,128px);
+  font-weight:700;letter-spacing:.09em;line-height:1.06}
+#aviso .izq .url{margin-top:9px;font-size:clamp(12px,1.2vw,17px);opacity:.85}
+#aviso .der{text-align:center}
+#aviso .der img{width:clamp(150px,19vw,290px);height:auto;background:#fff;border-radius:14px;padding:9px;display:block}
+#aviso .der .et{margin:0 0 8px}
+#aviso .grupos{display:flex;gap:9px;margin-top:2.6vh;flex-wrap:wrap;justify-content:center}
+#aviso .grupos button{background:rgba(255,255,255,.14);border:0;border-bottom:4px solid rgba(0,0,0,.22);
+  color:#fff;font:inherit;font-size:clamp(15px,1.4vw,20px);font-weight:700;border-radius:12px;
+  padding:10px clamp(14px,1.6vw,24px);letter-spacing:1px;cursor:pointer}
+#aviso .grupos button.on{background:var(--oro)}
+#aviso small{opacity:.72;display:block;margin-top:2.2vh;font-size:clamp(12px,1.1vw,15px);text-align:center;max-width:760px}
 </style>
 </head>
 <body>
@@ -43,10 +57,21 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
 </div>
 <div id="aviso">
   <h1>Clase en vivo</h1>
-  <p>Abre el control en tu celular y escribe este código de sala:</p>
-  <div class="sala" id="asala">301</div>
-  <p>Cuando mandes la primera orden desde el celular, esta pantalla la obedece.</p>
-  <small>Mueve el puntero arriba para ver la barra. Si el control está en este mismo equipo, funciona sin internet.</small>
+  <p class="sub">Toma tu celular y entra al control de esta pantalla.</p>
+  <div class="caja">
+    <div class="izq">
+      <div class="et">N&uacute;mero de sala</div>
+      <span class="sala" id="asala">301</span>
+      <div class="url">tinyurl.com/actividadeshcm &rarr; Control</div>
+    </div>
+    <div class="der">
+      <div class="et">o escanea</div>
+      <img id="aqr" alt="C&oacute;digo QR del control" src="qr-301.png">
+    </div>
+  </div>
+  <div class="grupos" id="agrupos"></div>
+  <small>Al escanear, el celular entra directo a esta sala. Si lo escribes a mano, teclea el n&uacute;mero
+  en el control. La primera orden que mandes desde el celular hace desaparecer esta portada.</small>
 </div>
 
 <script src="canal.js"></script>
@@ -57,6 +82,22 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
   var lec  = par.get('lec') || '';
   document.getElementById('asala').textContent = sala;
   document.getElementById('bsala').textContent = sala;
+
+  /* el QR de la sala lleva al control ya conectado a esta sala */
+  var GRUPOS = ['301','302','303','304','305','306'];
+  var aqr = document.getElementById('aqr');
+  function verQR(){
+    aqr.src = (GRUPOS.indexOf(sala)>=0 ? 'qr-'+sala+'.png' : 'qr-301.png');
+    aqr.style.visibility = (GRUPOS.indexOf(sala)>=0 ? 'visible' : 'hidden');
+  }
+  verQR();
+  var cg = document.getElementById('agrupos');
+  GRUPOS.forEach(function(g){
+    var b=document.createElement('button'); b.textContent=g;
+    if(g===sala) b.className='on';
+    b.onclick=function(){ location.search='?sala='+g + (lec ? '&lec='+encodeURIComponent(lec) : ''); };
+    cg.appendChild(b);
+  });
 
   var marco = document.getElementById('marco'),
       cv = document.getElementById('pizarra'), cx = cv.getContext('2d'),

@@ -19,7 +19,7 @@ header .cfg{background:rgba(255,255,255,.18);border:0;color:#fff;border-radius:8
 #luz{width:11px;height:11px;border-radius:50%;background:#c0392b;flex:none}
 #luz.ok{background:#49c06a}
 nav{display:flex;border-bottom:2px solid var(--oro)}
-nav button{flex:1;background:#fff;border:0;padding:13px 4px;font:inherit;font-weight:700;color:var(--vino);border-bottom:4px solid transparent}
+nav button{flex:1;background:#fff;border:0;padding:13px 4px;font:inherit;font-weight:700;color:var(--vino);border-bottom:4px solid transparent;font-size:15.5px}
 nav button.act{border-bottom-color:var(--vino);background:var(--claro)}
 main{flex:1;overflow:auto;padding:12px 12px 26px}
 .pag{display:none}.pag.act{display:block}
@@ -33,6 +33,38 @@ button.b:active{background:var(--vino);color:#fff}
 button.b.on{background:var(--vino);color:#fff;border-color:var(--vino)}
 button.b.g{background:var(--verde);color:#fff;border-color:var(--verde)}
 button.b small{display:block;font-weight:400;font-size:12.5px;opacity:.75;margin-top:2px}
+
+/* ── mando estilo videojuego ─────────────────────────────────────────── */
+#p-man{padding-bottom:6px}
+.tablero{background:#2a2226;border-radius:20px;padding:12px;box-shadow:inset 0 2px 0 rgba(255,255,255,.08)}
+.pant{background:#120f11;border-radius:12px;padding:9px 12px;color:#f0e7ea;display:flex;align-items:center;gap:10px;margin-bottom:11px}
+.pant .et{font-size:11.5px;letter-spacing:1.5px;color:#9c8d93;text-transform:uppercase}
+.pant .vl{font-size:17px;font-weight:700;color:var(--oro)}
+.pant .dr{margin-left:auto;font-size:12.5px;color:#8d8086;text-align:right;line-height:1.25}
+.gatillos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:11px}
+.gatillos button{background:#413539;border:0;border-bottom:4px solid #241d20;border-radius:12px 12px 16px 16px;
+  color:#f3ecee;font:inherit;font-weight:700;padding:13px 6px;font-size:15px}
+.gatillos button:active{background:var(--oro);border-bottom-color:#7d5e13;transform:translateY(2px)}
+.gatillos button small{display:block;font-weight:400;font-size:11.5px;opacity:.7;letter-spacing:.5px}
+.mando{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center}
+.cruz{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:5px;aspect-ratio:1/1}
+.cruz button{background:#4a3c41;border:0;border-bottom:4px solid #241d20;color:#fff;font:inherit;font-size:21px;font-weight:700;border-radius:11px}
+.cruz button:active{background:var(--vino2);border-bottom-color:#3d0c1f;transform:translateY(2px)}
+.cruz .vacio{visibility:hidden}
+.cruz .mid{background:#241d20;font-size:11px;letter-spacing:.5px;line-height:1.1;padding:2px}
+.acc{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:9px;aspect-ratio:1/1}
+.acc button{border:0;border-bottom:5px solid rgba(0,0,0,.35);border-radius:50%;color:#fff;font:inherit;
+  font-weight:700;font-size:13px;line-height:1.15;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px}
+.acc button span{font-size:19px;display:block;margin-bottom:1px}
+.acc button:active{transform:translateY(2px);filter:brightness(1.25)}
+.acc button.on{box-shadow:0 0 0 4px rgba(255,255,255,.55);filter:brightness(1.3)}
+.acc .a{background:var(--verde)}.acc .b{background:#c0392b}.acc .x{background:var(--oro)}.acc .y{background:#4a3c41}
+.secpills{display:flex;gap:7px;margin-top:11px;overflow:auto;padding-bottom:2px}
+.secpills button{flex:none;background:#413539;border:0;color:#e9dfe3;font:inherit;font-size:13.5px;
+  border-radius:20px;padding:8px 15px;font-weight:700}
+.secpills button.on{background:var(--oro);color:#2a2226}
+.pie{color:#8d8086;font-size:12.5px;margin:9px 2px 0;text-align:center}
+
 #pad{position:relative;width:100%;aspect-ratio:16/9;background:#fff;border:3px dashed #c7c0c3;border-radius:14px;
   touch-action:none;overflow:hidden;margin:4px 0 10px}
 #pad canvas{position:absolute;inset:0;width:100%;height:100%}
@@ -55,36 +87,120 @@ dialog .fin button{flex:1;border:0;border-radius:10px;padding:13px;font:inherit;
 dialog .fin .ok{background:var(--vino);color:#fff}
 dialog .fin .no{background:var(--claro);color:#555}
 dialog p{font-size:14px;color:#666;line-height:1.45}
+
+/* ── pantalla de entrada (como el juego) ─────────────────────────────── */
+#entrar{position:fixed;inset:0;z-index:40;background:var(--vino);color:#fff;display:none;
+  flex-direction:column;align-items:center;justify-content:center;padding:22px}
+#entrar.ver{display:flex}
+#entrar h1{margin:0 0 4px;font-size:25px;letter-spacing:.3px;text-align:center}
+#entrar p{margin:0 0 16px;font-size:15.5px;opacity:.88;text-align:center;max-width:330px}
+#eco{background:#fff;color:var(--vino);border-radius:14px;width:min(320px,86vw);text-align:center;
+  font-size:46px;font-weight:700;letter-spacing:12px;padding:12px 0 12px 12px;min-height:74px}
+#eco.vacio{color:#d6c9ce}
+#teclas{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:min(320px,86vw);margin-top:16px}
+#teclas button{background:rgba(255,255,255,.14);border:0;border-bottom:4px solid rgba(0,0,0,.22);color:#fff;
+  font:inherit;font-size:25px;font-weight:700;border-radius:13px;padding:15px 0}
+#teclas button:active{background:#fff;color:var(--vino)}
+#teclas .ir{background:var(--oro);font-size:17px;letter-spacing:1px}
 </style>
 </head>
 <body>
+
+<div id="entrar">
+  <h1>Control de clase</h1>
+  <p>Escribe el n&uacute;mero que aparece en la pantalla del sal&oacute;n, o esc&aacute;nea su c&oacute;digo QR.</p>
+  <div id="eco" class="vacio">— — —</div>
+  <div id="teclas">
+    <button>1</button><button>2</button><button>3</button>
+    <button>4</button><button>5</button><button>6</button>
+    <button>7</button><button>8</button><button>9</button>
+    <button data-k="del">&larr;</button><button>0</button><button class="ir" data-k="ok">ENTRAR</button>
+  </div>
+</div>
+
 <header>
   <div id="luz"></div><b>CONTROL DE CLASE</b>
   <span class="sala" id="hsala">301</span>
-  <button class="cfg" id="bcfg">⚙</button>
+  <button class="cfg" id="bcfg">&#9881;</button>
 </header>
 <nav>
-  <button class="act" data-p="nav">Navegar</button>
-  <button data-p="piz">Pizarrón</button>
-  <button data-p="lec">Lección</button>
+  <button class="act" data-p="man">Mando</button>
+  <button data-p="piz">Pizarr&oacute;n</button>
+  <button data-p="lec">Lecci&oacute;n</button>
+  <button data-p="nav">Lista</button>
 </nav>
 <main>
 
-<section class="pag act" id="p-nav">
+<section class="pag act" id="p-man">
+  <div class="tablero">
+    <div class="pant">
+      <div>
+        <div class="et">En pantalla</div>
+        <div class="vl" id="mlec">Lecci&oacute;n 6</div>
+      </div>
+      <div class="dr" id="msec">Secci&oacute;n 1 de 3<br><span id="mnom">Presentation</span></div>
+    </div>
+
+    <div class="gatillos">
+      <button data-zoom="-">L &nbsp;A &minus;<small>letra m&aacute;s chica</small></button>
+      <button data-zoom="+">R &nbsp;A &plus;<small>letra m&aacute;s grande</small></button>
+    </div>
+
+    <div class="mando">
+      <div class="cruz">
+        <div class="vacio"></div><button data-d="arriba">&#9650;</button><div class="vacio"></div>
+        <button data-d="izq">&#9664;</button><button class="mid" data-d="inicio">INICIO</button><button data-d="der">&#9654;</button>
+        <div class="vacio"></div><button data-d="abajo">&#9660;</button><div class="vacio"></div>
+      </div>
+      <div class="acc">
+        <button class="a" id="mlaser"><span>&#128308;</span>L&aacute;ser</button>
+        <button class="b" id="mclave"><span>&#128273;</span>Clave</button>
+        <button class="x" id="mrev"><span>&#10004;</span>Revisar</button>
+        <button class="y" id="mtapa"><span>&#9728;</span>Negro</button>
+      </div>
+    </div>
+
+    <div class="secpills" id="mpills"></div>
+    <p class="pie">La cruz mueve la pantalla y cambia de secci&oacute;n. Mantén &#9650;&#9660; presionado para avanzar seguido.</p>
+  </div>
+</section>
+
+<section class="pag" id="p-piz">
+  <div id="pad"><canvas></canvas><div class="ayuda">Dibuja aqu&iacute; con el dedo.<br>Lo que trazas aparece en la pantalla.</div></div>
+  <div class="colores" id="cols"></div>
+  <div class="gros" id="gr">
+    <button data-g="3">fino</button><button data-g="6" class="sel">medio</button><button data-g="12">grueso</button>
+  </div>
+  <div class="rej r3">
+    <button class="b" id="blaser">&#128308; L&aacute;ser</button>
+    <button class="b" data-op='{"t":"deshacer"}'>&#8630; Deshacer</button>
+    <button class="b g" data-op='{"t":"borrar"}'>Borrar todo</button>
+  </div>
+  <p class="nota">El l&aacute;ser mueve un punto rojo sin dejar marca. Con el l&aacute;piz, cada trazo se queda hasta que borres.
+  Nada de esto detiene los audios ni los videos de la pantalla.</p>
+</section>
+
+<section class="pag" id="p-lec">
+  <h3>Abrir en la pantalla</h3>
+  <div class="rej" id="lecs"></div>
+  <p class="nota">Si la pantalla apenas se abri&oacute;, primero manda una lecci&oacute;n desde aqu&iacute;.</p>
+</section>
+
+<section class="pag" id="p-nav">
   <h3>Secciones</h3>
   <div class="rej r5" id="secs"></div>
   <h3>Mover la pantalla</h3>
   <div class="rej r2">
-    <button class="b" data-op='{"t":"desp","v":-1}'>▲ Subir</button>
-    <button class="b" data-op='{"t":"desp","v":1}'>▼ Bajar</button>
-    <button class="b" data-op='{"t":"tope","v":"inicio"}'>⤒ Inicio</button>
-    <button class="b" data-op='{"t":"tope","v":"fin"}'>⤓ Final</button>
+    <button class="b" data-op='{"t":"desp","v":-1}'>&#9650; Subir</button>
+    <button class="b" data-op='{"t":"desp","v":1}'>&#9660; Bajar</button>
+    <button class="b" data-op='{"t":"tope","v":"inicio"}'>&#10514; Inicio</button>
+    <button class="b" data-op='{"t":"tope","v":"fin"}'>&#10515; Final</button>
   </div>
-  <h3>Tamaño de letra</h3>
+  <h3>Tama&ntilde;o de letra</h3>
   <div class="rej r3">
-    <button class="b" data-zoom="-">A −</button>
+    <button class="b" data-zoom="-">A &minus;</button>
     <button class="b" data-zoom="0">100%</button>
-    <button class="b" data-zoom="+">A +</button>
+    <button class="b" data-zoom="+">A &plus;</button>
   </div>
   <h3>En clase</h3>
   <div class="rej r2">
@@ -95,37 +211,16 @@ dialog p{font-size:14px;color:#666;line-height:1.45}
   <div class="rej r3" id="revs"></div>
 </section>
 
-<section class="pag" id="p-piz">
-  <div id="pad"><canvas></canvas><div class="ayuda">Dibuja aquí con el dedo.<br>Lo que trazas aparece en la pantalla.</div></div>
-  <div class="colores" id="cols"></div>
-  <div class="gros" id="gr">
-    <button data-g="3">fino</button><button data-g="6" class="sel">medio</button><button data-g="12">grueso</button>
-  </div>
-  <div class="rej r3">
-    <button class="b" id="blaser">🔴 Láser</button>
-    <button class="b" data-op='{"t":"deshacer"}'>↶ Deshacer</button>
-    <button class="b g" data-op='{"t":"borrar"}'>Borrar todo</button>
-  </div>
-  <p class="nota">El láser mueve un punto rojo sin dejar marca. Con el lápiz, cada trazo se queda hasta que borres.
-  Nada de esto detiene los audios ni los videos de la pantalla.</p>
-</section>
-
-<section class="pag" id="p-lec">
-  <h3>Abrir en la pantalla</h3>
-  <div class="rej" id="lecs"></div>
-  <p class="nota">Si la pantalla apenas se abrió, primero manda una lección desde aquí.</p>
-</section>
-
 </main>
 
 <dialog id="dcfg"><div class="in">
   <h2>Ajustes</h2>
-  <label>Código de sala (el mismo que muestra la pantalla)</label>
+  <label>C&oacute;digo de sala (el mismo que muestra la pantalla)</label>
   <input id="icsala" maxlength="8" autocapitalize="characters">
-  <label>Dirección del servidor del HCM (para controlar otra computadora)</label>
+  <label>Direcci&oacute;n del servidor del HCM (para controlar otra computadora)</label>
   <input id="icep" placeholder="https://script.google.com/macros/s/…/exec">
-  <p>Si el celular está conectado al proyector, déjala vacía: funciona sin internet.
-     Para controlar la computadora del salón, pega aquí la dirección de tu Apps Script del HCM.</p>
+  <p>Si el celular est&aacute; conectado al proyector, d&eacute;jala vac&iacute;a: funciona sin internet.
+     Para controlar la computadora del sal&oacute;n, pega aqu&iacute; la direcci&oacute;n de tu Apps Script del HCM.</p>
   <div class="fin"><button class="no" id="bno">Cerrar</button><button class="ok" id="bok">Guardar</button></div>
 </div></dialog>
 
@@ -133,7 +228,32 @@ dialog p{font-size:14px;color:#666;line-height:1.45}
 <script>
 (function(){
   var par = new URLSearchParams(location.search);
-  var sala = (par.get('sala') || localStorage.getItem('hcm_aula_sala') || '301').toUpperCase();
+  var deUrl = par.get('sala');
+  var guardada = localStorage.getItem('hcm_aula_sala');
+  var sala = (deUrl || guardada || '').toUpperCase().trim();
+  if(par.get('ep')) Canal.guardarEndpoint(par.get('ep'));
+
+  /* ── pantalla de entrada, igual que el juego ───────────────────────── */
+  var cap = document.getElementById('entrar'), eco = document.getElementById('eco'), buf='';
+  function pintaEco(){
+    eco.textContent = buf ? buf : '— — —';
+    eco.classList.toggle('vacio', !buf);
+  }
+  document.querySelectorAll('#teclas button').forEach(function(b){
+    b.onclick=function(){
+      var k=b.dataset.k;
+      try{ navigator.vibrate && navigator.vibrate(10); }catch(e){}
+      if(k==='del'){ buf=buf.slice(0,-1); pintaEco(); return; }
+      if(k==='ok'){
+        if(buf.length<3) return;
+        localStorage.setItem('hcm_aula_sala', buf);
+        location.search='?sala='+encodeURIComponent(buf);
+        return;
+      }
+      if(buf.length<6){ buf+=b.textContent.trim(); pintaEco(); }
+    };
+  });
+  if(!sala){ cap.classList.add('ver'); pintaEco(); return; }
   localStorage.setItem('hcm_aula_sala', sala);
   document.getElementById('hsala').textContent = sala;
 
@@ -143,49 +263,97 @@ dialog p{font-size:14px;color:#666;line-height:1.45}
 
   /* secciones y ejercicios por lección */
   var LECCIONES = [
-    {f:'leccion-06-should-could.html', n:'Lección 6 · Should / could / adverbios',
+    {f:'leccion-06-should-could.html', n:'Lección 6 · Should / could / adverbios', c:'Lección 6',
      secs:[['1','Presentation','#p1'],['2','Practice','#p2'],['3','Production','#p3']],
      revs:[['Ordenar','#rev-o'],['Adverbios','#rev-adv'],['Sam','#rev-sam'],['Adj/Adv','#rev-par'],['How','#rev-how']]},
-    {f:'leccion-05-vocabulary.html', n:'Lección 5 · Vocabulary',
+    {f:'leccion-05-vocabulary.html', n:'Lección 5 · Vocabulary', c:'Lección 5',
      secs:[['1','Presentation','#p1'],['2','Practice','#p2'],['3','Production','#p3']],
      revs:[['Palabras','#rev-d1'],['Ej. A','#rev-ea'],['Ej. B','#rev-eb'],['Caja','#rev-ec'],['Tell','#rev-ed']]},
-    {f:'leccion-04-indirect-commands.html', n:'Lección 4 · Indirect commands',
+    {f:'leccion-04-indirect-commands.html', n:'Lección 4 · Indirect commands', c:'Lección 4',
      secs:[['1','Presentation','#p1'],['2','Listening','#p2'],['3','Preguntas','#p3'],['4','Ejercicios','#p4'],['5','Production','#p5']],
      revs:[['Preguntas','#revisarQ'],['A','#revA'],['B','#revB'],['C','#revC'],['D','#revD'],['E','#revE'],['F','#revF']]},
-    {f:'index.html', n:'Índice de actividades', secs:[], revs:[]}
+    {f:'index.html', n:'Índice de actividades', c:'Índice', secs:[], revs:[]}
   ];
-  var actual = LECCIONES[0];
+  var actual = LECCIONES[0], iSec = 0, iRev = 0;
+
+  var mlec=document.getElementById('mlec'), msec=document.getElementById('msec'),
+      mnom=document.getElementById('mnom'), mpills=document.getElementById('mpills');
+
+  function pintaMando(){
+    mlec.textContent = actual.c;
+    if(actual.secs.length){
+      msec.innerHTML = 'Sección '+(iSec+1)+' de '+actual.secs.length+'<br><span id="mnom">'+actual.secs[iSec][1]+'</span>';
+    } else {
+      msec.innerHTML = 'Sin secciones<br><span id="mnom">&mdash;</span>';
+    }
+    mpills.innerHTML='';
+    actual.secs.forEach(function(x,i){
+      var b=document.createElement('button'); b.textContent=x[1];
+      if(i===iSec) b.className='on';
+      b.onclick=function(){ iSec=i; manda({t:'ir', v:x[2]}); pintaMando(); };
+      mpills.appendChild(b);
+    });
+  }
+  function vaSeccion(paso){
+    if(!actual.secs.length) return;
+    iSec = Math.min(actual.secs.length-1, Math.max(0, iSec+paso));
+    manda({t:'ir', v:actual.secs[iSec][2]});
+    pintaMando();
+  }
 
   function pinta(){
     var s = document.getElementById('secs'); s.innerHTML='';
-    s.className = 'rej r' + Math.min(5, Math.max(2, actual.secs.length));
-    actual.secs.forEach(function(x){
+    s.className = 'rej r' + Math.min(5, Math.max(2, actual.secs.length||2));
+    actual.secs.forEach(function(x,i){
       var b=document.createElement('button'); b.className='b';
       b.innerHTML = x[0] + '<small>'+x[1]+'</small>';
-      b.onclick=function(){ manda({t:'ir', v:x[2]}); };
+      b.onclick=function(){ iSec=i; manda({t:'ir', v:x[2]}); pintaMando(); };
       s.appendChild(b);
     });
     var r = document.getElementById('revs'); r.innerHTML='';
-    actual.revs.forEach(function(x){
+    actual.revs.forEach(function(x,i){
       var b=document.createElement('button'); b.className='b'; b.textContent=x[0];
-      b.onclick=function(){ manda({t:'clic', v:x[1]}); };
+      b.onclick=function(){ iRev=i; manda({t:'clic', v:x[1]}); };
       r.appendChild(b);
     });
+    pintaMando();
   }
   var cl = document.getElementById('lecs');
   LECCIONES.forEach(function(L){
     var b=document.createElement('button'); b.className='b'; b.textContent=L.n;
-    b.onclick=function(){ actual=L; pinta(); manda({t:'lec', v:L.f}); };
+    b.onclick=function(){ actual=L; iSec=0; iRev=0; pinta(); manda({t:'lec', v:L.f}); };
     cl.appendChild(b);
   });
   pinta();
+
+  /* ── cruz del mando, con repetición al mantener presionado ─────────── */
+  var rep=null, lento=null;
+  function cruz(d){
+    if(d==='arriba') manda({t:'desp', v:-1});
+    else if(d==='abajo') manda({t:'desp', v:1});
+    else if(d==='izq') vaSeccion(-1);
+    else if(d==='der') vaSeccion(1);
+    else if(d==='inicio') manda({t:'tope', v:'inicio'});
+  }
+  document.querySelectorAll('.cruz button[data-d]').forEach(function(b){
+    var d=b.dataset.d;
+    b.addEventListener('pointerdown', function(e){
+      e.preventDefault(); cruz(d);
+      if(d==='arriba'||d==='abajo'){
+        lento=setTimeout(function(){ rep=setInterval(function(){ cruz(d); }, 650); }, 520);
+      }
+    });
+    ['pointerup','pointercancel','pointerleave'].forEach(function(ev){
+      b.addEventListener(ev, function(){ clearTimeout(lento); clearInterval(rep); rep=null; });
+    });
+  });
 
   /* botones con op fija */
   document.querySelectorAll('[data-op]').forEach(function(b){
     b.onclick=function(){ manda(JSON.parse(b.dataset.op)); };
   });
 
-  /* zoom */
+  /* zoom (gatillos del mando y lista) */
   var z = 1;
   document.querySelectorAll('[data-zoom]').forEach(function(b){
     b.onclick=function(){
@@ -195,9 +363,20 @@ dialog p{font-size:14px;color:#666;line-height:1.45}
     };
   });
 
-  /* pantalla en negro */
-  var tapado=false, bt=document.getElementById('btapa');
-  bt.onclick=function(){ tapado=!tapado; bt.classList.toggle('on',tapado); manda({t:'tapa', v:tapado}); };
+  /* pantalla en negro — dos botones, un solo estado */
+  var tapado=false, bt=document.getElementById('btapa'), bt2=document.getElementById('mtapa');
+  function tapar(){ tapado=!tapado; bt.classList.toggle('on',tapado); bt2.classList.toggle('on',tapado); manda({t:'tapa', v:tapado}); }
+  bt.onclick=tapar; bt2.onclick=tapar;
+
+  /* clave docente y revisar, desde el mando */
+  document.getElementById('mclave').onclick=function(){ manda({t:'clic', v:'#clave'}); };
+  document.getElementById('mrev').onclick=function(){
+    if(!actual.revs.length) return;
+    var x=actual.revs[iRev % actual.revs.length];
+    manda({t:'clic', v:x[1]});
+    iRev=(iRev+1)%actual.revs.length;
+    this.querySelector('span').nextSibling.textContent = x[0];
+  };
 
   /* pestañas */
   document.querySelectorAll('nav button').forEach(function(b){
@@ -207,6 +386,11 @@ dialog p{font-size:14px;color:#666;line-height:1.45}
       b.classList.add('act'); document.getElementById('p-'+b.dataset.p).classList.add('act');
     };
   });
+  function vePizarron(){
+    document.querySelectorAll('nav button').forEach(function(x){ x.classList.toggle('act', x.dataset.p==='piz'); });
+    document.querySelectorAll('.pag').forEach(function(x){ x.classList.toggle('act', x.id==='p-piz'); });
+    setTimeout(medirPad, 60);
+  }
 
   /* ── pizarrón ─────────────────────────────────────────────────────────── */
   var COLORES=['#e11d2e','#631132','#1b6ac9','#2e9e4f','#AE8420','#111111'];
@@ -222,26 +406,33 @@ dialog p{font-size:14px;color:#666;line-height:1.45}
     b.onclick=function(){ grosor=+b.dataset.g; manda({t:'pluma',c:color,g:grosor});
       document.querySelectorAll('#gr button').forEach(function(x){x.classList.remove('sel')}); b.classList.add('sel'); };
   });
-  var bl=document.getElementById('blaser');
-  bl.onclick=function(){ laser=!laser; bl.classList.toggle('on',laser); if(!laser) manda({t:'laser', v:null}); };
+  var bl=document.getElementById('blaser'), bl2=document.getElementById('mlaser');
+  function alLaser(irAlPad){
+    laser=!laser; bl.classList.toggle('on',laser); bl2.classList.toggle('on',laser);
+    if(!laser) manda({t:'laser', v:null});
+    else if(irAlPad) vePizarron();
+  }
+  bl.onclick=function(){ alLaser(false); };
+  bl2.onclick=function(){ alLaser(true); };
 
   var pad=document.getElementById('pad'), lz=pad.querySelector('canvas'), lx=lz.getContext('2d'), ayuda=pad.querySelector('.ayuda');
   function medirPad(){ var r=devicePixelRatio||1, b=pad.getBoundingClientRect();
+    if(!b.width) return;
     lz.width=b.width*r; lz.height=b.height*r; lx.setTransform(r,0,0,r,0,0); lx.lineCap='round'; lx.lineJoin='round'; }
   addEventListener('resize', medirPad); setTimeout(medirPad, 50);
 
-  var dibujando=false, buffer=[], ultimo=0, prev=null;
+  var dibujando=false, buffer=[], ultimo=0;
   function pos(e){ var b=pad.getBoundingClientRect();
     return [Math.min(1,Math.max(0,(e.clientX-b.left)/b.width)), Math.min(1,Math.max(0,(e.clientY-b.top)/b.height))]; }
   function soltar(){
     if(buffer.length){ manda({t:'sigue', v:buffer}); buffer=[]; }
-    dibujando=false; prev=null;
+    dibujando=false;
   }
   pad.addEventListener('pointerdown', function(e){
     pad.setPointerCapture(e.pointerId); ayuda.style.display='none';
     var p=pos(e);
     if(laser){ manda({t:'laser', v:p}); dibujando=true; return; }
-    dibujando=true; buffer=[]; prev=p;
+    dibujando=true; buffer=[];
     manda({t:'trazo', v:[p], c:color, g:grosor});
     lx.strokeStyle=color; lx.lineWidth=grosor; lx.beginPath();
     lx.moveTo(p[0]*pad.clientWidth, p[1]*pad.clientHeight);

@@ -18,6 +18,24 @@ header.top p{margin:8px 0 0;font-size:16px;opacity:.9;max-width:680px}
 main{max-width:980px;margin:0 auto;padding:22px 16px 80px}
 h2{color:var(--vino);border-bottom:3px solid var(--oro);padding-bottom:6px;margin:24px 0 16px;font-size:23px}
 .lista{display:grid;gap:14px}
+.vivo{display:flex;gap:22px;align-items:center;flex-wrap:wrap;background:var(--vino);color:#fff;
+  border-radius:12px;padding:20px 22px;margin-top:-2px}
+.vivo .vtxt{flex:1 1 300px}
+.vivo .et{font-size:12px;letter-spacing:2.5px;text-transform:uppercase;opacity:.8}
+.vivo h3{margin:4px 0 8px;font-size:21px;color:#fff}
+.vivo .num{display:inline-block;background:#fff;color:var(--vino);border-radius:12px;padding:6px 22px;
+  font-size:46px;font-weight:700;letter-spacing:.08em;line-height:1.1}
+.vivo .grupos{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0 10px}
+.vivo .grupos button{background:rgba(255,255,255,.16);border:0;border-bottom:3px solid rgba(0,0,0,.22);
+  color:#fff;font:inherit;font-size:15px;font-weight:700;border-radius:9px;padding:7px 15px;letter-spacing:1px;cursor:pointer}
+.vivo .grupos button.on{background:var(--oro)}
+.vivo p{margin:0 0 12px;font-size:15px;opacity:.9;max-width:460px}
+.vivo .vbtn{display:inline-block;background:var(--oro);color:#fff;text-decoration:none;font-weight:700;
+  border-radius:9px;padding:11px 20px;font-size:15.5px}
+.vivo .vqr{text-align:center;flex:0 0 auto}
+.vivo .vqr img{width:184px;height:184px;background:#fff;border-radius:12px;padding:8px;display:block}
+.vivo .vqr span{display:block;margin-top:7px;font-size:13px;opacity:.85}
+@media(max-width:620px){.vivo{justify-content:center;text-align:center}.vivo p{max-width:none}}
 a.act{display:block;text-decoration:none;color:inherit;background:var(--claro);border-radius:12px;padding:16px 18px;border-left:7px solid var(--oro);transition:transform .12s, box-shadow .12s}
 a.act:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(99,17,50,.16)}
 a.act .n{display:inline-block;background:var(--vino);color:#fff;font-size:12.5px;font-weight:700;border-radius:20px;padding:4px 12px;margin-bottom:8px}
@@ -57,6 +75,21 @@ img{max-width:100%;height:auto}
      destapa la clave y pon la pantalla en negro. Los audios y los videos no se detienen.</p>
   <div class="tags"><span>Pizarr&oacute;n</span><span>Control remoto</span><span>Docente</span></div>
 </a>
+<div class="vivo">
+  <div class="vtxt">
+    <div class="et">Para controlarla desde tu celular</div>
+    <h3>Entra con este n&uacute;mero</h3>
+    <span class="num" id="vnum">301</span>
+    <div class="grupos" id="vgrupos"></div>
+    <p>Abre <b>el control</b> en el celular y teclea el n&uacute;mero, o escanea el QR y entra directo.
+       La pantalla del sal&oacute;n muestra el mismo n&uacute;mero en grande cuando la abres.</p>
+    <a class="vbtn" id="vctl" href="control.html?sala=301">Abrir el control &rarr;</a>
+  </div>
+  <div class="vqr">
+    <img id="vimg" src="qr-301.png" alt="C&oacute;digo QR del control de clase">
+    <span>Esc&aacute;nealo con la c&aacute;mara</span>
+  </div>
+</div>
 <a class="act" href="leccion-06-should-could.html">
   <span class="abrir">Abrir &rarr;</span>
   <span class="n">Lecci&oacute;n 6</span>
@@ -88,5 +121,25 @@ enlace a los cadetes para que la hagan en su celular. Cada actividad se califica
 Aqu&iacute; se van a ir agregando las dem&aacute;s lecciones.</div>
 </main>
 <footer>Heroico Colegio Militar &middot; Campo Militar 1-C, Ciudad de M&eacute;xico</footer>
+
+<script>
+(function(){
+  var G=['301','302','303','304','305','306'];
+  var n=document.getElementById('vnum'), im=document.getElementById('vimg'),
+      ct=document.getElementById('vctl'), cg=document.getElementById('vgrupos');
+  if(!cg) return;
+  function pon(g){
+    n.textContent=g; im.src='qr-'+g+'.png'; ct.href='control.html?sala='+g;
+    cg.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b.textContent===g); });
+    try{ localStorage.setItem('hcm_aula_sala_vista', g); }catch(e){}
+  }
+  G.forEach(function(g){
+    var b=document.createElement('button'); b.textContent=g;
+    b.onclick=function(){ pon(g); }; cg.appendChild(b);
+  });
+  var v; try{ v=localStorage.getItem('hcm_aula_sala_vista'); }catch(e){}
+  pon(G.indexOf(v)>=0 ? v : '301');
+})();
+</script>
 </body>
 </html>

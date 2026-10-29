@@ -162,6 +162,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
     cursor.style.display='block';
     cursor.style.left=(p[0]*innerWidth)+'px'; cursor.style.top=(p[1]*innerHeight)+'px';
   }
+  var ultimoCampo=null;
   function tocar(p){
     verCursor(p);
     var d=doc(); if(!d) return;
@@ -175,13 +176,18 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
       el.dispatchEvent(new PointerEvent('pointerup',Object.assign({pointerId:1,pointerType:'touch',isPrimary:true},base,{buttons:0})));
       el.dispatchEvent(new MouseEvent('mouseup',Object.assign({},base,{buttons:0})));
     }catch(e){}
-    if(typeof el.focus==='function' && /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) el.focus();
+    if(/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)){
+      ultimoCampo = el;
+      if(typeof el.focus==='function') el.focus();
+    }
     if(typeof el.click==='function') el.click();
   }
   function escribir(txt){
     var d=doc(); if(!d) return;
     var a=d.activeElement;
-    if(!a || !/^(INPUT|TEXTAREA)$/.test(a.tagName)) return;
+    if(!a || !/^(INPUT|TEXTAREA)$/.test(a.tagName)) a = ultimoCampo;   // el celular no roba el foco
+    if(!a || !a.isConnected) return;
+    try{ a.focus(); }catch(e){}
     if(txt==='\b') a.value=a.value.slice(0,-1);
     else if(txt==='\u0018') a.value='';
     else a.value += txt;

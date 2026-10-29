@@ -145,6 +145,20 @@ img{max-width:100%;height:auto}
 .bloque>p{margin:0;font-size:16.5px}
 .bloque .num2{display:inline-block;width:26px;height:26px;line-height:26px;text-align:center;background:var(--vino);
   color:#fff;border-radius:50%;font-size:14px;font-weight:700;margin-right:8px}
+.lora{background:var(--claro);border-left:5px solid var(--oro);border-radius:10px;padding:13px 16px;margin:10px 0;font-size:16.5px;line-height:1.55}
+.tabadv{width:100%;border-collapse:collapse;margin:10px 0}
+.tabadv th{background:var(--vino);color:#fff;font-size:14.5px;padding:9px 10px;text-align:left}
+.tabadv td{border-bottom:1px solid #e2dcde;padding:8px 10px;font-size:16px}
+.tabadv td.n{width:34px;color:#999;font-size:14px}
+.tabadv input{font:inherit;padding:8px 10px;border:1px solid #c7c0c3;border-radius:8px;width:100%;background:#fff}
+.tabadv input.bien{border-color:var(--verde);background:#eaf6ec}
+.tabadv input.mal{border-color:#c0392b;background:#fdeceb}
+.tabadv tr.bonus td{background:#fdf6e6}
+.cajas{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:10px 0}
+.caja{background:var(--claro);border-radius:10px;padding:11px 14px}
+.caja h5{margin:0 0 7px;color:var(--vino);font-size:15px}
+.caja p{margin:0;font-size:15.5px;line-height:1.7}
+.ejemplo2{background:#f5f0f1;border-left:4px solid var(--oro);border-radius:8px;padding:10px 14px;margin:9px 0;font-size:16px}
 </style>
 </head>
 <body>
@@ -225,10 +239,12 @@ La pregunta se arma con should al principio: <b>Should I call him?</b></div>
 <div class="barra"><button class="principal" id="rev-o">Revisar</button>
 <button class="secundario" id="res-o">Empezar de nuevo</button><span class="marcador" id="sc-o"></span></div>
 
-<h3>Exercise A &mdash; Adjective &rarr; adverb</h3>
+<h3>Exercise A &mdash; adverbs of manner with -ly</h3>
 <div class="pg">Student Text &middot; page 69</div>
-<p><i>Escribe el adverbio que sale de cada adjetivo. Los dos &uacute;ltimos son los del BONUS.</i></p>
-<div id="exadv"><div class="bloque"><p><span class="num2">1</span>safe</p><div class="hueco"><input type="text" id="adv0_0" autocomplete="off" spellcheck="false" placeholder="respuesta"></div><p class="pista" id="kadv0">&#10003; safely</p></div><div class="bloque"><p><span class="num2">2</span>careful</p><div class="hueco"><input type="text" id="adv1_0" autocomplete="off" spellcheck="false" placeholder="respuesta"></div><p class="pista" id="kadv1">&#10003; carefully</p></div><div class="bloque"><p><span class="num2">3</span>easy</p><div class="hueco"><input type="text" id="adv2_0" autocomplete="off" spellcheck="false" placeholder="respuesta"></div><p class="pista" id="kadv2">&#10003; easily</p></div><div class="bloque"><p><span class="num2">4</span>careless</p><div class="hueco"><input type="text" id="adv3_0" autocomplete="off" spellcheck="false" placeholder="respuesta"></div><p class="pista" id="kadv3">&#10003; carelessly</p></div><div class="bloque"><p><span class="num2">5</span>bad</p><div class="hueco"><input type="text" id="adv4_0" autocomplete="off" spellcheck="false" placeholder="respuesta"></div><p class="pista" id="kadv4">&#10003; badly</p></div><div class="bloque"><p><span class="num2">6</span>slow</p><div class="hueco"><input type="text" id="adv5_0" autocomplete="off" spellcheck="false" placeholder="respuesta"></div><p class="pista" id="kadv5">&#10003; slowly</p></div><div class="bloque"><p><span class="num2">7</span>fast</p><div class="hueco"><input type="text" id="adv6_0" autocomplete="off" spellcheck="false" placeholder="respuesta"></div><p class="pista" id="kadv6">&#10003; fast</p></div><div class="bloque"><p><span class="num2">8</span>good</p><div class="hueco"><input type="text" id="adv7_0" autocomplete="off" spellcheck="false" placeholder="respuesta"></div><p class="pista" id="kadv7">&#10003; well</p></div></div>
+<div class="lora">Lora is an instructor in a driving school. She teaches people to drive <b>safely</b>. First, the students must read their driving book <b>carefully</b> and take a test. Almost all of her students study and pass the test <b>easily</b>. Then, they can learn to drive on the road.<br><br>Last year, Lora had one very bad student. He was young and read his book <b>carelessly</b>. He did <b>badly</b> on the test, but he passed. On the road, he did not drive <b>slowly</b>. He always drove <b>fast</b>. He never learned to drive <b>well</b> and did not graduate.</div>
+<p><i>Complete the chart. Use the adjectives from the paragraph. Number 1 is an example.</i></p>
+<table class="tabadv"><thead><tr><th></th><th>Adjective</th><th>Adverb</th><th>verb + adverb</th></tr></thead>
+<tbody id="tadv"></tbody></table>
 <div class="barra"><button class="principal" id="rev-adv">Revisar</button>
 <button class="secundario" id="res-adv">Limpiar</button><span class="marcador" id="sc-adv"></span></div>
 
@@ -260,15 +276,23 @@ La pregunta se arma con should al principio: <b>Should I call him?</b></div>
 
 <h3>Use <i>could</i> to give suggestions</h3>
 <div class="pg">Student Text &middot; page 66</div>
-<div class="prod"><p>1. We need to get to the airport with a lot of luggage, but we don't have a car.</p><input type="text" placeholder="You could …"><p class="ini">Empieza así: <b>You could …</b></p><p class="pista ejemplo" style="display:none">&#10003; You could call a taxi.</p></div><div class="prod"><p>2. You ate dinner in an expensive restaurant. You can't find your wallet to pay.</p><input type="text" placeholder="You could …"><p class="ini">Empieza así: <b>You could …</b></p><p class="pista ejemplo" style="display:none">&#10003; You could ask a friend to bring you some money.</p></div><div class="prod"><p>3. You return to your car after studying, but you can't find your car keys. The library is closed.</p><input type="text" placeholder="You could …"><p class="ini">Empieza así: <b>You could …</b></p><p class="pista ejemplo" style="display:none">&#10003; You could call your roommate and ask for the other key.</p></div><div class="prod"><p>4. Your new car has a lot of problems. You have to take it to the mechanic often.</p><input type="text" placeholder="You could …"><p class="ini">Empieza así: <b>You could …</b></p><p class="pista ejemplo" style="display:none">&#10003; You could sell it and buy a better one.</p></div>
+<p><i>Read the situations. Then give a suggestion with could.</i></p>
+<div class="prod"><p>1. We need to get to the airport with a lot of luggage, but we don't have a car.</p><input type="text" placeholder="You could…"><p class="ini">Empieza as&iacute;: <b>You could&hellip;</b></p></div><div class="prod"><p>2. You ate dinner in an expensive restaurant. You can't find your wallet to pay.</p><input type="text" placeholder="You could…"><p class="ini">Empieza as&iacute;: <b>You could&hellip;</b></p></div><div class="prod"><p>3. You return to your car after studying in the library, but you can't find your car keys. It is now 10 p.m. and the library is closed.</p><input type="text" placeholder="You could…"><p class="ini">Empieza as&iacute;: <b>You could&hellip;</b></p></div><div class="prod"><p>4. You had a car accident a week ago. The other driver caused it, but won't pay to repair your car.</p><input type="text" placeholder="You could…"><p class="ini">Empieza as&iacute;: <b>You could&hellip;</b></p></div><div class="prod"><p>5. You find a wallet on the bus. There is no ID in it, but there are five $100 bills.</p><input type="text" placeholder="You could…"><p class="ini">Empieza as&iacute;: <b>You could&hellip;</b></p></div><div class="prod"><p>6. Your new car has a lot of problems. You have to take it to the mechanic often.</p><input type="text" placeholder="You could…"><p class="ini">Empieza as&iacute;: <b>You could&hellip;</b></p></div>
 
 <h3>Give the writers your advice</h3>
 <div class="pg">Student Text &middot; page 67</div>
 <div class="prod"><p>1. Dear Ruth: I was using my friend's car. I had an accident. What should I do? Should I tell my friend, or should I get it fixed and not tell my friend? &mdash; <i>Careless</i></p><input type="text" placeholder="You should …"><p class="ini">Empieza así: <b>You should …</b></p><p class="pista ejemplo" style="display:none">&#10003; You should tell your friend right away. You could also pay for the repair.</p></div><div class="prod"><p>2. Dear Ruth: My wife got a lot of money for her birthday. I want to buy a new television set. She wants to take a trip. What do you think we should do? &mdash; <i>Needing a new TV</i></p><input type="text" placeholder="I think you should …"><p class="ini">Empieza así: <b>I think you should …</b></p><p class="pista ejemplo" style="display:none">&#10003; I think you should take the trip, because it is her money.</p></div>
 
-<h3>Y t&uacute;, &iquest;c&oacute;mo?</h3>
+<h3>Exercise C &mdash; ask and answer questions with <i>how</i></h3>
 <div class="pg">Student Text &middot; page 73</div>
-<div class="prod"><p>1. How do you drive?</p><input type="text" placeholder="I drive …"><p class="ini">Empieza así: <b>I drive …</b></p><p class="pista ejemplo" style="display:none">&#10003; I drive carefully and slowly in the city.</p></div><div class="prod"><p>2. How do you study English?</p><input type="text" placeholder="I study …"><p class="ini">Empieza así: <b>I study …</b></p><p class="pista ejemplo" style="display:none">&#10003; I study English carefully every night.</p></div><div class="prod"><p>3. How did you sleep last night?</p><input type="text" placeholder="I slept …"><p class="ini">Empieza así: <b>I slept …</b></p><p class="pista ejemplo" style="display:none">&#10003; I slept badly because my dogs were noisy.</p></div>
+<p><i>Ask and answer questions with how. Use the words in the boxes.</i></p>
+<div class="cajas">
+  <div class="caja"><h5>Verbs</h5><p>walk &middot; say &middot; play &middot; eat &middot; dance &middot; cook &middot; sing &middot; study &middot; write &middot; read &middot; plan &middot; sleep &middot; drive &middot; review &middot; exercise &middot; draw &middot; park</p></div>
+  <div class="caja"><h5>Adverbs</h5><p>badly &middot; carefully &middot; carelessly &middot; correctly &middot; easily &middot; fast &middot; safely &middot; slowly &middot; well</p></div>
+</div>
+<div class="ejemplo2"><b>A:</b> How do you spend your money? &nbsp;&middot;&nbsp;
+  <b>B:</b> I spend it fast, but I buy nice things for my wife.</div>
+<div class="prod"><p>1. Pregunta y respuesta con <b>how</b>:</p><input type="text" placeholder="How do you…?"><input type="text" placeholder="I … "></div><div class="prod"><p>2. Pregunta y respuesta con <b>how</b>:</p><input type="text" placeholder="How do you…?"><input type="text" placeholder="I … "></div><div class="prod"><p>3. Pregunta y respuesta con <b>how</b>:</p><input type="text" placeholder="How do you…?"><input type="text" placeholder="I … "></div><div class="prod"><p>4. Pregunta y respuesta con <b>how</b>:</p><input type="text" placeholder="How do you…?"><input type="text" placeholder="I … "></div>
 
 <div class="barra"><button class="secundario" id="clave">Mostrar clave (docente)</button></div>
 <div class="aviso"><b>Homework</b>
@@ -278,7 +302,7 @@ Luego escribe tres preguntas con <i>how</i> para hacerle a un compa&ntilde;ero.<
 
 </main>
 <footer>Nonintensive ALC, Volume 3, Lesson 6 &middot; Student Text pages 63&ndash;74 &middot; Heroico Colegio Militar</footer>
-<script id="datos" type="application/json">{"orden": [["You", "should", "call", "the police."], ["No,", "we", "shouldn't", "leave", "now."], ["What", "should", "I", "do", "now?"], ["Which book", "should", "I", "borrow?"], ["Should", "I", "see", "that movie?"]], "ordenPie": ["Q: I lost my wallet. What should I do? &mdash; A:", "Q: It's raining. Should we go now? &mdash; A:", "Q: &hellip; &mdash; A: I think you should study.", "Q: &hellip; &mdash; A: Oh, you should borrow this one about camping.", "Q: &hellip; &mdash; A: No, you shouldn't. I don't think you'll care for it."], "adv": [["safe", ["safely"]], ["careful", ["carefully"]], ["easy", ["easily"]], ["careless", ["carelessly"]], ["bad", ["badly"]], ["slow", ["slowly"]], ["fast", ["fast"]], ["good", ["well"]]], "sam": [["He read the language ______, …", "well"], ["… but he didn't speak it ______.", "well"], ["At first, he said things ______, and people didn't understand him.", "badly"], ["Sam thought they spoke too ______.", "fast"], ["He had to ask them to repeat their sentences more ______.", "slowly"], ["Sam listened ______ and wrote new words in his notebook.", "carefully"], ["He always tried to spell them ______.", "correctly"], ["Now, Sam understands German and can use it ______.", "easily"], ["He doesn't say things ______.", "badly"]], "parejas": [["I see the plane ______ because the sky is ______.", ["clearly"], ["clear"]], ["Is Anna ______? She's eating her food ______.", ["hungry"], ["hungrily"]], ["The little girl sang ______ because she was ______.", ["happily"], ["happy"]], ["The players sounded ______. They talked ______.", ["excited"], ["excitedly"]], ["Mary is watching TV ______. She looks ______.", ["sleepily"], ["sleepy"]], ["The boss sounds ______. He is speaking ______.", ["angry"], ["angrily"]]], "how": [["Mark: I did badly. My score was only 65.", ["how did you do on your test", "how did you do on the test", "how did you do"]], ["Pam: I'll take the bus to the airport.", ["how will you get to the airport", "how are you going to get to the airport", "how will you go to the airport"]], ["Lt Lake: The major spoke angrily.", ["how did the major speak"]], ["Joe: My boys played well.", ["how did your boys play", "how did the boys play"]], ["Rose: I'm not sleeping well this week.", ["how are you sleeping this week", "how are you sleeping"]]], "videos": ["what should I do", "you should ask", "you could", "how do you drive", "drive carefully", "he did badly", "speak slowly", "answered correctly"]}</script>
+<script id="datos" type="application/json">{"orden": [["call the police", "should"], ["shouldn't leave now", "no", "we"], ["do", "I", "what", "now", "should"], ["I", "borrow", "which book", "should"], ["see", "should", "I", "movie", "that"]], "ordenPie": ["Q: I lost my wallet. What should I do? &mdash; A:", "Q: It's raining. Should we go now? &mdash; A:", "Q: &hellip; &mdash; A: I think you should study.", "Q: &hellip; &mdash; A: Oh, you should borrow this one about camping.", "Q: &hellip; &mdash; A: No, you shouldn't. I don't think you'll care for it."], "ordenOk": [["should call the police", "you should call the police"], ["no we shouldn't leave now"], ["what should I do now"], ["which book should I borrow"], ["should I see that movie"]], "advT": [["safe", ["safely"], ["drive safely"]], ["careful", ["carefully"], ["read carefully", "read their driving book carefully", "read the book carefully"]], ["easy", ["easily"], ["pass the test easily", "pass easily"]], ["careless", ["carelessly"], ["read carelessly", "read his book carelessly"]], ["bad", ["badly"], ["did badly", "did badly on the test"]], ["slow", ["slowly"], ["drive slowly", "did not drive slowly"]], ["fast", ["fast"], ["drove fast", "drive fast"]], ["good", ["well"], ["drive well", "learned to drive well"]]], "sam": [["He read the language ______, …", "well"], ["… but he didn't speak it ______.", "well"], ["At first, he said things ______, and people didn't understand him.", "badly"], ["Sam thought they spoke too ______.", "fast"], ["He had to ask them to repeat their sentences more ______.", "slowly"], ["Sam listened ______ and wrote new words in his notebook.", "carefully"], ["He always tried to spell them ______.", "correctly"], ["Now, Sam understands German and can use it ______.", "easily"], ["He doesn't say things ______.", "badly"]], "parejas": [["I see the plane ______ because the sky is ______.", ["clearly"], ["clear"]], ["Is Anna ______? She's eating her food ______.", ["hungry"], ["hungrily"]], ["The little girl sang ______ because she was ______.", ["happily"], ["happy"]], ["The players sounded ______. They talked ______.", ["excited"], ["excitedly"]], ["Mary is watching TV ______. She looks ______.", ["sleepily"], ["sleepy"]], ["The boss sounds ______. He is speaking ______.", ["angry"], ["angrily"]]], "how": [["Mark: I did badly. My score was only 65.", ["how did you do on your test", "how did you do on the test", "how did you do"]], ["Pam: I'll take the bus to the airport.", ["how will you get to the airport", "how are you going to get to the airport", "how will you go to the airport"]], ["Lt Lake: The major spoke angrily.", ["how did the major speak"]], ["Joe: My boys played well.", ["how did your boys play", "how did the boys play"]], ["Rose: I'm not sleeping well this week.", ["how are you sleeping this week", "how are you sleeping"]]], "videos": ["what should I do", "you should ask", "you could", "how do you drive", "drive carefully", "he did badly", "speak slowly", "answered correctly"]}</script>
 <script>
 const D=JSON.parse(document.getElementById('datos').textContent);
 function norm(s){return (s||'').toLowerCase().replace(/[.,;!?'"“”‘’]/g,'').replace(/\s+/g,' ').trim();}
@@ -346,9 +370,11 @@ function revisar(id,pares,salida){
 function reiniciar(id,pares,salida){montar(id,pares);document.getElementById(salida).textContent='';}
 
 
+var _s = 20261029;
+function _rnd(){ _s = (_s*1103515245 + 12345) % 2147483648; return _s / 2147483648; }
 /* ── ejercicio de ordenar (fichas) ──────────────────────────────────────── */
 var co=document.getElementById('exo');
-function revolver(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}
+function revolver(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(_rnd()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}
  if(b.join(' ')===a.join(' ')&&b.length>1){var t2=b[0];b[0]=b[1];b[1]=t2;} return b;}
 function montarO(){
  co.innerHTML='';
@@ -356,7 +382,7 @@ function montarO(){
   var d=document.createElement('div');d.className='orden';
   d.innerHTML='<p class="enc"><span class="num">'+(i+1)+'</span>'+D.ordenPie[i]+'</p>'+
     '<div class="resp" id="ro'+i+'" data-i="'+i+'"></div><div class="pool" id="po'+i+'" data-i="'+i+'"></div>'+
-    '<p class="pista" id="ko'+i+'">&#10003; '+frase.join(' ')+'</p>';
+    '<p class="pista" id="ko'+i+'">&#10003; '+D.ordenOk[i][0]+'</p>';
   co.appendChild(d);
   var pool=d.querySelector('#po'+i);
   revolver(frase).forEach(function(w){var b=document.createElement('button');b.className='ficha';b.type='button';b.textContent=w;pool.appendChild(b);});
@@ -375,7 +401,8 @@ document.getElementById('rev-o').onclick=function(){var n=0;
   var r=document.getElementById('ro'+i);
   var dicho=Array.prototype.map.call(r.children,function(x){return x.textContent;}).join(' ');
   r.classList.remove('bien','error'); document.getElementById('ko'+i).classList.remove('ver');
-  if(norm(dicho)===norm(frase.join(' '))){r.classList.add('bien');n++;}
+  var ok=D.ordenOk[i].some(function(a){return norm(a)===norm(dicho);});
+  if(ok){r.classList.add('bien');n++;}
   else{r.classList.add('error');document.getElementById('ko'+i).classList.add('ver');}});
  document.getElementById('sc-o').textContent='Score: '+n+' / '+D.orden.length;};
 document.getElementById('res-o').onclick=function(){montarO();document.getElementById('sc-o').textContent='';};
@@ -405,10 +432,45 @@ function limpiarHuecos(idp, items, salida){
  });
  document.getElementById(salida).textContent='';
 }
-[['adv',D.adv],['par',D.parejas],['how',D.how]].forEach(function(x){
+[['par',D.parejas],['how',D.how]].forEach(function(x){
  document.getElementById('rev-'+x[0]).onclick=function(){revisarHuecos(x[0],x[1],'sc-'+x[0])};
  document.getElementById('res-'+x[0]).onclick=function(){limpiarHuecos(x[0],x[1],'sc-'+x[0])};
 });
+
+/* ── tabla de adverbios (página 69) ─────────────────────────────────────── */
+(function(){
+  var c=document.getElementById('tadv');
+  D.advT.forEach(function(f,i){
+    var tr=document.createElement('tr');
+    if(i>=6) tr.className='bonus';
+    var ejemplo = (i===0);
+    tr.innerHTML='<td class="n">'+(i+1)+'</td><td>'+f[0]+'</td>'+
+      '<td>'+(ejemplo ? '<i>safely</i>' : '<input type="text" id="advA'+i+'" placeholder="adverbio" autocomplete="off" spellcheck="false">')+'</td>'+
+      '<td>'+(ejemplo ? '<i>drive safely</i>' : '<input type="text" id="advB'+i+'" placeholder="verbo + adverbio" autocomplete="off" spellcheck="false">')+'</td>';
+    c.appendChild(tr);
+  });
+  function revisaAdv(){
+    var n=0, total=0;
+    D.advT.forEach(function(f,i){
+      if(i===0) return;
+      [['advA'+i, f[1]], ['advB'+i, f[2]]].forEach(function(par){
+        var inp=document.getElementById(par[0]); if(!inp) return;
+        total++; inp.classList.remove('bien','mal');
+        var v=norm(inp.value);
+        if(par[1].some(function(a){return norm(a)===v;})){ inp.classList.add('bien'); n++; }
+        else inp.classList.add('mal');
+      });
+    });
+    document.getElementById('sc-adv').textContent='Score: '+n+' / '+total;
+  }
+  document.getElementById('rev-adv').onclick=revisaAdv;
+  document.getElementById('res-adv').onclick=function(){
+    D.advT.forEach(function(f,i){ if(i===0) return;
+      ['advA'+i,'advB'+i].forEach(function(id){ var e=document.getElementById(id); if(e){ e.value=''; e.classList.remove('bien','mal'); } });
+    });
+    document.getElementById('sc-adv').textContent='';
+  };
+})();
 
 /* ── párrafo de Sam (arrastrar) ─────────────────────────────────────────── */
 montar('sam', D.sam);

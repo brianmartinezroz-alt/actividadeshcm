@@ -1,17 +1,32 @@
 {
   "name": "Control de clase · HCM",
   "short_name": "Control HCM",
-  "description": "Pizarrón en vivo y control de la pantalla del salón.",
+  "description": "La pantalla del salón en tu mano: tocar, escribir y controlar la clase en vivo.",
   "start_url": "./control.html",
   "scope": "./",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "landscape",
   "background_color": "#631132",
   "theme_color": "#631132",
   "lang": "es-MX",
   "icons": [
-    {"src":"control-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
-    {"src":"control-512.png","sizes":"512x512","type":"image/png","purpose":"any"},
-    {"src":"control-512.png","sizes":"512x512","type":"image/png","purpose":"maskable"}
+    {
+      "src": "control-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "control-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "control-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }

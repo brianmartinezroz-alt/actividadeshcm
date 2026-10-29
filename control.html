@@ -43,8 +43,8 @@ body{display:flex;flex-direction:column}
 #barra button.on{background:var(--oro);color:#241d20;border-bottom-color:#7d5e13}
 #barra button.rojo{background:#a4332a;border-bottom-color:#5e1c17}
 #barra .sep{flex:none;width:1px;background:#4a3c41;margin:3px 2px}
-#tintas{position:absolute;left:0;right:0;bottom:78px;background:#241d20;border-top:1px solid #4a3c41;
-  padding:10px 12px;display:none;gap:9px;align-items:center;flex-wrap:wrap}
+#tintas{flex:none;background:#1b1518;border-top:1px solid #4a3c41;
+  padding:9px 10px;display:none;gap:9px;align-items:center;flex-wrap:wrap;justify-content:center}
 #tintas.ver{display:flex}
 #tintas i{width:34px;height:34px;border-radius:9px;border:3px solid transparent;display:block}
 #tintas i.sel{border-color:#fff}
@@ -88,8 +88,9 @@ dialog .fin .no{background:var(--claro);color:#555}
   #barra .corte{display:none}
   #barra button{min-width:46px;max-width:none;font-size:9.5px;padding:4px 3px;border-bottom-width:2px}
   #barra button span{font-size:15px;margin:0}
-  #tintas{bottom:54px;padding:7px 10px}
-  #tintas i{width:28px;height:28px}
+  #tintas{padding:6px 8px;gap:7px}
+  #tintas i{width:26px;height:26px}
+  #tintas u{padding:5px 10px;font-size:12px}
 }
 </style>
 </head>
@@ -423,18 +424,21 @@ if('serviceWorker' in navigator){
   capa.addEventListener('pointercancel', suelta);
 
   /* ── botones de la barrita ──────────────────────────────────────── */
-  var cajaTinta=document.getElementById('tintas');
-  document.getElementById('b-tinta').onclick=function(){
-    var v=cajaTinta.classList.toggle('ver'); this.classList.toggle('on', v);
+  var cajaTinta=document.getElementById('tintas'), btnTinta=document.getElementById('b-tinta');
+  function cierraTinta(){ cajaTinta.classList.remove('ver'); btnTinta.classList.remove('on'); medir(); }
+  btnTinta.onclick=function(){
+    var v=cajaTinta.classList.toggle('ver'); this.classList.toggle('on', v); medir();
   };
   cajaTinta.querySelectorAll('i').forEach(function(s){
     s.onclick=function(){ color=s.dataset.c; manda({t:'pluma', c:color, g:grosor});
       cajaTinta.querySelectorAll('i').forEach(function(x){x.classList.remove('sel')}); s.classList.add('sel');
-      if(modo!=='escribir') ponModo('escribir'); };
+      if(modo!=='escribir') ponModo('escribir');
+      cierraTinta(); };
   });
   cajaTinta.querySelectorAll('u').forEach(function(s){
     s.onclick=function(){ grosor=+s.dataset.g; manda({t:'pluma', c:color, g:grosor});
-      cajaTinta.querySelectorAll('u').forEach(function(x){x.classList.remove('sel')}); s.classList.add('sel'); };
+      cajaTinta.querySelectorAll('u').forEach(function(x){x.classList.remove('sel')}); s.classList.add('sel');
+      cierraTinta(); };
   });
   document.getElementById('b-deshacer').onclick=function(){ trazos.pop(); redibujaTinta(); manda({t:'deshacer'}); };
   document.getElementById('b-borrar').onclick=function(){

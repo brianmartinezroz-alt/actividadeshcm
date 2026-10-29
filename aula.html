@@ -11,13 +11,15 @@
 :root{--vino:#631132;--oro:#AE8420;--claro:#F5F1F3}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calibri,"Segoe UI",system-ui,sans-serif}
+body.sinraton, body.sinraton *{cursor:none !important}
 #mundo{position:absolute;left:0;top:0;width:1280px;height:720px;transform-origin:0 0;background:#fff}
 #marco{position:absolute;inset:0;width:1280px;height:720px;border:0;background:#fff}
 #lienzo{position:absolute;left:0;top:0;width:1280px;height:720px;z-index:4;display:none;background:#fff;
   background-image:linear-gradient(rgba(99,17,50,.07) 1px, transparent 1px);background-size:100% 46px}
 #pizarra{position:absolute;left:0;top:0;width:1280px;height:720px;pointer-events:none;z-index:5}
-#cursor{position:absolute;width:30px;height:30px;z-index:6;pointer-events:none;display:none;
-  transform:translate(-3px,-2px);filter:drop-shadow(0 2px 3px rgba(0,0,0,.5))}
+#cursor{position:absolute;width:30px;height:30px;z-index:6;pointer-events:none;display:none;opacity:0;
+  transform:translate(-3px,-2px);filter:drop-shadow(0 2px 3px rgba(0,0,0,.5));transition:opacity .35s}
+#cursor.ver{opacity:1}
 .destello{position:absolute;width:30px;height:30px;border-radius:50%;border:3px solid #AE8420;
   z-index:6;pointer-events:none;transform:translate(-50%,-50%);animation:toc .45s ease-out forwards}
 @keyframes toc{from{opacity:.95;width:14px;height:14px}to{opacity:0;width:64px;height:64px}}
@@ -198,9 +200,13 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
     d.style.left=x+'px'; d.style.top=y+'px'; mundo.appendChild(d);
     setTimeout(function(){ d.remove(); }, 480);
   }
+  var relojCur=null;
   function verCursor(p){
     cursor.style.display='block';
     cursor.style.left=(p[0]*W)+'px'; cursor.style.top=(p[1]*H)+'px';
+    cursor.classList.add('ver');
+    clearTimeout(relojCur);
+    relojCur=setTimeout(function(){ cursor.classList.remove('ver'); }, 1800);
   }
   var ultimoCampo=null;
   function tocar(p){
@@ -254,7 +260,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
       case 'laser': if(op.v){ laser.style.display='block'; laser.style.left=(op.v[0]*W)+'px'; laser.style.top=(op.v[1]*H)+'px'; }
                     else laser.style.display='none'; break;
       case 'tapa':  tapa.style.display = op.v ? 'block':'none'; break;
-      case 'cur':   if(op.v) verCursor(op.v); else cursor.style.display='none'; break;
+      case 'cur':   if(op.v) verCursor(op.v); else cursor.classList.remove('ver'); break;
       case 'tap':   tocar(op.v); break;
       case 'tecla': escribir(op.v); break;
       case 'lienzo':lienzo.style.display = op.v ? 'block':'none'; break;
@@ -312,6 +318,17 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
   }
   setInterval(function(){ if(aviso2.style.display!=='none') pintaEstado(); }, 2000);
   pintaEstado();
+
+  /* el puntero del mouse del salón estorba en la proyección: se esconde solo */
+  var relojRaton=null;
+  function raton(){
+    document.body.classList.remove('sinraton');
+    clearTimeout(relojRaton);
+    relojRaton=setTimeout(function(){ document.body.classList.add('sinraton'); }, 2500);
+  }
+  addEventListener('mousemove', raton);
+  addEventListener('mousedown', raton);
+  raton();
 
   if(lec) abrir(lec);
 })();

@@ -123,7 +123,7 @@ dialog .fin .no{background:var(--claro);color:#555}
 </div>
 
 <div id="top">
-  <div id="luz"></div><b>EN VIVO</b>
+  <div id="luz"></div><b id="rotulo">CONECTANDO&hellip;</b>
   <span class="sala" id="hsala">301</span>
   <button class="mas" id="bmenu">&#9776;</button>
 </div>
@@ -602,10 +602,15 @@ if('serviceWorker' in navigator){
     }
   }
 
+  var luz=document.getElementById('luz'), rotulo=document.getElementById('rotulo');
   setInterval(function(){
-    var ok = canal.estado.remoto==='conectado' || canal.estado.remoto==='apagado';
-    document.getElementById('luz').classList.toggle('ok', ok);
-  }, 1200);
+    var r = canal.estado.remoto;
+    var ok = (r==='conectado');
+    luz.classList.toggle('ok', ok);
+    rotulo.textContent = ok ? 'EN VIVO'
+      : (r==='esperando' ? 'CONECTANDO…'
+      : (r==='error' ? 'SIN SERVIDOR' : 'SOLO ESTE EQUIPO'));
+  }, 1000);
 
   medir();
   requestAnimationFrame(medir);

@@ -29,6 +29,14 @@ body{display:flex;flex-direction:column}
   background-image:linear-gradient(rgba(99,17,50,.07) 1px,transparent 1px);background-size:100% 46px}
 #tinta{position:absolute;inset:0;width:1280px;height:720px;pointer-events:none}
 #capa{position:absolute;inset:0;touch-action:none}
+#punta{position:absolute;width:26px;height:26px;border-radius:50%;border:3px solid #fff;
+  background:rgba(225,29,46,.75);box-shadow:0 0 12px 4px rgba(225,29,46,.45);pointer-events:none;
+  transform:translate(-50%,-50%);display:none;z-index:5}
+#tocagiro{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:none;z-index:6;
+  background:var(--verde);color:#fff;border:0;border-bottom:5px solid #33521f;border-radius:14px;
+  padding:14px 38px;font:inherit;font-weight:700;font-size:18px;letter-spacing:1px}
+#tocagiro:active{transform:translateX(-50%) translateY(2px);filter:brightness(1.15)}
+#tocagiro.ver{display:block}
 #marca{position:absolute;left:10px;top:8px;background:rgba(0,0,0,.6);color:#fff;border-radius:14px;
   padding:4px 11px;font-size:12.5px;pointer-events:none;opacity:0;transition:opacity .25s}
 #marca.ver{opacity:1}
@@ -121,6 +129,8 @@ dialog .fin .no{background:var(--claro);color:#555}
     <canvas id="tinta" width="1280" height="720"></canvas>
   </div>
   <div id="capa"></div>
+  <div id="punta"></div>
+  <button id="tocagiro">TOCAR</button>
   <div id="marca">Tocar</div>
 </div>
 
@@ -139,6 +149,7 @@ dialog .fin .no{background:var(--claro);color:#555}
   <button id="m-tocar" class="on"><span>&#128070;</span>Tocar</button>
   <button id="m-escribir"><span>&#9999;</span>Escribir</button>
   <button id="m-laser"><span>&#128308;</span>L&aacute;ser</button>
+  <button id="m-giro"><span>&#128241;</span>Inclinar</button>
   <button id="b-tinta"><span>&#127912;</span>Tinta</button>
   <div class="corte"></div>
   <button id="b-deshacer"><span>&#8630;</span>Deshacer</button>
@@ -250,7 +261,10 @@ if('serviceWorker' in navigator){
     ox = anchoV <= r.width ? (r.width-anchoV)/2 : Math.min(0, Math.max(r.width-anchoV, ox));
     oy = altoV  <= r.height? (r.height-altoV)/2 : Math.min(0, Math.max(r.height-altoV, oy));
   }
-  function aplicaT(){ mundo.style.transform='translate('+ox+'px,'+oy+'px) scale('+k+')'; }
+  function aplicaT(){
+    mundo.style.transform='translate('+ox+'px,'+oy+'px) scale('+k+')';
+    if(typeof ponPunta==='function' && modo==='giro') ponPunta(donde);
+  }
   addEventListener('resize', medir);
   addEventListener('orientationchange', function(){ setTimeout(medir,250); });
   try{ new ResizeObserver(medir).observe(espejo); }catch(e){}
@@ -315,16 +329,57 @@ if('serviceWorker' in navigator){
   /* ── modos ──────────────────────────────────────────────────────── */
   var modo='tocar';
   function ponModo(m){
+    if(modo==='giro' && m!=='giro') apagaGiro();
     modo=m;
-    ['tocar','escribir','laser'].forEach(function(x){
+    ['tocar','escribir','laser','giro'].forEach(function(x){
       document.getElementById('m-'+x).classList.toggle('on', x===m);
     });
+    document.getElementById('tocagiro').classList.toggle('ver', m==='giro');
+    punta.style.display = m==='giro' ? 'block' : 'none';
+    if(m==='giro') prendeGiro();
     if(m!=='laser') manda({t:'laser', v:null});
     avisa(m==='tocar'?'Tocar y mover':m==='escribir'?'Escribiendo sobre la pantalla':'Láser');
   }
   document.getElementById('m-tocar').onclick=function(){ ponModo('tocar'); };
   document.getElementById('m-escribir').onclick=function(){ ponModo('escribir'); };
   document.getElementById('m-laser').onclick=function(){ ponModo('laser'); };
+  document.getElementById('m-giro').onclick=function(){ ponModo('giro'); };
+
+  /* ── mover el puntero inclinando el teléfono ────────────────────── */
+  var punta=document.getElementById('punta'), giroOn=false, ref=null, ultG=0, donde=[0.5,0.5];
+  function ponPunta(n){
+    donde=n;
+    var r=espejo.getBoundingClientRect();
+    punta.style.left=(ox + n[0]*W*k)+'px';
+    punta.style.top =(oy + n[1]*H*k)+'px';
+  }
+  function alGiro(e){
+    if(e.beta===null || e.gamma===null) return;
+    if(!ref) ref={b:e.beta, g:e.gamma};
+    var x=0.5+(e.gamma-ref.g)/50, y=0.5+(e.beta-ref.b)/50;
+    ponPunta([Math.min(1,Math.max(0,x)), Math.min(1,Math.max(0,y))]);
+    if(Date.now()-ultG>80){ ultG=Date.now(); canal.enviar({t:'cur', v:donde}); }
+  }
+  function prendeGiro(){
+    ref=null; ponPunta([0.5,0.5]);
+    if(giroOn) return;
+    function engancha(){ addEventListener('deviceorientation', alGiro); giroOn=true;
+      avisa('Inclina el tel\u00e9fono \u00b7 toca con el bot\u00f3n verde'); }
+    try{
+      if(typeof DeviceOrientationEvent!=='undefined' && DeviceOrientationEvent.requestPermission){
+        DeviceOrientationEvent.requestPermission().then(function(r){
+          if(r==='granted') engancha(); else avisa('El tel\u00e9fono no dio permiso del sensor');
+        }).catch(function(){ avisa('El tel\u00e9fono no dio permiso del sensor'); });
+      } else engancha();
+    }catch(err){ avisa('Este tel\u00e9fono no trae sensor de movimiento'); }
+  }
+  function apagaGiro(){
+    if(giroOn){ removeEventListener('deviceorientation', alGiro); giroOn=false; }
+    ref=null; punta.style.display='none'; manda({t:'cur', v:null});
+  }
+  document.getElementById('tocagiro').onclick=function(){
+    manda({t:'tap', v:donde}); tocaLocal(donde); vibra();
+  };
 
   /* ── gestos ─────────────────────────────────────────────────────── */
   var dedos={}, pinza=null, uno=null, trazando=false, buffer=[], ultimo=0, ultimoScroll=0;
@@ -346,6 +401,7 @@ if('serviceWorker' in navigator){
     if(ids.length>2) return;
     var n=punto(e);
     uno={x:e.clientX, y:e.clientY, x0:e.clientX, y0:e.clientY, movido:false, n:n, t:Date.now()};
+    if(modo==='giro'){ ref=null; avisa('Centrado'); return; }
     if(modo==='escribir'){
       trazando=true; buffer=[];
       var ancla = enLienzo ? 'pant' : 'doc';

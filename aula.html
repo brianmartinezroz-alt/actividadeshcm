@@ -8,16 +8,17 @@
 :root{--vino:#631132;--oro:#AE8420;--claro:#F5F1F3}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calibri,"Segoe UI",system-ui,sans-serif}
-#marco{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
-#lienzo{position:absolute;inset:0;z-index:4;display:none;background:#fff;
+#mundo{position:absolute;left:0;top:0;width:1280px;height:720px;transform-origin:0 0;background:#fff}
+#marco{position:absolute;inset:0;width:1280px;height:720px;border:0;background:#fff}
+#lienzo{position:absolute;left:0;top:0;width:1280px;height:720px;z-index:4;display:none;background:#fff;
   background-image:linear-gradient(rgba(99,17,50,.07) 1px, transparent 1px);background-size:100% 46px}
-#pizarra{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5}
+#pizarra{position:absolute;left:0;top:0;width:1280px;height:720px;pointer-events:none;z-index:5}
 #cursor{position:absolute;width:30px;height:30px;z-index:6;pointer-events:none;display:none;
   transform:translate(-3px,-2px);filter:drop-shadow(0 2px 3px rgba(0,0,0,.5))}
 .destello{position:absolute;width:30px;height:30px;border-radius:50%;border:3px solid #AE8420;
   z-index:6;pointer-events:none;transform:translate(-50%,-50%);animation:toc .45s ease-out forwards}
 @keyframes toc{from{opacity:.95;width:14px;height:14px}to{opacity:0;width:64px;height:64px}}
-#laser{position:absolute;width:26px;height:26px;border-radius:50%;background:rgba(255,40,40,.85);
+#laser{position:absolute;width:26px;height:26px;z-index:6;border-radius:50%;background:rgba(255,40,40,.85);
   box-shadow:0 0 18px 6px rgba(255,40,40,.55);pointer-events:none;z-index:6;display:none;transform:translate(-50%,-50%)}
 #tapa{position:absolute;inset:0;background:#0b0b0b;z-index:7;display:none}
 #tapa span{position:absolute;bottom:40px;left:0;right:0;text-align:center;color:#555;font-size:18px}
@@ -52,11 +53,13 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
 </style>
 </head>
 <body>
-<iframe id="marco" title="Lección"></iframe>
-<div id="lienzo"></div>
-<canvas id="pizarra"></canvas>
-<svg id="cursor" viewBox="0 0 24 24"><path d="M4 2l15 8.2-6.6 1.5L9.9 18z" fill="#fff" stroke="#631132" stroke-width="1.6" stroke-linejoin="round"/></svg>
-<div id="laser"></div>
+<div id="mundo">
+  <iframe id="marco" title="Lección"></iframe>
+  <div id="lienzo"></div>
+  <canvas id="pizarra"></canvas>
+  <div id="laser"></div>
+  <svg id="cursor" viewBox="0 0 24 24"><path d="M4 2l15 8.2-6.6 1.5L9.9 18z" fill="#fff" stroke="#631132" stroke-width="1.6" stroke-linejoin="round"/></svg>
+</div>
 <div id="tapa"><span>Pantalla en pausa</span></div>
 <div id="zona"></div>
 <div id="barra">
@@ -118,9 +121,12 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
   var trazos = [];        // se guardan normalizados para redibujar al cambiar de tamaño
   var pluma = {c:'#e11d2e', g:5};
 
+  var W=1280, H=720, mundo=document.getElementById('mundo');
   function medir(){
-    var r = window.devicePixelRatio || 1;
-    cv.width = Math.round(innerWidth*r); cv.height = Math.round(innerHeight*r);
+    var e = Math.min(innerWidth/W, innerHeight/H);
+    mundo.style.transform = 'translate('+((innerWidth-W*e)/2)+'px,'+((innerHeight-H*e)/2)+'px) scale('+e+')';
+    var r = Math.min(2, (window.devicePixelRatio||1) * Math.max(1,e));
+    cv.width = Math.round(W*r); cv.height = Math.round(H*r);
     cx.setTransform(r,0,0,r,0,0); redibujar();
   }
   function redibujar(){
@@ -129,7 +135,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
     trazos.forEach(function(t){
       cx.strokeStyle=t.c; cx.lineWidth=t.g; cx.beginPath();
       t.p.forEach(function(q,i){
-        var x=q[0]*innerWidth, y=q[1]*innerHeight;
+        var x=q[0]*W, y=q[1]*H;
         if(i===0) cx.moveTo(x,y); else cx.lineTo(x,y);
       });
       cx.stroke();
@@ -140,11 +146,14 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
   var cargando=false, espera=[];
   marco.addEventListener('load', function(){
     cargando=false;
+    try{ var dd=doc(); if(dd) dd.documentElement.style.scrollBehavior='auto'; }catch(e){}
     var q=espera; espera=[];
     q.forEach(function(op){ setTimeout(function(){ aplicar(op); }, 60); });
   });
+  var lecActual='';
   function abrir(archivo){
     if(!archivo) return;
+    lecActual = archivo;
     cargando = true; espera = [];
     marco.src = archivo;
     blec.textContent = archivo.replace('.html','').replace(/-/g,' ');
@@ -155,18 +164,18 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
   /* ── tocar la lección a distancia ─────────────────────────────────── */
   function destello(x,y){
     var d=document.createElement('div'); d.className='destello';
-    d.style.left=x+'px'; d.style.top=y+'px'; document.body.appendChild(d);
+    d.style.left=x+'px'; d.style.top=y+'px'; mundo.appendChild(d);
     setTimeout(function(){ d.remove(); }, 480);
   }
   function verCursor(p){
     cursor.style.display='block';
-    cursor.style.left=(p[0]*innerWidth)+'px'; cursor.style.top=(p[1]*innerHeight)+'px';
+    cursor.style.left=(p[0]*W)+'px'; cursor.style.top=(p[1]*H)+'px';
   }
   var ultimoCampo=null;
   function tocar(p){
     verCursor(p);
     var d=doc(); if(!d) return;
-    var x=p[0]*innerWidth, y=p[1]*innerHeight;
+    var x=p[0]*W, y=p[1]*H;
     destello(x,y);
     var el=d.elementFromPoint(x,y); if(!el) return;
     var base={bubbles:true,cancelable:true,composed:true,clientX:x,clientY:y,view:d.defaultView,button:0,buttons:1};
@@ -197,13 +206,13 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
   function aplicar(op){
     aviso.style.display='none';
     // si la lección aún está cargando, la orden espera su turno
-    if(cargando && op.t!=='lec' && op.t!=='tapa' && op.t!=='borrar'){ espera.push(op); return; }
+    if(cargando && op.t!=='lec' && op.t!=='tapa' && op.t!=='borrar' && op.t!=='hola'){ espera.push(op); return; }
     var d = doc();
     switch(op.t){
       case 'lec':   abrir(op.v); break;
-      case 'ir':    if(d){ var e=d.querySelector(op.v); if(e) e.scrollIntoView({behavior:'smooth',block:'start'}); } break;
-      case 'desp':  if(d&&d.defaultView) d.defaultView.scrollBy({top: op.v*innerHeight*0.8, behavior:'smooth'}); break;
-      case 'tope':  if(d&&d.defaultView) d.defaultView.scrollTo({top: op.v==='fin'? d.body.scrollHeight : 0, behavior:'smooth'}); break;
+      case 'ir':    if(d){ var e=d.querySelector(op.v); if(e) e.scrollIntoView({block:'start'}); } break;
+      case 'desp':  if(d&&d.defaultView) d.defaultView.scrollBy(0, op.v*H*0.8); break;
+      case 'tope':  if(d&&d.defaultView) d.defaultView.scrollTo(0, op.v==='fin'? d.body.scrollHeight : 0); break;
       case 'clic':  if(d){ var b=d.querySelector(op.v); if(b) b.click(); } break;
       case 'zoom':  if(d&&d.body) d.body.style.zoom = op.v; break;
       case 'pluma': pluma = {c:op.c||pluma.c, g:op.g||pluma.g}; break;
@@ -211,14 +220,16 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
       case 'sigue': var u=trazos[trazos.length-1]; if(u){ u.p=u.p.concat(op.v); redibujar(); } break;
       case 'borrar':trazos=[]; redibujar(); break;
       case 'deshacer': trazos.pop(); redibujar(); break;
-      case 'laser': if(op.v){ laser.style.display='block'; laser.style.left=(op.v[0]*innerWidth)+'px'; laser.style.top=(op.v[1]*innerHeight)+'px'; }
+      case 'laser': if(op.v){ laser.style.display='block'; laser.style.left=(op.v[0]*W)+'px'; laser.style.top=(op.v[1]*H)+'px'; }
                     else laser.style.display='none'; break;
       case 'tapa':  tapa.style.display = op.v ? 'block':'none'; break;
       case 'cur':   if(op.v) verCursor(op.v); else cursor.style.display='none'; break;
       case 'tap':   tocar(op.v); break;
       case 'tecla': escribir(op.v); break;
       case 'lienzo':lienzo.style.display = op.v ? 'block':'none'; break;
-      case 'hola':  break;
+      case 'pos':   if(d&&d.defaultView) d.defaultView.scrollTo(0, op.v); break;
+      case 'hola':  try{ canal.enviar({t:'estoy', v:lecActual,
+                        s:(d&&d.defaultView)?Math.round(d.defaultView.scrollY):0}); }catch(e){} break;
     }
   }
 

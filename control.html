@@ -9,122 +9,95 @@
 <style>
 :root{--vino:#631132;--vino2:#7d1b42;--oro:#AE8420;--verde:#4E7B31;--claro:#F5F1F3}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;overscroll-behavior:none;background:#fff;color:#333;
-  font-family:Calibri,"Segoe UI",system-ui,sans-serif;font-size:17px}
+html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;background:#171114;color:#fff;
+  font-family:Calibri,"Segoe UI",system-ui,sans-serif;font-size:16px}
 body{display:flex;flex-direction:column}
-header{background:var(--vino);color:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px}
-header b{font-size:16px;letter-spacing:.5px}
-header .sala{margin-left:auto;background:var(--oro);border-radius:20px;padding:4px 14px;font-weight:700;letter-spacing:2px}
-header .cfg{background:rgba(255,255,255,.18);border:0;color:#fff;border-radius:8px;padding:6px 10px;font:inherit}
-#luz{width:11px;height:11px;border-radius:50%;background:#c0392b;flex:none}
+
+/* ── cabecera delgada ─────────────────────────────────────────────── */
+#top{flex:none;height:40px;background:var(--vino);display:flex;align-items:center;gap:9px;padding:0 12px;font-size:14px}
+#top b{letter-spacing:.5px;font-size:13.5px;opacity:.9}
+#luz{width:9px;height:9px;border-radius:50%;background:#c0392b;flex:none}
 #luz.ok{background:#49c06a}
-nav{display:flex;border-bottom:2px solid var(--oro)}
-nav button{flex:1;background:#fff;border:0;padding:13px 4px;font:inherit;font-weight:700;color:var(--vino);border-bottom:4px solid transparent;font-size:15.5px}
-nav button.act{border-bottom-color:var(--vino);background:var(--claro)}
-main{flex:1;overflow:auto;padding:12px 12px 26px}
-.pag{display:none}.pag.act{display:block}
-h3{color:var(--vino2);margin:16px 0 7px;font-size:16px;text-transform:uppercase;letter-spacing:.5px}
-h3:first-child{margin-top:2px}
-.rej{display:grid;gap:9px}
-.r2{grid-template-columns:1fr 1fr}.r3{grid-template-columns:1fr 1fr 1fr}.r5{grid-template-columns:repeat(5,1fr)}
-button.b{background:var(--claro);border:1px solid #e0d7db;border-radius:12px;padding:16px 8px;font:inherit;
-  font-weight:700;color:var(--vino);min-height:58px}
-button.b:active{background:var(--vino);color:#fff}
-button.b.on{background:var(--vino);color:#fff;border-color:var(--vino)}
-button.b.g{background:var(--verde);color:#fff;border-color:var(--verde)}
-button.b small{display:block;font-weight:400;font-size:12.5px;opacity:.75;margin-top:2px}
+#top .sala{margin-left:auto;background:var(--oro);border-radius:14px;padding:2px 11px;font-weight:700;letter-spacing:2px;font-size:13.5px}
+#top .mas{background:rgba(255,255,255,.18);border:0;color:#fff;border-radius:7px;padding:4px 9px;font:inherit;font-size:15px}
 
-/* ── mando estilo videojuego ─────────────────────────────────────────── */
-#p-man{padding-bottom:6px}
-.tablero{background:#2a2226;border-radius:20px;padding:12px;box-shadow:inset 0 2px 0 rgba(255,255,255,.08)}
-.pant{background:#120f11;border-radius:12px;padding:9px 12px;color:#f0e7ea;display:flex;align-items:center;gap:10px;margin-bottom:11px}
-.pant .et{font-size:11.5px;letter-spacing:1.5px;color:#9c8d93;text-transform:uppercase}
-.pant .vl{font-size:17px;font-weight:700;color:var(--oro)}
-.pant .dr{margin-left:auto;font-size:12.5px;color:#8d8086;text-align:right;line-height:1.25}
-.gatillos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:11px}
-.gatillos button{background:#413539;border:0;border-bottom:4px solid #241d20;border-radius:12px 12px 16px 16px;
-  color:#f3ecee;font:inherit;font-weight:700;padding:13px 6px;font-size:15px}
-.gatillos button:active{background:var(--oro);border-bottom-color:#7d5e13;transform:translateY(2px)}
-.gatillos button small{display:block;font-weight:400;font-size:11.5px;opacity:.7;letter-spacing:.5px}
-.mando{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center}
-.cruz{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:5px;aspect-ratio:1/1}
-.cruz button{background:#4a3c41;border:0;border-bottom:4px solid #241d20;color:#fff;font:inherit;font-size:21px;font-weight:700;border-radius:11px}
-.cruz button:active{background:var(--vino2);border-bottom-color:#3d0c1f;transform:translateY(2px)}
-.cruz .vacio{visibility:hidden}
-.cruz .mid{background:#241d20;font-size:11px;letter-spacing:.5px;line-height:1.1;padding:2px}
-.acc{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:9px;aspect-ratio:1/1}
-.acc button{border:0;border-bottom:5px solid rgba(0,0,0,.35);border-radius:50%;color:#fff;font:inherit;
-  font-weight:700;font-size:13px;line-height:1.15;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px}
-.acc button span{font-size:19px;display:block;margin-bottom:1px}
-.acc button:active{transform:translateY(2px);filter:brightness(1.25)}
-.acc button.on{box-shadow:0 0 0 4px rgba(255,255,255,.55);filter:brightness(1.3)}
-.acc .a{background:var(--verde)}.acc .b{background:#c0392b}.acc .x{background:var(--oro)}.acc .y{background:#4a3c41}
-.secpills{display:flex;gap:7px;margin-top:11px;overflow:auto;padding-bottom:2px}
-.secpills button{flex:none;background:#413539;border:0;color:#e9dfe3;font:inherit;font-size:13.5px;
-  border-radius:20px;padding:8px 15px;font-weight:700}
-.secpills button.on{background:var(--oro);color:#2a2226}
-.pie{color:#8d8086;font-size:12.5px;margin:9px 2px 0;text-align:center}
+/* ── espejo de la pantalla del salón ──────────────────────────────── */
+#espejo{flex:1;position:relative;overflow:hidden;background:#000;touch-action:none}
+#mundo{position:absolute;left:0;top:0;width:1280px;height:720px;transform-origin:0 0;background:#fff}
+#marco{width:1280px;height:720px;border:0;display:block;background:#fff}
+#blanco{position:absolute;inset:0;display:none;background:#fff;
+  background-image:linear-gradient(rgba(99,17,50,.07) 1px,transparent 1px);background-size:100% 46px}
+#tinta{position:absolute;inset:0;width:1280px;height:720px;pointer-events:none}
+#capa{position:absolute;inset:0;touch-action:none}
+#marca{position:absolute;left:10px;top:8px;background:rgba(0,0,0,.6);color:#fff;border-radius:14px;
+  padding:4px 11px;font-size:12.5px;pointer-events:none;opacity:0;transition:opacity .25s}
+#marca.ver{opacity:1}
 
-.modos{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.modos button{background:var(--claro);border:1px solid #e0d7db;border-radius:11px;padding:12px 6px;font:inherit;
-  font-weight:700;color:var(--vino);font-size:14.5px}
-.modos button.on{background:var(--vino);color:#fff;border-color:var(--vino)}
-.modos button small{display:block;font-weight:400;font-size:11.5px;opacity:.75}
-#tocar{width:100%;background:var(--verde);color:#fff;border:0;border-bottom:5px solid #33521f;border-radius:14px;
-  padding:19px;font:inherit;font-weight:700;font-size:19px;letter-spacing:1px;margin-bottom:10px;display:none}
-#tocar:active{transform:translateY(2px);filter:brightness(1.15)}
-#tocar.ver{display:block}
-.escribir{display:flex;gap:8px;margin:10px 0}
-.escribir input{flex:1;font:inherit;padding:12px;border:1px solid #c7c0c3;border-radius:10px}
-.escribir button{background:var(--vino);color:#fff;border:0;border-radius:10px;padding:0 16px;font:inherit;font-weight:700}
-.anchos{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:9px}
-.anchos button{background:#413539;border:0;border-bottom:4px solid #241d20;color:#f3ecee;font:inherit;
-  font-weight:700;border-radius:12px;padding:13px 6px;font-size:14.5px}
-.anchos button.on{background:var(--oro);color:#2a2226}
-#pad{position:relative;width:100%;aspect-ratio:16/9;background:#fff;border:3px dashed #c7c0c3;border-radius:14px;
-  touch-action:none;overflow:hidden;margin:4px 0 10px}
-#pad canvas{position:absolute;inset:0;width:100%;height:100%}
-#pad .ayuda{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#b9b0b4;
-  font-size:15px;pointer-events:none;text-align:center;padding:0 20px}
-.colores{display:flex;gap:9px;margin-bottom:9px}
-.colores span{flex:1;height:44px;border-radius:11px;border:3px solid transparent}
-.colores span.sel{border-color:#333}
-.gros{display:flex;gap:9px;margin-bottom:9px}
-.gros button{flex:1;background:var(--claro);border:1px solid #e0d7db;border-radius:11px;padding:10px;font:inherit}
-.gros button.sel{background:var(--vino);color:#fff}
-.nota{font-size:13.5px;color:#888;margin:8px 0 0}
-dialog{border:0;border-radius:16px;padding:0;width:92%;max-width:420px}
-dialog .in{padding:18px}
-dialog h2{margin:0 0 8px;color:var(--vino);font-size:20px}
-dialog label{display:block;font-size:14px;color:#777;margin:12px 0 4px}
-dialog input{width:100%;font:inherit;padding:11px;border:1px solid #c7c0c3;border-radius:9px}
-dialog .fin{display:flex;gap:9px;margin-top:16px}
-dialog .fin button{flex:1;border:0;border-radius:10px;padding:13px;font:inherit;font-weight:700}
+/* ── barrita de botones ───────────────────────────────────────────── */
+#barra{flex:none;background:#241d20;border-top:3px solid var(--oro);display:flex;flex-wrap:wrap;
+  justify-content:center;gap:6px;padding:7px 7px calc(7px + env(safe-area-inset-bottom))}
+#barra button{flex:1 1 0;min-width:52px;max-width:92px;background:#3a2e33;border:0;border-bottom:3px solid #151013;
+  color:#f3ecee;font:inherit;font-weight:700;font-size:11px;border-radius:10px;padding:7px 4px;line-height:1.1}
+#barra button span{display:block;font-size:17px;margin-bottom:1px}
+#barra .corte{flex-basis:100%;height:0}
+#barra button.on{background:var(--oro);color:#241d20;border-bottom-color:#7d5e13}
+#barra button.rojo{background:#a4332a;border-bottom-color:#5e1c17}
+#barra .sep{flex:none;width:1px;background:#4a3c41;margin:3px 2px}
+#tintas{position:absolute;left:0;right:0;bottom:78px;background:#241d20;border-top:1px solid #4a3c41;
+  padding:10px 12px;display:none;gap:9px;align-items:center;flex-wrap:wrap}
+#tintas.ver{display:flex}
+#tintas i{width:34px;height:34px;border-radius:9px;border:3px solid transparent;display:block}
+#tintas i.sel{border-color:#fff}
+#tintas b{font-weight:700;font-size:13px;color:#b5a6ac;margin-left:6px}
+#tintas u{text-decoration:none;background:#3a2e33;border-radius:9px;padding:7px 12px;font-size:13px}
+#tintas u.sel{background:var(--oro);color:#241d20}
+
+dialog{border:0;border-radius:16px;padding:0;width:94%;max-width:460px;color:#333}
+dialog .in{padding:16px}
+dialog h2{margin:0 0 10px;color:var(--vino);font-size:19px}
+dialog h3{margin:14px 0 6px;color:var(--vino2);font-size:13.5px;text-transform:uppercase;letter-spacing:.5px}
+dialog .rej{display:grid;gap:8px;grid-template-columns:1fr 1fr}
+dialog .rej.r3{grid-template-columns:1fr 1fr 1fr}
+dialog .rej button{background:var(--claro);border:1px solid #e0d7db;border-radius:10px;padding:12px 8px;font:inherit;
+  font-weight:700;color:var(--vino);font-size:14px}
+dialog label{display:block;font-size:13px;color:#777;margin:10px 0 4px}
+dialog input{width:100%;font:inherit;padding:10px;border:1px solid #c7c0c3;border-radius:9px}
+dialog .fin{display:flex;gap:9px;margin-top:14px}
+dialog .fin button{flex:1;border:0;border-radius:10px;padding:12px;font:inherit;font-weight:700}
 dialog .fin .ok{background:var(--vino);color:#fff}
 dialog .fin .no{background:var(--claro);color:#555}
-dialog p{font-size:14px;color:#666;line-height:1.45}
 
-/* ── pantalla de entrada (como el juego) ─────────────────────────────── */
-#entrar{position:fixed;inset:0;z-index:40;background:var(--vino);color:#fff;display:none;
-  flex-direction:column;align-items:center;justify-content:center;padding:22px}
+/* ── entrada con número ───────────────────────────────────────────── */
+#entrar{position:fixed;inset:0;z-index:40;background:var(--vino);display:none;
+  flex-direction:column;align-items:center;justify-content:center;padding:20px}
 #entrar.ver{display:flex}
-#entrar h1{margin:0 0 4px;font-size:25px;letter-spacing:.3px;text-align:center}
-#entrar p{margin:0 0 16px;font-size:15.5px;opacity:.88;text-align:center;max-width:330px}
+#entrar h1{margin:0 0 4px;font-size:24px;text-align:center}
+#entrar p{margin:0 0 14px;font-size:15px;opacity:.88;text-align:center;max-width:320px}
 #eco{background:#fff;color:var(--vino);border-radius:14px;width:min(320px,86vw);text-align:center;
-  font-size:46px;font-weight:700;letter-spacing:12px;padding:12px 0 12px 12px;min-height:74px}
+  font-size:44px;font-weight:700;letter-spacing:12px;padding:10px 0 10px 12px}
 #eco.vacio{color:#d6c9ce}
-#teclas{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:min(320px,86vw);margin-top:16px}
+#teclas{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;width:min(320px,86vw);margin-top:14px}
 #teclas button{background:rgba(255,255,255,.14);border:0;border-bottom:4px solid rgba(0,0,0,.22);color:#fff;
-  font:inherit;font-size:25px;font-weight:700;border-radius:13px;padding:15px 0}
-#teclas button:active{background:#fff;color:var(--vino)}
-#teclas .ir{background:var(--oro);font-size:17px;letter-spacing:1px}
+  font:inherit;font-size:24px;font-weight:700;border-radius:12px;padding:14px 0}
+#teclas .ir{background:var(--oro);font-size:16px;letter-spacing:1px}
+
+/* ── celular acostado: barrita de una sola fila ───────────────────── */
+@media (max-height:540px){
+  #top{height:30px;font-size:13px}
+  #barra{flex-wrap:nowrap;overflow-x:auto;gap:5px;padding:5px 6px calc(5px + env(safe-area-inset-bottom))}
+  #barra .corte{display:none}
+  #barra button{min-width:46px;max-width:none;font-size:9.5px;padding:4px 3px;border-bottom-width:2px}
+  #barra button span{font-size:15px;margin:0}
+  #tintas{bottom:54px;padding:7px 10px}
+  #tintas i{width:28px;height:28px}
+}
 </style>
 </head>
 <body>
 
 <div id="entrar">
   <h1>Control de clase</h1>
-  <p>Escribe el n&uacute;mero que aparece en la pantalla del sal&oacute;n, o esc&aacute;nea su c&oacute;digo QR.</p>
+  <p>Escribe el n&uacute;mero que aparece en la pantalla del sal&oacute;n, o escanea su QR.</p>
   <div id="eco" class="vacio">— — —</div>
   <div id="teclas">
     <button>1</button><button>2</button><button>3</button>
@@ -134,158 +107,92 @@ dialog p{font-size:14px;color:#666;line-height:1.45}
   </div>
 </div>
 
-<header>
-  <div id="luz"></div><b>CONTROL DE CLASE</b>
+<div id="top">
+  <div id="luz"></div><b>EN VIVO</b>
   <span class="sala" id="hsala">301</span>
-  <button class="cfg" id="bcfg">&#9881;</button>
-</header>
-<nav>
-  <button class="act" data-p="man">Mando</button>
-  <button data-p="piz">Pizarr&oacute;n</button>
-  <button data-p="lec">Lecci&oacute;n</button>
-  <button data-p="nav">Lista</button>
-</nav>
-<main>
+  <button class="mas" id="bmenu">&#9776;</button>
+</div>
 
-<section class="pag act" id="p-man">
-  <div class="tablero">
-    <div class="pant">
-      <div>
-        <div class="et">En pantalla</div>
-        <div class="vl" id="mlec">Lecci&oacute;n 6</div>
-      </div>
-      <div class="dr" id="msec">Secci&oacute;n 1 de 3<br><span id="mnom">Presentation</span></div>
-    </div>
-
-    <div class="gatillos">
-      <button data-zoom="-">L &nbsp;A &minus;<small>letra m&aacute;s chica</small></button>
-      <button data-zoom="+">R &nbsp;A &plus;<small>letra m&aacute;s grande</small></button>
-    </div>
-
-    <div class="mando">
-      <div class="cruz">
-        <div class="vacio"></div><button data-d="arriba">&#9650;</button><div class="vacio"></div>
-        <button data-d="izq">&#9664;</button><button class="mid" data-d="inicio">INICIO</button><button data-d="der">&#9654;</button>
-        <div class="vacio"></div><button data-d="abajo">&#9660;</button><div class="vacio"></div>
-      </div>
-      <div class="acc">
-        <button class="a" id="mlaser"><span>&#128308;</span>L&aacute;ser</button>
-        <button class="b" id="mclave"><span>&#128273;</span>Clave</button>
-        <button class="x" id="mrev"><span>&#10004;</span>Revisar</button>
-        <button class="y" id="mtapa"><span>&#9728;</span>Negro</button>
-      </div>
-    </div>
-
-    <div class="anchos">
-      <button id="mlienzo">&#9634; Lienzo blanco</button>
-      <button id="mpuntero">&#128070; Puntero / escribir</button>
-    </div>
-    <div class="secpills" id="mpills"></div>
-    <p class="pie">La cruz mueve la pantalla y cambia de secci&oacute;n. Mantén &#9650;&#9660; presionado para avanzar seguido.</p>
+<div id="espejo">
+  <div id="mundo">
+    <iframe id="marco" title="Pantalla del sal&oacute;n" scrolling="no"></iframe>
+    <div id="blanco"></div>
+    <canvas id="tinta" width="1280" height="720"></canvas>
   </div>
-</section>
+  <div id="capa"></div>
+  <div id="marca">Tocar</div>
+</div>
 
-<section class="pag" id="p-piz">
-  <div class="modos" id="modos">
-    <button data-m="lapiz" class="on">&#9999; L&aacute;piz<small>escribe en la pantalla</small></button>
-    <button data-m="laser">&#128308; L&aacute;ser<small>se&ntilde;ala sin marcar</small></button>
-    <button data-m="puntero">&#128070; Puntero<small>mueve y toca la lecci&oacute;n</small></button>
-    <button data-m="giro">&#128241; Con el cel<small>mueve inclinando</small></button>
-  </div>
-  <button id="tocar">TOCAR AQU&Iacute;</button>
-  <div id="pad"><canvas></canvas><div class="ayuda">Dibuja aqu&iacute; con el dedo.<br>Lo que trazas aparece en la pantalla.</div></div>
-  <div class="colores" id="cols"></div>
-  <div class="gros" id="gr">
-    <button data-g="3">fino</button><button data-g="6" class="sel">medio</button><button data-g="12">grueso</button>
-  </div>
-  <div class="rej r3">
-    <button class="b" id="blienzo">&#9634; Lienzo</button>
-    <button class="b" data-op='{"t":"deshacer"}'>&#8630; Deshacer</button>
-    <button class="b g" data-op='{"t":"borrar"}'>Borrar todo</button>
-  </div>
-  <div class="escribir">
-    <input id="itxt" placeholder="Escribe aqu&iacute; y s&uacute;belo al recuadro" autocapitalize="none">
-    <button id="btxt">Enviar</button>
-    <button id="bborra">&#9003;</button>
-  </div>
-  <p class="nota">Con <b>Puntero</b> mueves el dedo en el recuadro y tocas: as&iacute; arrastras las palabras,
-  abres los audios y marcas respuestas sin levantarte. Con <b>Con el cel</b> el puntero sigue c&oacute;mo inclinas
-  el tel&eacute;fono y tocas con el bot&oacute;n verde. El <b>Lienzo</b> pone una hoja en blanco encima para explicar
-  gram&aacute;tica, sin cerrar la lecci&oacute;n: el audio y el video siguen corriendo abajo.
-  El l&aacute;ser mueve un punto rojo sin dejar marca. Con el l&aacute;piz, cada trazo se queda hasta que borres.
-  Nada de esto detiene los audios ni los videos de la pantalla.</p>
-</section>
+<div id="tintas">
+  <i data-c="#e11d2e" class="sel" style="background:#e11d2e"></i>
+  <i data-c="#631132" style="background:#631132"></i>
+  <i data-c="#1b6ac9" style="background:#1b6ac9"></i>
+  <i data-c="#2e9e4f" style="background:#2e9e4f"></i>
+  <i data-c="#AE8420" style="background:#AE8420"></i>
+  <i data-c="#111111" style="background:#111"></i>
+  <b>Grueso</b>
+  <u data-g="3">fino</u><u data-g="6" class="sel">medio</u><u data-g="12">grueso</u>
+</div>
 
-<section class="pag" id="p-lec">
+<div id="barra">
+  <button id="m-tocar" class="on"><span>&#128070;</span>Tocar</button>
+  <button id="m-escribir"><span>&#9999;</span>Escribir</button>
+  <button id="m-laser"><span>&#128308;</span>L&aacute;ser</button>
+  <button id="b-tinta"><span>&#127912;</span>Tinta</button>
+  <div class="corte"></div>
+  <button id="b-deshacer"><span>&#8630;</span>Deshacer</button>
+  <button id="b-borrar" class="rojo"><span>&#10006;</span>Borrar</button>
+  <button id="b-lienzo"><span>&#9634;</span>Lienzo</button>
+  <button id="b-negro"><span>&#9728;</span>Negro</button>
+  <button id="b-ajustar"><span>&#9974;</span>Ajustar</button>
+</div>
+
+<dialog id="dmenu"><div class="in">
+  <h2>Clase</h2>
   <h3>Abrir en la pantalla</h3>
-  <div class="rej" id="lecs"></div>
-  <p class="nota">Si la pantalla apenas se abri&oacute;, primero manda una lecci&oacute;n desde aqu&iacute;.</p>
-</section>
-
-<section class="pag" id="p-nav">
-  <h3>Secciones</h3>
-  <div class="rej r5" id="secs"></div>
-  <h3>Mover la pantalla</h3>
-  <div class="rej r2">
-    <button class="b" data-op='{"t":"desp","v":-1}'>&#9650; Subir</button>
-    <button class="b" data-op='{"t":"desp","v":1}'>&#9660; Bajar</button>
-    <button class="b" data-op='{"t":"tope","v":"inicio"}'>&#10514; Inicio</button>
-    <button class="b" data-op='{"t":"tope","v":"fin"}'>&#10515; Final</button>
-  </div>
-  <h3>Tama&ntilde;o de letra</h3>
-  <div class="rej r3">
-    <button class="b" data-zoom="-">A &minus;</button>
-    <button class="b" data-zoom="0">100%</button>
-    <button class="b" data-zoom="+">A &plus;</button>
-  </div>
-  <h3>En clase</h3>
-  <div class="rej r2">
-    <button class="b" data-op='{"t":"clic","v":"#clave"}'>Clave docente</button>
-    <button class="b" id="btapa">Pantalla en negro</button>
-  </div>
+  <div class="rej" id="m-lecs"></div>
+  <h3>Ir a la secci&oacute;n</h3>
+  <div class="rej r3" id="m-secs"></div>
   <h3>Revisar ejercicios</h3>
-  <div class="rej r3" id="revs"></div>
-</section>
-
-</main>
+  <div class="rej r3" id="m-revs"></div>
+  <h3>Tama&ntilde;o de letra en la pantalla</h3>
+  <div class="rej r3">
+    <button data-zoom="-">A &minus;</button><button data-zoom="0">100%</button><button data-zoom="+">A &plus;</button>
+  </div>
+  <h3>Otros</h3>
+  <div class="rej">
+    <button data-op='{"t":"clic","v":"#clave"}'>Clave docente</button>
+    <button id="m-cfg">Ajustes de conexi&oacute;n</button>
+  </div>
+  <div class="fin"><button class="no" id="m-cerrar">Cerrar</button></div>
+</div></dialog>
 
 <dialog id="dcfg"><div class="in">
   <h2>Ajustes</h2>
-  <label>C&oacute;digo de sala (el mismo que muestra la pantalla)</label>
+  <label>C&oacute;digo de sala</label>
   <input id="icsala" maxlength="8" autocapitalize="characters">
   <label>Direcci&oacute;n del servidor del HCM (para controlar otra computadora)</label>
   <input id="icep" placeholder="https://script.google.com/macros/s/…/exec">
-  <p>Si el celular est&aacute; conectado al proyector, d&eacute;jala vac&iacute;a: funciona sin internet.
-     Para controlar la computadora del sal&oacute;n, pega aqu&iacute; la direcci&oacute;n de tu Apps Script del HCM.</p>
   <div class="fin"><button class="no" id="bno">Cerrar</button><button class="ok" id="bok">Guardar</button></div>
 </div></dialog>
 
 <script src="canal.js"></script>
 <script>
 (function(){
+  var W = 1280, H = 720;                       // la pantalla del salón, en grande
   var par = new URLSearchParams(location.search);
-  var deUrl = par.get('sala');
-  var guardada = localStorage.getItem('hcm_aula_sala');
-  var sala = (deUrl || guardada || '').toUpperCase().trim();
+  var sala = (par.get('sala') || localStorage.getItem('hcm_aula_sala') || '').toUpperCase().trim();
   if(par.get('ep')) Canal.guardarEndpoint(par.get('ep'));
 
-  /* ── pantalla de entrada, igual que el juego ───────────────────────── */
-  var cap = document.getElementById('entrar'), eco = document.getElementById('eco'), buf='';
-  function pintaEco(){
-    eco.textContent = buf ? buf : '— — —';
-    eco.classList.toggle('vacio', !buf);
-  }
+  /* ── entrada con número ─────────────────────────────────────────── */
+  var cap=document.getElementById('entrar'), eco=document.getElementById('eco'), buf='';
+  function pintaEco(){ eco.textContent = buf || '— — —'; eco.classList.toggle('vacio', !buf); }
   document.querySelectorAll('#teclas button').forEach(function(b){
     b.onclick=function(){
-      var k=b.dataset.k;
-      try{ navigator.vibrate && navigator.vibrate(10); }catch(e){}
+      var k=b.dataset.k; try{ navigator.vibrate && navigator.vibrate(10); }catch(e){}
       if(k==='del'){ buf=buf.slice(0,-1); pintaEco(); return; }
-      if(k==='ok'){
-        if(buf.length<3) return;
-        localStorage.setItem('hcm_aula_sala', buf);
-        location.search='?sala='+encodeURIComponent(buf);
-        return;
-      }
+      if(k==='ok'){ if(buf.length<3) return; localStorage.setItem('hcm_aula_sala',buf);
+                    location.search='?sala='+encodeURIComponent(buf); return; }
       if(buf.length<6){ buf+=b.textContent.trim(); pintaEco(); }
     };
   });
@@ -293,17 +200,17 @@ dialog p{font-size:14px;color:#666;line-height:1.45}
   localStorage.setItem('hcm_aula_sala', sala);
   document.getElementById('hsala').textContent = sala;
 
-  var canal = new Canal(sala, 'control', function(){});
-  function manda(op){ canal.enviar(op); vibra(); }
-  function vibra(){ try{ navigator.vibrate && navigator.vibrate(12); }catch(e){} }
+  var canal = new Canal(sala, 'control', recibir);
+  function manda(op){ canal.enviar(op); }
+  function vibra(){ try{ navigator.vibrate && navigator.vibrate(10); }catch(e){} }
 
-  /* secciones y ejercicios por lección */
+  /* ── lecciones ──────────────────────────────────────────────────── */
   var LECCIONES = [
-    {f:'clase-29-oct.html', n:'Clase de hoy \u00b7 29 oct (gram\u00e1tica L6)', c:'Clase 29 oct',
+    {f:'clase-29-oct.html', n:'Clase de hoy · 29 oct', c:'Clase 29 oct',
      secs:[['1','Presentation','#p1'],['2','Practice','#p2'],['3','Production','#p3']],
      revs:[['Ordenar','#rev-o'],['Adverbios','#rev-adv'],['Sam','#rev-sam'],['Adj/Adv','#rev-par'],
-           ['Carrera: siguiente','#ca-sig'],['Carrera: abrir','#ca-abrir'],['Carrera: correcta','#ca-clave']]},
-    {f:'leccion-06-should-could.html', n:'Lección 6 · Should / could / adverbios', c:'Lección 6',
+           ['Carrera &rarr;','#ca-sig'],['Carrera: abrir','#ca-abrir'],['Carrera: correcta','#ca-clave']]},
+    {f:'leccion-06-should-could.html', n:'Lección 6 · Should / could', c:'Lección 6',
      secs:[['1','Presentation','#p1'],['2','Practice','#p2'],['3','Production','#p3']],
      revs:[['Ordenar','#rev-o'],['Adverbios','#rev-adv'],['Sam','#rev-sam'],['Adj/Adv','#rev-par'],['How','#rev-how']]},
     {f:'leccion-05-vocabulary.html', n:'Lección 5 · Vocabulary', c:'Lección 5',
@@ -314,261 +221,247 @@ dialog p{font-size:14px;color:#666;line-height:1.45}
      revs:[['Preguntas','#revisarQ'],['A','#revA'],['B','#revB'],['C','#revC'],['D','#revD'],['E','#revE'],['F','#revF']]},
     {f:'index.html', n:'Índice de actividades', c:'Índice', secs:[], revs:[]}
   ];
-  var actual = LECCIONES[0], iSec = 0, iRev = 0;
+  var actual = LECCIONES[0];
 
-  var mlec=document.getElementById('mlec'), msec=document.getElementById('msec'),
-      mnom=document.getElementById('mnom'), mpills=document.getElementById('mpills');
-
-  function pintaMando(){
-    mlec.textContent = actual.c;
-    if(actual.secs.length){
-      msec.innerHTML = 'Sección '+(iSec+1)+' de '+actual.secs.length+'<br><span id="mnom">'+actual.secs[iSec][1]+'</span>';
-    } else {
-      msec.innerHTML = 'Sin secciones<br><span id="mnom">&mdash;</span>';
-    }
-    mpills.innerHTML='';
-    actual.secs.forEach(function(x,i){
-      var b=document.createElement('button'); b.textContent=x[1];
-      if(i===iSec) b.className='on';
-      b.onclick=function(){ iSec=i; manda({t:'ir', v:x[2]}); pintaMando(); };
-      mpills.appendChild(b);
-    });
+  /* ── el espejo ──────────────────────────────────────────────────── */
+  var espejo=document.getElementById('espejo'), mundo=document.getElementById('mundo'),
+      marco=document.getElementById('marco'), capa=document.getElementById('capa'),
+      tinta=document.getElementById('tinta'), tx=tinta.getContext('2d'),
+      blanco=document.getElementById('blanco'), marca=document.getElementById('marca');
+  var k=0, ox=0, oy=0, kBase=0, ajustado=false;
+  function medir(){
+    var r=espejo.getBoundingClientRect();
+    if(!r.width || !r.height) return;
+    kBase = Math.min(r.width/W, r.height/H);
+    if(!ajustado || k < kBase){ k = kBase; ox=0; oy=0; ajustado=true; }
+    limita(); aplicaT();
   }
-  function vaSeccion(paso){
-    if(!actual.secs.length) return;
-    iSec = Math.min(actual.secs.length-1, Math.max(0, iSec+paso));
-    manda({t:'ir', v:actual.secs[iSec][2]});
-    pintaMando();
+  function limita(){
+    var r=espejo.getBoundingClientRect();
+    if(k < kBase) k = kBase;
+    if(k > kBase*6) k = kBase*6;
+    var anchoV = W*k, altoV = H*k;
+    ox = anchoV <= r.width ? (r.width-anchoV)/2 : Math.min(0, Math.max(r.width-anchoV, ox));
+    oy = altoV  <= r.height? (r.height-altoV)/2 : Math.min(0, Math.max(r.height-altoV, oy));
   }
+  function aplicaT(){ mundo.style.transform='translate('+ox+'px,'+oy+'px) scale('+k+')'; }
+  addEventListener('resize', medir);
+  addEventListener('orientationchange', function(){ setTimeout(medir,250); });
+  try{ new ResizeObserver(medir).observe(espejo); }catch(e){}
 
-  function pinta(){
-    var s = document.getElementById('secs'); s.innerHTML='';
-    s.className = 'rej r' + Math.min(5, Math.max(2, actual.secs.length||2));
-    actual.secs.forEach(function(x,i){
-      var b=document.createElement('button'); b.className='b';
-      b.innerHTML = x[0] + '<small>'+x[1]+'</small>';
-      b.onclick=function(){ iSec=i; manda({t:'ir', v:x[2]}); pintaMando(); };
-      s.appendChild(b);
-    });
-    var r = document.getElementById('revs'); r.innerHTML='';
-    actual.revs.forEach(function(x,i){
-      var b=document.createElement('button'); b.className='b'; b.textContent=x[0];
-      b.onclick=function(){ iRev=i; manda({t:'clic', v:x[1]}); };
-      r.appendChild(b);
-    });
-    pintaMando();
-  }
-  var cl = document.getElementById('lecs');
-  LECCIONES.forEach(function(L){
-    var b=document.createElement('button'); b.className='b'; b.textContent=L.n;
-    b.onclick=function(){ actual=L; iSec=0; iRev=0; pinta(); manda({t:'lec', v:L.f}); };
-    cl.appendChild(b);
+  function doc(){ try{ return marco.contentDocument; }catch(e){ return null; } }
+  var cargando=false;
+  marco.addEventListener('load', function(){
+    cargando=false;
+    try{ var dd=doc(); if(dd) dd.documentElement.style.scrollBehavior='auto'; }catch(e){}
   });
-  pinta();
-
-  /* ── cruz del mando, con repetición al mantener presionado ─────────── */
-  var rep=null, lento=null;
-  function cruz(d){
-    if(d==='arriba') manda({t:'desp', v:-1});
-    else if(d==='abajo') manda({t:'desp', v:1});
-    else if(d==='izq') vaSeccion(-1);
-    else if(d==='der') vaSeccion(1);
-    else if(d==='inicio') manda({t:'tope', v:'inicio'});
-  }
-  document.querySelectorAll('.cruz button[data-d]').forEach(function(b){
-    var d=b.dataset.d;
-    b.addEventListener('pointerdown', function(e){
-      e.preventDefault(); cruz(d);
-      if(d==='arriba'||d==='abajo'){
-        lento=setTimeout(function(){ rep=setInterval(function(){ cruz(d); }, 650); }, 520);
-      }
-    });
-    ['pointerup','pointercancel','pointerleave'].forEach(function(ev){
-      b.addEventListener(ev, function(){ clearTimeout(lento); clearInterval(rep); rep=null; });
-    });
-  });
-
-  /* botones con op fija */
-  document.querySelectorAll('[data-op]').forEach(function(b){
-    b.onclick=function(){ manda(JSON.parse(b.dataset.op)); };
-  });
-
-  /* zoom (gatillos del mando y lista) */
-  var z = 1;
-  document.querySelectorAll('[data-zoom]').forEach(function(b){
-    b.onclick=function(){
-      var d=b.dataset.zoom;
-      z = d==='0' ? 1 : Math.min(2.2, Math.max(0.6, z + (d==='+' ? 0.15 : -0.15)));
-      manda({t:'zoom', v:Math.round(z*100)/100});
-    };
-  });
-
-  /* pantalla en negro — dos botones, un solo estado */
-  var tapado=false, bt=document.getElementById('btapa'), bt2=document.getElementById('mtapa');
-  function tapar(){ tapado=!tapado; bt.classList.toggle('on',tapado); bt2.classList.toggle('on',tapado); manda({t:'tapa', v:tapado}); }
-  bt.onclick=tapar; bt2.onclick=tapar;
-
-  /* clave docente y revisar, desde el mando */
-  document.getElementById('mclave').onclick=function(){ manda({t:'clic', v:'#clave'}); };
-  document.getElementById('mrev').onclick=function(){
-    if(!actual.revs.length) return;
-    var x=actual.revs[iRev % actual.revs.length];
-    manda({t:'clic', v:x[1]});
-    iRev=(iRev+1)%actual.revs.length;
-    this.querySelector('span').nextSibling.textContent = x[0];
-  };
-
-  /* pestañas */
-  document.querySelectorAll('nav button').forEach(function(b){
-    b.onclick=function(){
-      document.querySelectorAll('nav button').forEach(function(x){x.classList.remove('act')});
-      document.querySelectorAll('.pag').forEach(function(x){x.classList.remove('act')});
-      b.classList.add('act'); document.getElementById('p-'+b.dataset.p).classList.add('act');
-    };
-  });
-  function vePizarron(){
-    document.querySelectorAll('nav button').forEach(function(x){ x.classList.toggle('act', x.dataset.p==='piz'); });
-    document.querySelectorAll('.pag').forEach(function(x){ x.classList.toggle('act', x.id==='p-piz'); });
-    setTimeout(medirPad, 60);
+  function abrir(archivo, avisa){
+    cargando=true; marco.src=archivo;
+    if(avisa) manda({t:'lec', v:archivo});
   }
 
-  /* ── pizarrón ─────────────────────────────────────────────────────────── */
-  var COLORES=['#e11d2e','#631132','#1b6ac9','#2e9e4f','#AE8420','#111111'];
-  var color=COLORES[0], grosor=6;
-  var cc=document.getElementById('cols');
-  COLORES.forEach(function(c,i){
-    var s=document.createElement('span'); s.style.background=c; if(i===0) s.className='sel';
-    s.onclick=function(){ color=c; manda({t:'pluma',c:color,g:grosor});
-      cc.querySelectorAll('span').forEach(function(x){x.classList.remove('sel')}); s.classList.add('sel'); };
-    cc.appendChild(s);
-  });
-  document.querySelectorAll('#gr button').forEach(function(b){
-    b.onclick=function(){ grosor=+b.dataset.g; manda({t:'pluma',c:color,g:grosor});
-      document.querySelectorAll('#gr button').forEach(function(x){x.classList.remove('sel')}); b.classList.add('sel'); };
-  });
-  /* ── modos del recuadro: lapiz | laser | puntero | giro ───────────── */
-  var modo='lapiz';
-  var pad=document.getElementById('pad'), lz=pad.querySelector('canvas'), lx=lz.getContext('2d'),
-      ayuda=pad.querySelector('.ayuda'), bTocar=document.getElementById('tocar');
-  var bl2=document.getElementById('mlaser');
-
-  function ponModo(m){
-    if(modo==='laser' && m!=='laser') manda({t:'laser', v:null});
-    if(modo==='giro' && m!=='giro') apagaGiro();
-    modo=m;
-    document.querySelectorAll('#modos button').forEach(function(b){ b.classList.toggle('on', b.dataset.m===m); });
-    bl2.classList.toggle('on', m==='laser');
-    bTocar.classList.toggle('ver', m==='puntero' || m==='giro');
-    ayuda.textContent = m==='lapiz' ? 'Dibuja aquí con el dedo. Lo que trazas aparece en la pantalla.' :
-                        m==='laser' ? 'Arrastra el dedo: el punto rojo te sigue en la pantalla.' :
-                        m==='puntero'? 'Mueve el dedo para llevar el puntero. Un toque corto = clic en la pantalla.' :
-                                       'Inclina el teléfono para mover el puntero y usa el botón verde para tocar.';
-    ayuda.style.display='flex';
-    if(m==='giro') prendeGiro();
-    vePizarron();
+  /* punto de la pantalla grande a partir de un toque */
+  function punto(t){
+    var r=espejo.getBoundingClientRect();
+    var x=(t.clientX-r.left-ox)/k, y=(t.clientY-r.top-oy)/k;
+    return [Math.max(0,Math.min(1,x/W)), Math.max(0,Math.min(1,y/H))];
   }
-  document.querySelectorAll('#modos button').forEach(function(b){ b.onclick=function(){ ponModo(b.dataset.m); }; });
-  bl2.onclick=function(){ ponModo(modo==='laser' ? 'lapiz' : 'laser'); };
-  document.getElementById('mpuntero').onclick=function(){ ponModo('puntero'); };
+  function avisa(txt){ marca.textContent=txt; marca.classList.add('ver');
+    clearTimeout(avisa.t); avisa.t=setTimeout(function(){ marca.classList.remove('ver'); },1200); }
 
-  /* lienzo blanco */
-  var enLienzo=false, bli=document.getElementById('blienzo'), bli2=document.getElementById('mlienzo');
-  function alLienzo(){
-    enLienzo=!enLienzo;
-    bli.classList.toggle('on',enLienzo); bli2.classList.toggle('on',enLienzo);
-    manda({t:'lienzo', v:enLienzo});
-  }
-  bli.onclick=alLienzo; bli2.onclick=alLienzo;
-
-  /* escribir en el recuadro que esté seleccionado en la pantalla */
-  var itxt=document.getElementById('itxt');
-  document.getElementById('btxt').onclick=function(){
-    var t=itxt.value; if(!t) return; manda({t:'tecla', v:t}); itxt.value='';
-  };
-  document.getElementById('bborra').onclick=function(){ manda({t:'tecla', v:'\b'}); };
-  itxt.addEventListener('keydown', function(e){ if(e.key==='Enter') document.getElementById('btxt').click(); });
-
-  function medirPad(){ var r=devicePixelRatio||1, b=pad.getBoundingClientRect();
-    if(!b.width) return;
-    lz.width=b.width*r; lz.height=b.height*r; lx.setTransform(r,0,0,r,0,0); lx.lineCap='round'; lx.lineJoin='round'; }
-  addEventListener('resize', medirPad); setTimeout(medirPad, 50);
-
-  var dibujando=false, buffer=[], ultimo=0, donde=[0.5,0.5], t0=0, p0=null, movido=false;
-  function pos(e){ var b=pad.getBoundingClientRect();
-    return [Math.min(1,Math.max(0,(e.clientX-b.left)/b.width)), Math.min(1,Math.max(0,(e.clientY-b.top)/b.height))]; }
-  function soltar(e){
-    if(modo==='puntero'){
-      if(!movido && Date.now()-t0 < 400) manda({t:'tap', v:donde});
-      dibujando=false; return;
-    }
-    if(buffer.length){ manda({t:'sigue', v:buffer}); buffer=[]; }
-    dibujando=false;
-  }
-  pad.addEventListener('pointerdown', function(e){
-    if(modo==='giro') return;
-    pad.setPointerCapture(e.pointerId); ayuda.style.display='none';
-    var p=pos(e); dibujando=true; t0=Date.now(); p0=p; movido=false; donde=p;
-    if(modo==='laser'){ manda({t:'laser', v:p}); return; }
-    if(modo==='puntero'){ manda({t:'cur', v:p}); return; }
-    buffer=[];
-    manda({t:'trazo', v:[p], c:color, g:grosor});
-    lx.strokeStyle=color; lx.lineWidth=grosor; lx.beginPath();
-    lx.moveTo(p[0]*pad.clientWidth, p[1]*pad.clientHeight);
-  });
-  pad.addEventListener('pointermove', function(e){
-    if(!dibujando || modo==='giro') return;
-    var p=pos(e);
-    if(p0 && (Math.abs(p[0]-p0[0])>0.02 || Math.abs(p[1]-p0[1])>0.02)) movido=true;
-    if(modo==='laser'){ if(Date.now()-ultimo>90){ ultimo=Date.now(); canal.enviar({t:'laser', v:p}); } return; }
-    if(modo==='puntero'){ donde=p; if(Date.now()-ultimo>70){ ultimo=Date.now(); canal.enviar({t:'cur', v:p}); } return; }
-    lx.lineTo(p[0]*pad.clientWidth, p[1]*pad.clientHeight); lx.stroke();
-    buffer.push(p);
-    if(Date.now()-ultimo>140 && buffer.length){ ultimo=Date.now(); canal.enviar({t:'sigue', v:buffer}); buffer=[]; }
-  });
-  pad.addEventListener('pointerup', soltar);
-  pad.addEventListener('pointercancel', soltar);
-  bTocar.onclick=function(){ manda({t:'tap', v:donde}); };
-  document.querySelector('[data-op=\'{"t":"borrar"}\']').addEventListener('click', function(){
-    lx.clearRect(0,0,lz.width,lz.height); ayuda.style.display='flex';
-  });
-
-  /* ── mover el puntero inclinando el teléfono ──────────────────────── */
-  var giroOn=false, ref=null, ultG=0;
-  function alGiro(e){
-    if(e.beta===null || e.gamma===null) return;
-    if(!ref) ref={b:e.beta, g:e.gamma};
-    var x=0.5+(e.gamma-ref.g)/55, y=0.5+(e.beta-ref.b)/55;
-    donde=[Math.min(1,Math.max(0,x)), Math.min(1,Math.max(0,y))];
-    if(Date.now()-ultG>70){ ultG=Date.now(); canal.enviar({t:'cur', v:donde}); }
-  }
-  function prendeGiro(){
-    if(giroOn) return;
-    ref=null;
-    function engancha(){ addEventListener('deviceorientation', alGiro); giroOn=true; }
+  /* un toque = clic de verdad, aquí y allá */
+  function tocaLocal(n){
+    var d=doc(); if(!d) return;
+    var x=n[0]*W, y=n[1]*H, el=d.elementFromPoint(x,y); if(!el) return;
+    var base={bubbles:true,cancelable:true,composed:true,clientX:x,clientY:y,view:d.defaultView,button:0};
     try{
-      if(typeof DeviceOrientationEvent!=='undefined' && DeviceOrientationEvent.requestPermission){
-        DeviceOrientationEvent.requestPermission().then(function(r){
-          if(r==='granted') engancha();
-          else { ayuda.textContent='El teléfono no dio permiso para el sensor. Usa el modo Puntero.'; }
-        }).catch(function(){ ayuda.textContent='El teléfono no dio permiso para el sensor. Usa el modo Puntero.'; });
-      } else engancha();
-    }catch(err){ ayuda.textContent='Este teléfono no trae sensor de movimiento. Usa el modo Puntero.'; }
+      el.dispatchEvent(new PointerEvent('pointerdown',Object.assign({pointerId:1,pointerType:'touch',isPrimary:true},base)));
+      el.dispatchEvent(new MouseEvent('mousedown',base));
+      el.dispatchEvent(new PointerEvent('pointerup',Object.assign({pointerId:1,pointerType:'touch',isPrimary:true},base)));
+      el.dispatchEvent(new MouseEvent('mouseup',base));
+    }catch(e){}
+    if(typeof el.click==='function') el.click();
   }
-  function apagaGiro(){
-    if(!giroOn) return;
-    removeEventListener('deviceorientation', alGiro); giroOn=false; ref=null;
-    manda({t:'cur', v:null});
-  }
-  pad.addEventListener('dblclick', function(){ if(modo==='giro') ref=null; });
 
-  /* ── ajustes ──────────────────────────────────────────────────────────── */
-  var d=document.getElementById('dcfg');
-  document.getElementById('bcfg').onclick=function(){
+  /* ── modos ──────────────────────────────────────────────────────── */
+  var modo='tocar';
+  function ponModo(m){
+    modo=m;
+    ['tocar','escribir','laser'].forEach(function(x){
+      document.getElementById('m-'+x).classList.toggle('on', x===m);
+    });
+    if(m!=='laser') manda({t:'laser', v:null});
+    avisa(m==='tocar'?'Tocar y mover':m==='escribir'?'Escribiendo sobre la pantalla':'Láser');
+  }
+  document.getElementById('m-tocar').onclick=function(){ ponModo('tocar'); };
+  document.getElementById('m-escribir').onclick=function(){ ponModo('escribir'); };
+  document.getElementById('m-laser').onclick=function(){ ponModo('laser'); };
+
+  /* ── gestos ─────────────────────────────────────────────────────── */
+  var dedos={}, pinza=null, uno=null, trazando=false, buffer=[], ultimo=0, ultimoScroll=0;
+  var color='#e11d2e', grosor=6;
+
+  function dist(a,b){ return Math.hypot(a.x-b.x, a.y-b.y); }
+  function centro(a,b){ return {x:(a.x+b.x)/2, y:(a.y+b.y)/2}; }
+
+  capa.addEventListener('pointerdown', function(e){
+    try{ capa.setPointerCapture(e.pointerId); }catch(err){}
+    dedos[e.pointerId]={x:e.clientX,y:e.clientY};
+    var ids=Object.keys(dedos);
+    if(ids.length===2){
+      cierraTrazo();
+      var a=dedos[ids[0]], b=dedos[ids[1]];
+      pinza={d:dist(a,b), c:centro(a,b), k:k, ox:ox, oy:oy};
+      uno=null; return;
+    }
+    if(ids.length>2) return;
+    var n=punto(e);
+    uno={x:e.clientX, y:e.clientY, x0:e.clientX, y0:e.clientY, movido:false, n:n, t:Date.now()};
+    if(modo==='escribir'){
+      trazando=true; buffer=[];
+      manda({t:'trazo', v:[n], c:color, g:grosor});
+      tx.strokeStyle=color; tx.lineWidth=grosor; tx.lineCap='round'; tx.lineJoin='round';
+      tx.beginPath(); tx.moveTo(n[0]*W, n[1]*H);
+    } else if(modo==='laser'){
+      manda({t:'laser', v:n});
+    }
+  });
+
+  capa.addEventListener('pointermove', function(e){
+    if(!dedos[e.pointerId]) return;
+    dedos[e.pointerId]={x:e.clientX,y:e.clientY};
+    var ids=Object.keys(dedos);
+
+    if(ids.length>=2 && pinza){
+      var a=dedos[ids[0]], b=dedos[ids[1]];
+      var d2=dist(a,b), c2=centro(a,b);
+      var nk=Math.max(kBase, Math.min(kBase*6, pinza.k * (d2/pinza.d)));
+      ox = c2.x - (pinza.c.x - pinza.ox) * (nk/pinza.k);
+      oy = c2.y - (pinza.c.y - pinza.oy) * (nk/pinza.k);
+      k = nk; limita(); aplicaT();
+      return;
+    }
+    if(!uno) return;
+    var dx=e.clientX-uno.x, dy=e.clientY-uno.y;
+    if(Math.abs(e.clientX-uno.x0)>7 || Math.abs(e.clientY-uno.y0)>7) uno.movido=true;
+    uno.x=e.clientX; uno.y=e.clientY;
+    var n=punto(e);
+
+    if(modo==='escribir' && trazando){
+      tx.lineTo(n[0]*W, n[1]*H); tx.stroke();
+      buffer.push(n);
+      if(Date.now()-ultimo>130 && buffer.length){ ultimo=Date.now(); canal.enviar({t:'sigue', v:buffer}); buffer=[]; }
+      return;
+    }
+    if(modo==='laser'){
+      if(Date.now()-ultimo>90){ ultimo=Date.now(); canal.enviar({t:'laser', v:n}); }
+      return;
+    }
+    /* modo tocar: arrastrar mueve la lección, aquí y en el salón */
+    var d=doc();
+    if(d && d.defaultView && uno.movido){
+      d.defaultView.scrollBy(0, -dy/k);
+      if(Date.now()-ultimoScroll>70){
+        ultimoScroll=Date.now();
+        canal.enviar({t:'pos', v:Math.round(d.defaultView.scrollY)});
+      }
+    }
+  });
+
+  function cierraTrazo(){
+    if(trazando && buffer.length){ manda({t:'sigue', v:buffer}); buffer=[]; }
+    trazando=false;
+  }
+  function suelta(e){
+    delete dedos[e.pointerId];
+    var ids=Object.keys(dedos);
+    if(ids.length<2) pinza=null;
+    if(uno && ids.length===0){
+      if(modo==='tocar'){
+        if(!uno.movido && Date.now()-uno.t<500){ manda({t:'tap', v:uno.n}); tocaLocal(uno.n); vibra(); }
+        else { var d=doc(); if(d&&d.defaultView) manda({t:'pos', v:Math.round(d.defaultView.scrollY)}); }
+      }
+      if(modo==='laser' && !uno.movido){ /* queda el punto donde lo dejó */ }
+      cierraTrazo();
+      uno=null;
+    }
+  }
+  capa.addEventListener('pointerup', suelta);
+  capa.addEventListener('pointercancel', suelta);
+
+  /* ── botones de la barrita ──────────────────────────────────────── */
+  var cajaTinta=document.getElementById('tintas');
+  document.getElementById('b-tinta').onclick=function(){
+    var v=cajaTinta.classList.toggle('ver'); this.classList.toggle('on', v);
+  };
+  cajaTinta.querySelectorAll('i').forEach(function(s){
+    s.onclick=function(){ color=s.dataset.c; manda({t:'pluma', c:color, g:grosor});
+      cajaTinta.querySelectorAll('i').forEach(function(x){x.classList.remove('sel')}); s.classList.add('sel');
+      if(modo!=='escribir') ponModo('escribir'); };
+  });
+  cajaTinta.querySelectorAll('u').forEach(function(s){
+    s.onclick=function(){ grosor=+s.dataset.g; manda({t:'pluma', c:color, g:grosor});
+      cajaTinta.querySelectorAll('u').forEach(function(x){x.classList.remove('sel')}); s.classList.add('sel'); };
+  });
+  document.getElementById('b-deshacer').onclick=function(){ manda({t:'deshacer'}); };
+  document.getElementById('b-borrar').onclick=function(){
+    manda({t:'borrar'}); tx.clearRect(0,0,W,H);
+  };
+  var enLienzo=false;
+  document.getElementById('b-lienzo').onclick=function(){
+    enLienzo=!enLienzo; this.classList.toggle('on',enLienzo);
+    blanco.style.display = enLienzo ? 'block':'none';
+    manda({t:'lienzo', v:enLienzo});
+    if(enLienzo && modo!=='escribir') ponModo('escribir');
+  };
+  var tapado=false;
+  document.getElementById('b-negro').onclick=function(){
+    tapado=!tapado; this.classList.toggle('on',tapado); manda({t:'tapa', v:tapado});
+  };
+  document.getElementById('b-ajustar').onclick=function(){ ajustado=false; medir(); avisa('Pantalla completa'); };
+
+  /* ── menú ───────────────────────────────────────────────────────── */
+  var dmenu=document.getElementById('dmenu'), dcfg=document.getElementById('dcfg');
+  function pintaMenu(){
+    var cl=document.getElementById('m-lecs'); cl.innerHTML='';
+    LECCIONES.forEach(function(L){
+      var b=document.createElement('button'); b.textContent=L.n;
+      b.onclick=function(){ actual=L; abrir(L.f, true); pintaMenu(); dmenu.close(); };
+      cl.appendChild(b);
+    });
+    var cs=document.getElementById('m-secs'); cs.innerHTML='';
+    actual.secs.forEach(function(x){
+      var b=document.createElement('button'); b.textContent=x[1];
+      b.onclick=function(){ manda({t:'ir', v:x[2]}); irLocal(x[2]); dmenu.close(); };
+      cs.appendChild(b);
+    });
+    var cr=document.getElementById('m-revs'); cr.innerHTML='';
+    actual.revs.forEach(function(x){
+      var b=document.createElement('button'); b.innerHTML=x[0];
+      b.onclick=function(){ manda({t:'clic', v:x[1]}); clicLocal(x[1]); };
+      cr.appendChild(b);
+    });
+  }
+  function irLocal(sel){ var d=doc(); if(d){ var e=d.querySelector(sel); if(e) e.scrollIntoView({block:'start'}); } }
+  function clicLocal(sel){ var d=doc(); if(d){ var b=d.querySelector(sel); if(b) b.click(); } }
+  document.getElementById('bmenu').onclick=function(){ pintaMenu(); dmenu.showModal(); };
+  document.getElementById('m-cerrar').onclick=function(){ dmenu.close(); };
+  dmenu.querySelectorAll('[data-op]').forEach(function(b){
+    b.onclick=function(){ var op=JSON.parse(b.dataset.op); manda(op); if(op.t==='clic') clicLocal(op.v); };
+  });
+  var z=1;
+  dmenu.querySelectorAll('[data-zoom]').forEach(function(b){
+    b.onclick=function(){ var d=b.dataset.zoom;
+      z = d==='0' ? 1 : Math.min(2.2, Math.max(0.6, z + (d==='+'?0.15:-0.15)));
+      manda({t:'zoom', v:Math.round(z*100)/100});
+      var dd=doc(); if(dd&&dd.body) dd.body.style.zoom=z; };
+  });
+  document.getElementById('m-cfg').onclick=function(){
     document.getElementById('icsala').value=sala;
     document.getElementById('icep').value=Canal.endpoint();
-    d.showModal();
+    dmenu.close(); dcfg.showModal();
   };
-  document.getElementById('bno').onclick=function(){ d.close(); };
+  document.getElementById('bno').onclick=function(){ dcfg.close(); };
   document.getElementById('bok').onclick=function(){
     var ns=(document.getElementById('icsala').value||'301').toUpperCase().trim();
     Canal.guardarEndpoint(document.getElementById('icep').value);
@@ -576,12 +469,29 @@ dialog p{font-size:14px;color:#666;line-height:1.45}
     location.search='?sala='+encodeURIComponent(ns);
   };
 
+  /* ── lo que llega de la pantalla ────────────────────────────────── */
+  function recibir(op){
+    if(op.t==='estoy'){
+      if(op.v && marco.src.indexOf(op.v)<0){
+        var L=LECCIONES.filter(function(x){return x.f===op.v;})[0];
+        if(L) actual=L;
+        abrir(op.v, false);
+        setTimeout(function(){ var d=doc(); if(d&&d.defaultView) d.defaultView.scrollTo(0, op.s||0); }, 900);
+      }
+    }
+  }
+
   setInterval(function(){
     var ok = canal.estado.remoto==='conectado' || canal.estado.remoto==='apagado';
     document.getElementById('luz').classList.toggle('ok', ok);
   }, 1200);
 
+  medir();
+  requestAnimationFrame(medir);
+  setTimeout(medir, 300);
+  abrir(actual.f, false);
   manda({t:'hola'});
+  setTimeout(function(){ avisa('Toca para marcar · dos dedos para acercar'); }, 1200);
 })();
 </script>
 </body>

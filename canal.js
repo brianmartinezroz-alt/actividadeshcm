@@ -14,6 +14,7 @@
     this.clave = 'hcm-aula-' + this.sala;
     /* el endpoint se consulta cada vez: puede llegar después, de servidor.json */
     this.visto = 0;
+    this.primera = true;        // la primera respuesta no revive la clase anterior
     this.cola = [];
     this.enviando = false;
     this.ultimoCambio = 0;
@@ -98,13 +99,16 @@
         .then(function (r) {
           if (r && r.ok) {
             yo.estado.remoto = 'conectado';
-            if (r.ops && r.ops.length) {
+            if (yo.primera) {
+              /* al entrar, la sala puede traer lo que hizo el grupo anterior:
+                 se toma nota del punto actual y se ignora el historial */
+              if (typeof r.n === 'number') yo.visto = r.n;
+              yo.primera = false;
+            } else if (r.ops && r.ops.length) {
               yo.visto = r.n;
               yo.ultimoCambio = Date.now();
               yo.hayNuevo = true;        // si vino algo, vuelve a preguntar de inmediato
               yo.recibe(r.ops, 'remoto');
-            } else if (typeof r.n === 'number' && yo.visto === 0) {
-              yo.visto = r.n;
             }
           }
         })

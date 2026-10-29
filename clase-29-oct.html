@@ -601,5 +601,12 @@ document.getElementById('clave').onclick=function(){
   document.querySelectorAll('.ejemplo').forEach(function(p){p.style.display=v?'block':'none'});
   this.textContent=v?'Ocultar clave (docente)':'Mostrar clave (docente)';};
 </script>
+<style>
+#conherr{position:fixed;right:14px;bottom:14px;z-index:999;background:#631132;color:#fff;border:2px solid #AE8420;
+  border-radius:24px;padding:11px 18px;font:inherit;font-size:15px;font-weight:700;text-decoration:none;
+  box-shadow:0 6px 18px rgba(0,0,0,.35)}
+@media print{#conherr{display:none}}
+</style>
+<a id="conherr" href="aula.html?lec=clase-29-oct.html">&#9999; Abrir con herramientas</a>
 </body>
 </html>

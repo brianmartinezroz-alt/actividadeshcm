@@ -147,6 +147,7 @@ body.sinraton, body.sinraton *{cursor:none !important}
     <input id="aep" placeholder="https://script.google.com/macros/s/&hellip;/exec" autocomplete="off" spellcheck="false">
     <button id="aguardar">Guardar</button>
     <button id="aprobar">Probar</button>
+    <button id="alimpiar">Limpiar la sala</button>
   </div>
   <small>Al escanear, el celular entra directo a esta sala. Si lo escribes a mano, teclea el n&uacute;mero
   en el control. La primera orden que mandes desde el celular hace desaparecer esta portada.</small>
@@ -368,6 +369,18 @@ body.sinraton, body.sinraton *{cursor:none !important}
         est.className='estado';
         est.innerHTML='<span>Servidor del HCM:</span><b>no se pudo alcanzar</b><span style="opacity:.8">&mdash; revisa el internet de esta computadora</span>';
       });
+  };
+  document.getElementById('alimpiar').onclick=function(){
+    trazos=[]; redibujar();
+    lienzo.style.display='none'; tapa.style.display='none';
+    var ep=Canal.endpoint();
+    est.className='estado'; est.innerHTML='<span>Limpiando la sala '+sala+'&hellip;</span>';
+    if(!ep){ pintaEstado(); return; }
+    fetch(ep, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({accion:'aula_fin', sala:sala})})
+      .then(function(){ est.className='estado ok';
+        est.innerHTML='<span>Sala '+sala+':</span><b>limpia</b><span style="opacity:.8">&mdash; lista para el grupo que entra</span>'; })
+      .catch(function(){ pintaEstado(); });
   };
   document.getElementById('aguardar').onclick=function(){
     Canal.guardarEndpoint(inep.value);

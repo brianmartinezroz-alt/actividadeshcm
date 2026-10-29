@@ -190,8 +190,10 @@ body.sinraton, body.sinraton *{cursor:none !important}
   var pluma = {c:'#e11d2e', g:5};
 
   var W=1280, H=720, mundo=document.getElementById('mundo');
+  var ESC = 1;
   function medir(){
     var e = Math.min(innerWidth/W, innerHeight/H);
+    ESC = e;
     mundo.style.transform = 'translate('+((innerWidth-W*e)/2)+'px,'+((innerHeight-H*e)/2)+'px) scale('+e+')';
     var r = Math.min(2, (window.devicePixelRatio||1) * Math.max(1,e));
     cv.width = Math.round(W*r); cv.height = Math.round(H*r);
@@ -213,6 +215,50 @@ body.sinraton, body.sinraton *{cursor:none !important}
   }
   addEventListener('resize', medir); medir();
 
+  /* ── la pantalla se mueve sola: rueda, teclas y arrastre con el dedo ───── */
+  function scrollaDoc(dy){
+    var d=doc(); if(d&&d.defaultView){ d.defaultView.scrollBy(0, dy); }
+  }
+  function teclasMov(e){
+    var d=doc(); if(!d||!d.defaultView) return;
+    var k=e.key;
+    if(k==='ArrowDown') scrollaDoc(90);
+    else if(k==='ArrowUp') scrollaDoc(-90);
+    else if(k==='PageDown'||k===' ') scrollaDoc(innerHeight*0.85);
+    else if(k==='PageUp') scrollaDoc(-innerHeight*0.85);
+    else if(k==='Home') d.defaultView.scrollTo(0,0);
+    else if(k==='End') d.defaultView.scrollTo(0, d.body.scrollHeight);
+    else return;
+    e.preventDefault();
+  }
+  function mueveAqui(destino){
+    if(!destino || destino.__mov) return;
+    destino.__mov = true;
+    destino.addEventListener('wheel', function(e){
+      if(escribiendo) return;
+      scrollaDoc(e.deltaY); e.preventDefault();
+    }, {passive:false});
+    destino.addEventListener('keydown', teclasMov);
+    var y0=null, s0=0, arrastra=false;
+    destino.addEventListener('pointerdown', function(e){
+      if(escribiendo || e.pointerType==='mouse') return;
+      y0=e.clientY; arrastra=false;
+      var d=doc(); s0=(d&&d.defaultView)? d.defaultView.scrollY : 0;
+    });
+    destino.addEventListener('pointermove', function(e){
+      if(y0===null) return;
+      var dy=e.clientY-y0;
+      if(!arrastra && Math.abs(dy)<10) return;
+      arrastra=true;
+      var d=doc(); if(d&&d.defaultView) d.defaultView.scrollTo(0, s0 - dy/(ESC||1));
+    });
+    function fin(){ y0=null; }
+    destino.addEventListener('pointerup', fin);
+    destino.addEventListener('pointercancel', fin);
+  }
+  mueveAqui(document);
+
+
   var cargando=false, espera=[];
   marco.addEventListener('load', function(){
     cargando=false;
@@ -221,6 +267,7 @@ body.sinraton, body.sinraton *{cursor:none !important}
       if(dd){
         dd.documentElement.style.scrollBehavior='auto';
         dd.defaultView.addEventListener('scroll', function(){ redibujar(); avisaPos(); }, {passive:true});
+        mueveAqui(dd);
       }
     }catch(e){}
     var q=espera; espera=[];

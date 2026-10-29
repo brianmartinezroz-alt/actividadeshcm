@@ -119,7 +119,8 @@ dialog .fin .no{background:var(--claro);color:#555}
 
 <div id="entrar">
   <h1>Control de clase</h1>
-  <p>Escribe el n&uacute;mero que aparece en la pantalla del sal&oacute;n, o escanea su QR.</p>
+  <p>Escanea con la c&aacute;mara el <b>QR</b> que muestra la pantalla del sal&oacute;n.
+     Si prefieres, teclea aqu&iacute; el n&uacute;mero de esa pantalla.</p>
   <div id="eco" class="vacio">— — —</div>
   <div id="teclas">
     <button>1</button><button>2</button><button>3</button>
@@ -218,7 +219,7 @@ if('serviceWorker' in navigator){
 (function(){
   var W = 1280, H = 720;                       // la pantalla del salón, en grande
   var par = new URLSearchParams(location.search);
-  var sala = (par.get('sala') || localStorage.getItem('hcm_aula_sala') || '').toUpperCase().trim();
+  var sala = (par.get('sala') || '').toUpperCase().trim();   // solo entra con el QR o tecleando
   if(par.get('ep')) Canal.guardarEndpoint(par.get('ep'));
 
   /* ── entrada con número ─────────────────────────────────────────── */
@@ -362,6 +363,22 @@ if('serviceWorker' in navigator){
   function avisa(txt){ marca.textContent=txt; marca.classList.add('ver');
     clearTimeout(avisa.t); avisa.t=setTimeout(function(){ marca.classList.remove('ver'); },1200); }
 
+  /* identifica QUÉ tocó, para que allá se toque lo mismo aunque la
+     pantalla venga atrasada o la página esté en otra posición */
+  function refDe(n){
+    var d=doc(); if(!d) return null;
+    var el=d.elementFromPoint(n[0]*W, n[1]*H); if(!el) return null;
+    var cl=null;
+    try{ cl = el.closest('button,a,input,select,textarea,.ficha,.slot,.opc,.card,.play,[id]'); }catch(e){}
+    if(!cl) return null;
+    if(cl.id) return {s:'#'+cl.id, i:0};
+    var clase = (cl.className||'').toString().trim().split(/\s+/)[0];
+    var base = cl.tagName.toLowerCase() + (clase ? '.'+clase : '');
+    var todos = d.querySelectorAll(base);
+    for(var i=0;i<todos.length;i++) if(todos[i]===cl) return {s:base, i:i};
+    return null;
+  }
+
   /* un toque = clic de verdad, aquí y allá */
   function tocaLocal(n){
     var d=doc(); if(!d) return;
@@ -428,7 +445,10 @@ if('serviceWorker' in navigator){
     ref=null; punta.style.display='none'; manda({t:'cur', v:null});
   }
   document.getElementById('tocagiro').onclick=function(){
-    manda({t:'tap', v:donde}); tocaLocal(donde); vibra();
+    var r=refDe(donde);
+    if(r) manda({t:'tapEl', s:r.s, i:r.i});
+    else   manda({t:'tap', v:[donde[0], donde[1]*H + despLec()], a:'doc'});
+    tocaLocal(donde); vibra();
   };
 
   /* ── gestos ─────────────────────────────────────────────────────── */
@@ -442,13 +462,13 @@ if('serviceWorker' in navigator){
     try{ capa.setPointerCapture(e.pointerId); }catch(err){}
     dedos[e.pointerId]={x:e.clientX,y:e.clientY};
     var ids=Object.keys(dedos);
-    if(ids.length===2){
+    if(ids.length>=2){
+      if(trazando){ trazos.pop(); redibujaTinta(); manda({t:'deshacer'}); }   // borra el rayón que empezó el primer dedo
       cierraTrazo();
       var a=dedos[ids[0]], b=dedos[ids[1]];
       pinza={d:dist(a,b), c:centro(a,b), k:k, ox:ox, oy:oy};
       uno=null; return;
     }
-    if(ids.length>2) return;
     var n=punto(e);
     uno={x:e.clientX, y:e.clientY, x0:e.clientX, y0:e.clientY, movido:false, n:n, t:Date.now()};
     if(modo==='giro'){ ref=null; avisa('Centrado'); return; }
@@ -469,8 +489,11 @@ if('serviceWorker' in navigator){
     dedos[e.pointerId]={x:e.clientX,y:e.clientY};
     var ids=Object.keys(dedos);
 
-    if(ids.length>=2 && pinza){
+    if(ids.length>=2){
+      if(trazando){ trazos.pop(); redibujaTinta(); manda({t:'deshacer'}); cierraTrazo(); }
+      uno=null;
       var a=dedos[ids[0]], b=dedos[ids[1]];
+      if(!pinza) pinza={d:dist(a,b), c:centro(a,b), k:k, ox:ox, oy:oy};
       var d2=dist(a,b), c2=centro(a,b);
       var nk=Math.max(kBase, Math.min(kBase*6, pinza.k * (d2/pinza.d)));
       ox = c2.x - (pinza.c.x - pinza.ox) * (nk/pinza.k);
@@ -518,7 +541,12 @@ if('serviceWorker' in navigator){
     if(ids.length<2) pinza=null;
     if(uno && ids.length===0){
       if(modo==='tocar'){
-        if(!uno.movido && Date.now()-uno.t<500){ manda({t:'tap', v:uno.n}); tocaLocal(uno.n); vibra(); }
+        if(!uno.movido && Date.now()-uno.t<500){
+          var r=refDe(uno.n);
+          if(r) manda({t:'tapEl', s:r.s, i:r.i});
+          else   manda({t:'tap', v:[uno.n[0], uno.n[1]*H + despLec()], a:'doc'});
+          tocaLocal(uno.n); vibra();
+        }
         else { var d=doc(); if(d&&d.defaultView) manda({t:'pos', v:Math.round(d.defaultView.scrollY)}); }
       }
       if(modo==='laser' && !uno.movido){ /* queda el punto donde lo dejó */ }
@@ -676,6 +704,8 @@ if('serviceWorker' in navigator){
       case 'ir':    if(d){ var e=d.querySelector(op.v); if(e) e.scrollIntoView({block:'start'}); } break;
       case 'clic':  if(d){ var b2=d.querySelector(op.v); if(b2) b2.click(); } break;
       case 'tap':   tocaLocal(op.v); break;
+      case 'tapEl': if(d){ var le=d.querySelectorAll(op.s), ee=le[op.i];
+                      if(ee){ ee.scrollIntoView({block:'center'}); ee.click(); redibujaTinta(); } } break;
       case 'pluma': color=op.c||color; grosor=op.g||grosor; break;
       case 'trazo': trazos.push({c:op.c||color, g:op.g||grosor, a:op.a||'pant', p:op.v}); redibujaTinta(); break;
       case 'sigue': var u=trazos[trazos.length-1]; if(u){ u.p=u.p.concat(op.v); redibujaTinta(); } break;

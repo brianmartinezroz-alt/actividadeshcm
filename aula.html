@@ -91,7 +91,7 @@ body.sinraton, body.sinraton *{cursor:none !important}
 </head>
 <body>
 <div id="mundo">
-  <iframe id="marco" title="Lección"></iframe>
+  <iframe id="marco" title="Lección" scrolling="no"></iframe>
   <div id="lienzo"></div>
   <canvas id="pizarra"></canvas>
   <div id="laser"></div>
@@ -250,10 +250,18 @@ body.sinraton, body.sinraton *{cursor:none !important}
     relojCur=setTimeout(function(){ cursor.classList.remove('ver'); }, 1800);
   }
   var ultimoCampo=null;
-  function tocar(p){
-    verCursor(p);
+  function tocar(p, ancla){
     var d=doc(); if(!d) return;
-    var x=p[0]*W, y=p[1]*H;
+    var x=p[0]*W, y;
+    if(ancla==='doc'){
+      y = p[1] - desp();                       // el punto viene pegado al texto
+      if(y < 10 || y > H-10){                  // quedó fuera de cuadro: alinea y vuelve
+        if(d.defaultView){ d.defaultView.scrollTo(0, Math.max(0, p[1] - H/2)); redibujar(); }
+        y = p[1] - desp();
+      }
+    } else { y = p[1]*H; }
+    y = Math.max(0, Math.min(H, y));
+    verCursor([p[0], y/H]);
     destello(x,y);
     var el=d.elementFromPoint(x,y); if(!el) return;
     var base={bubbles:true,cancelable:true,composed:true,clientX:x,clientY:y,view:d.defaultView,button:0,buttons:1};
@@ -303,7 +311,17 @@ body.sinraton, body.sinraton *{cursor:none !important}
                     else laser.style.display='none'; break;
       case 'tapa':  tapa.style.display = op.v ? 'block':'none'; break;
       case 'cur':   if(op.v) verCursor(op.v); else cursor.classList.remove('ver'); break;
-      case 'tap':   tocar(op.v); break;
+      case 'tap':   tocar(op.v, op.a); break;
+      case 'tapEl': if(d){
+                      var le=d.querySelectorAll(op.s), ee=le[op.i];
+                      if(ee){
+                        ee.scrollIntoView({block:'center'});
+                        var rr=ee.getBoundingClientRect();
+                        verCursor([(rr.left+rr.width/2)/W, (rr.top+rr.height/2)/H]);
+                        destello(rr.left+rr.width/2, rr.top+rr.height/2);
+                        ee.click(); redibujar();
+                      }
+                    } break;
       case 'tecla': escribir(op.v); break;
       case 'lienzo':lienzo.style.display = op.v ? 'block':'none'; break;
       case 'pos':   if(d&&d.defaultView){ d.defaultView.scrollTo(0, op.v); redibujar(); } break;

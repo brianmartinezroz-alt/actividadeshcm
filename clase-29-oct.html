@@ -337,10 +337,13 @@ img{max-width:100%;height:auto}
 <footer>Heroico Colegio Militar &middot; Campo Militar 1-C &middot; tinyurl.com/actividadeshcm</footer>
 <script id="datos" type="application/json">{"vocab": [["badly", "mal"], ["carefully", "con cuidado"], ["carelessly", "sin cuidado, descuidadamente"], ["correctly", "correctamente"], ["easily", "con facilidad"], ["safely", "con seguridad"], ["slowly", "despacio"], ["well", "bien"], ["fast", "rápido"], ["how", "cómo"]], "carrera": [["The sergeant checks the engine ______ .", ["carefully", "careful", "carefuly", "con singular alegría"], 0, "Adverbio de modo: careful + -ly."], ["Your tires are bald. You ______ buy new ones.", ["should", "should to", "shoulds", "mejor rézale"], 0, "Consejo: should + verbo base, sin to."], ["I have a terrible headache. What ______ I do?", ["should", "should to", "am should", "aguantarse como los machos"], 0, "La pregunta empieza con should."], ["Ellen arrived ______ after a long flight.", ["safely", "safe", "safelly", "sana y salva, pero en inglés"], 0, "safe &rarr; safely."], ["He is a good driver. He drives ______ .", ["well", "good", "goodly", "como piloto de Fórmula 1"], 0, "El irregular: good &rarr; well."], ["Capt Reyes explains the orders ______ . (clear)", ["clearly", "clear", "clearily", "con lujo de detalle"], 0, "clear &rarr; clearly."], ["You ______ buy cheap tires.", ["shouldn't", "don't should", "shouldn't to", "ni de chiste"], 0, "Consejo negativo: shouldn't + verbo base."], ["The pilots are walking ______ to the hangar.", ["slowly", "slow", "slowy", "a paso de tortuga militar"], 0, "slow &rarr; slowly."], ["She answered the questions ______ . (correct)", ["correctly", "correct", "correctily", "a puro tanteo"], 0, "correct &rarr; correctly."], ["It's late. We ______ leave now.", ["should", "shoulds", "should to", "ahí nos vemos"], 0, "should para aconsejar lo que conviene."]], "orden": [["You", "should", "call", "the police."], ["No,", "we", "shouldn't", "leave", "now."], ["What", "should", "I", "do", "now?"], ["Which book", "should", "I", "borrow?"], ["Should", "I", "see", "that movie?"]], "ordenPie": ["Q: I lost my wallet. What should I do? &mdash; A:", "Q: It's raining. Should we go now? &mdash; A:", "Q: &hellip; &mdash; A: I think you should study.", "Q: &hellip; &mdash; A: Oh, you should borrow this one about camping.", "Q: &hellip; &mdash; A: No, you shouldn't. I don't think you'll care for it."], "adv": [["safe", ["safely"]], ["careful", ["carefully"]], ["easy", ["easily"]], ["careless", ["carelessly"]], ["bad", ["badly"]], ["slow", ["slowly"]], ["fast", ["fast"]], ["good", ["well"]]], "sam": [["He read the language ______, …", "well"], ["… but he didn't speak it ______.", "well"], ["At first, he said things ______, and people didn't understand him.", "badly"], ["Sam thought they spoke too ______.", "fast"], ["He had to ask them to repeat their sentences more ______.", "slowly"], ["Sam listened ______ and wrote new words in his notebook.", "carefully"], ["He always tried to spell them ______.", "correctly"], ["Now, Sam understands German and can use it ______.", "easily"], ["He doesn't say things ______.", "badly"]], "parejas": [["I see the plane ______ because the sky is ______.", ["clearly"], ["clear"]], ["Is Anna ______? She's eating her food ______.", ["hungry"], ["hungrily"]], ["The little girl sang ______ because she was ______.", ["happily"], ["happy"]], ["The players sounded ______. They talked ______.", ["excited"], ["excitedly"]], ["Mary is watching TV ______. She looks ______.", ["sleepily"], ["sleepy"]], ["The boss sounds ______. He is speaking ______.", ["angry"], ["angrily"]]]}</script>
 <script>
+/* ── barajeo igual en todos los aparatos ──────────────────────────────── */
+var _sem = 20261029;
+function _rnd(){ _sem = (_sem * 1103515245 + 12345) & 0x7fffffff; return _sem / 0x7fffffff; }
 const D=JSON.parse(document.getElementById('datos').textContent);
 function norm(s){return (s||'').toLowerCase().replace(/[.,;!?'"“”‘’]/g,'').replace(/\s+/g,' ').trim();}
 let tomada=null;
-function revolver(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function revolver(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(_rnd()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
 
 /* ── motor de arrastrar / tocar ──────────────────────────────────────────── */
 function montar(id, pares){
@@ -408,7 +411,7 @@ function reiniciar(id,pares,salida){montar(id,pares);document.getElementById(sal
   var pares = D.vocab, orden = [], i = 0, aciertos = 0, intentos = 0;
   var pide = document.getElementById('sn-pide'), rej = document.getElementById('sn-rej'),
       marca = document.getElementById('sn-marca');
-  function revolver2(a){var b=a.slice();for(var k=b.length-1;k>0;k--){var j=Math.floor(Math.random()*(k+1));var t=b[k];b[k]=b[j];b[j]=t;}return b;}
+  function revolver2(a){var b=a.slice();for(var k=b.length-1;k>0;k--){var j=Math.floor(_rnd()*(k+1));var t=b[k];b[k]=b[j];b[j]=t;}return b;}
   function pinta(){
     rej.innerHTML='';
     revolver2(pares).forEach(function(p){
@@ -524,7 +527,7 @@ function reiniciar(id,pares,salida){montar(id,pares);document.getElementById(sal
 
 /* ── ejercicio de ordenar ───────────────────────────────────────────────── */
 var co=document.getElementById('exo');
-function revolver(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}
+function revolver(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(_rnd()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}
  if(b.join(' ')===a.join(' ')&&b.length>1){var t2=b[0];b[0]=b[1];b[1]=t2;} return b;}
 function montarO(){
  co.innerHTML='';

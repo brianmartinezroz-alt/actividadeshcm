@@ -176,6 +176,11 @@ dialog .fin .no{background:var(--claro);color:#555}
   <div class="fin"><button class="no" id="bno">Cerrar</button><button class="ok" id="bok">Guardar</button></div>
 </div></dialog>
 
+<script>
+if('serviceWorker' in navigator){
+  addEventListener('load', function(){ navigator.serviceWorker.register('sw-control.js').catch(function(){}); });
+}
+</script>
 <script src="canal.js"></script>
 <script>
 (function(){
@@ -253,11 +258,34 @@ dialog .fin .no{background:var(--claro);color:#555}
   var cargando=false;
   marco.addEventListener('load', function(){
     cargando=false;
-    try{ var dd=doc(); if(dd) dd.documentElement.style.scrollBehavior='auto'; }catch(e){}
+    try{
+      var dd=doc();
+      if(dd){
+        dd.documentElement.style.scrollBehavior='auto';
+        dd.defaultView.addEventListener('scroll', redibujaTinta, {passive:true});
+      }
+    }catch(e){}
+    redibujaTinta();
   });
   function abrir(archivo, avisa){
     cargando=true; marco.src=archivo;
     if(avisa) manda({t:'lec', v:archivo});
+  }
+
+  /* ── tinta: se queda pegada al texto, no a la pantalla ──────────── */
+  var trazos=[];
+  function despLec(){ try{ var d=doc(); return (d&&d.defaultView)? d.defaultView.scrollY : 0; }catch(e){ return 0; } }
+  function redibujaTinta(){
+    tx.clearRect(0,0,W,H); tx.lineCap='round'; tx.lineJoin='round';
+    var sy=despLec();
+    trazos.forEach(function(t){
+      tx.strokeStyle=t.c; tx.lineWidth=t.g; tx.beginPath();
+      t.p.forEach(function(q,i){
+        var x=q[0]*W, y=(t.a==='doc') ? (q[1]-sy) : q[1]*H;
+        if(i===0) tx.moveTo(x,y); else tx.lineTo(x,y);
+      });
+      tx.stroke();
+    });
   }
 
   /* punto de la pantalla grande a partir de un toque */
@@ -299,7 +327,7 @@ dialog .fin .no{background:var(--claro);color:#555}
 
   /* ── gestos ─────────────────────────────────────────────────────── */
   var dedos={}, pinza=null, uno=null, trazando=false, buffer=[], ultimo=0, ultimoScroll=0;
-  var color='#e11d2e', grosor=6;
+  var color='#e11d2e', grosor=6, enLienzo=false;
 
   function dist(a,b){ return Math.hypot(a.x-b.x, a.y-b.y); }
   function centro(a,b){ return {x:(a.x+b.x)/2, y:(a.y+b.y)/2}; }
@@ -319,9 +347,11 @@ dialog .fin .no{background:var(--claro);color:#555}
     uno={x:e.clientX, y:e.clientY, x0:e.clientX, y0:e.clientY, movido:false, n:n, t:Date.now()};
     if(modo==='escribir'){
       trazando=true; buffer=[];
-      manda({t:'trazo', v:[n], c:color, g:grosor});
-      tx.strokeStyle=color; tx.lineWidth=grosor; tx.lineCap='round'; tx.lineJoin='round';
-      tx.beginPath(); tx.moveTo(n[0]*W, n[1]*H);
+      var ancla = enLienzo ? 'pant' : 'doc';
+      var q = ancla==='doc' ? [n[0], n[1]*H + despLec()] : n;
+      trazos.push({c:color, g:grosor, a:ancla, p:[q]});
+      manda({t:'trazo', v:[q], c:color, g:grosor, a:ancla});
+      redibujaTinta();
     } else if(modo==='laser'){
       manda({t:'laser', v:n});
     }
@@ -348,9 +378,12 @@ dialog .fin .no{background:var(--claro);color:#555}
     var n=punto(e);
 
     if(modo==='escribir' && trazando){
-      tx.lineTo(n[0]*W, n[1]*H); tx.stroke();
-      buffer.push(n);
-      if(Date.now()-ultimo>130 && buffer.length){ ultimo=Date.now(); canal.enviar({t:'sigue', v:buffer}); buffer=[]; }
+      var t0=trazos[trazos.length-1];
+      var q = (t0 && t0.a==='doc') ? [n[0], n[1]*H + despLec()] : n;
+      if(t0) t0.p.push(q);
+      redibujaTinta();
+      buffer.push(q);
+      if(Date.now()-ultimo>120 && buffer.length){ ultimo=Date.now(); canal.enviar({t:'sigue', v:buffer}); buffer=[]; }
       return;
     }
     if(modo==='laser'){
@@ -403,11 +436,10 @@ dialog .fin .no{background:var(--claro);color:#555}
     s.onclick=function(){ grosor=+s.dataset.g; manda({t:'pluma', c:color, g:grosor});
       cajaTinta.querySelectorAll('u').forEach(function(x){x.classList.remove('sel')}); s.classList.add('sel'); };
   });
-  document.getElementById('b-deshacer').onclick=function(){ manda({t:'deshacer'}); };
+  document.getElementById('b-deshacer').onclick=function(){ trazos.pop(); redibujaTinta(); manda({t:'deshacer'}); };
   document.getElementById('b-borrar').onclick=function(){
-    manda({t:'borrar'}); tx.clearRect(0,0,W,H);
+    trazos=[]; redibujaTinta(); manda({t:'borrar'});
   };
-  var enLienzo=false;
   document.getElementById('b-lienzo').onclick=function(){
     enLienzo=!enLienzo; this.classList.toggle('on',enLienzo);
     blanco.style.display = enLienzo ? 'block':'none';

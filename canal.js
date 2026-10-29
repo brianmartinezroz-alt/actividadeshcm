@@ -78,7 +78,7 @@
       .then(function (r) {
         yo.estado.remoto = (r && r.ok) ? 'conectado' : 'error';
         yo.enviando = false;
-        if (yo.cola.length) setTimeout(function () { yo.vaciar(); }, 120);
+        if (yo.cola.length) setTimeout(function () { yo.vaciar(); }, 30);
       })
       .catch(function () {
         yo.estado.remoto = 'error';
@@ -98,6 +98,7 @@
             if (r.ops && r.ops.length) {
               yo.visto = r.n;
               yo.ultimoCambio = Date.now();
+              yo.hayNuevo = true;        // si vino algo, vuelve a preguntar de inmediato
               yo.recibe(r.ops, 'remoto');
             } else if (typeof r.n === 'number' && yo.visto === 0) {
               yo.visto = r.n;
@@ -106,9 +107,11 @@
         })
         .catch(function () { yo.estado.remoto = 'error'; })
         .then(function () {
-          // rápido mientras hay movimiento, lento cuando no pasa nada
-          var activo = Date.now() - yo.ultimoCambio < 8000;
-          setTimeout(vuelta, activo ? 400 : 1800);
+          // pegadito mientras hay movimiento, tranquilo cuando no pasa nada
+          var desde = Date.now() - yo.ultimoCambio;
+          var espera = yo.hayNuevo ? 0 : (desde < 10000 ? 220 : (desde < 60000 ? 700 : 1500));
+          yo.hayNuevo = false;
+          setTimeout(vuelta, espera);
         });
     }
     vuelta();

@@ -152,13 +152,15 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
     cv.width = Math.round(W*r); cv.height = Math.round(H*r);
     cx.setTransform(r,0,0,r,0,0); redibujar();
   }
+  function desp(){ try{ var d=doc(); return (d&&d.defaultView)? d.defaultView.scrollY : 0; }catch(e){ return 0; } }
   function redibujar(){
     cx.clearRect(0,0,cv.width,cv.height);
     cx.lineCap='round'; cx.lineJoin='round';
+    var sy = desp();
     trazos.forEach(function(t){
       cx.strokeStyle=t.c; cx.lineWidth=t.g; cx.beginPath();
       t.p.forEach(function(q,i){
-        var x=q[0]*W, y=q[1]*H;
+        var x=q[0]*W, y=(t.a==='doc') ? (q[1]-sy) : q[1]*H;
         if(i===0) cx.moveTo(x,y); else cx.lineTo(x,y);
       });
       cx.stroke();
@@ -169,7 +171,13 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
   var cargando=false, espera=[];
   marco.addEventListener('load', function(){
     cargando=false;
-    try{ var dd=doc(); if(dd) dd.documentElement.style.scrollBehavior='auto'; }catch(e){}
+    try{
+      var dd=doc();
+      if(dd){
+        dd.documentElement.style.scrollBehavior='auto';
+        dd.defaultView.addEventListener('scroll', redibujar, {passive:true});
+      }
+    }catch(e){}
     var q=espera; espera=[];
     q.forEach(function(op){ setTimeout(function(){ aplicar(op); }, 60); });
   });
@@ -239,7 +247,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
       case 'clic':  if(d){ var b=d.querySelector(op.v); if(b) b.click(); } break;
       case 'zoom':  if(d&&d.body) d.body.style.zoom = op.v; break;
       case 'pluma': pluma = {c:op.c||pluma.c, g:op.g||pluma.g}; break;
-      case 'trazo': trazos.push({c:op.c||pluma.c, g:op.g||pluma.g, p:op.v}); redibujar(); break;
+      case 'trazo': trazos.push({c:op.c||pluma.c, g:op.g||pluma.g, p:op.v, a:op.a||'pant'}); redibujar(); break;
       case 'sigue': var u=trazos[trazos.length-1]; if(u){ u.p=u.p.concat(op.v); redibujar(); } break;
       case 'borrar':trazos=[]; redibujar(); break;
       case 'deshacer': trazos.pop(); redibujar(); break;
@@ -250,7 +258,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
       case 'tap':   tocar(op.v); break;
       case 'tecla': escribir(op.v); break;
       case 'lienzo':lienzo.style.display = op.v ? 'block':'none'; break;
-      case 'pos':   if(d&&d.defaultView) d.defaultView.scrollTo(0, op.v); break;
+      case 'pos':   if(d&&d.defaultView){ d.defaultView.scrollTo(0, op.v); redibujar(); } break;
       case 'hola':  try{ canal.enviar({t:'estoy', v:lecActual,
                         s:(d&&d.defaultView)?Math.round(d.defaultView.scrollY):0}); }catch(e){} break;
     }

@@ -101,6 +101,16 @@ dialog .fin .no{background:var(--claro);color:#555}
 #teclas button{background:rgba(255,255,255,.14);border:0;border-bottom:4px solid rgba(0,0,0,.22);color:#fff;
   font:inherit;font-size:24px;font-weight:700;border-radius:12px;padding:14px 0}
 #teclas .ir{background:var(--oro);font-size:16px;letter-spacing:1px}
+#visor{position:relative;width:min(320px,80vw);aspect-ratio:1/1;border-radius:18px;overflow:hidden;
+  background:#2b0d1c;display:none}
+#visor.ver{display:block}
+#visor video{width:100%;height:100%;object-fit:cover}
+#visor .mira{position:absolute;inset:14%;border:3px solid rgba(255,255,255,.85);border-radius:14px;
+  box-shadow:0 0 0 2000px rgba(0,0,0,.25)}
+.cambia{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:11px;padding:11px 18px;
+  font:inherit;font-weight:700;margin-top:14px;display:none}
+.cambia.ver{display:block}
+#eco.oculto, #teclas.oculto{display:none}
 
 /* ── celular acostado: barrita de una sola fila ───────────────────── */
 @media (max-height:540px){
@@ -119,9 +129,11 @@ dialog .fin .no{background:var(--claro);color:#555}
 
 <div id="entrar">
   <h1>Control de clase</h1>
-  <p>Escanea con la c&aacute;mara el <b>QR</b> que muestra la pantalla del sal&oacute;n.
-     Si prefieres, teclea aqu&iacute; el n&uacute;mero de esa pantalla.</p>
+  <p id="epie">Apunta la c&aacute;mara al <b>QR</b> de la pantalla del sal&oacute;n.</p>
+  <div id="visor"><video id="camara" playsinline muted autoplay></video><div class="mira"></div></div>
+  <button id="eteclado" class="cambia">Mejor escribo el n&uacute;mero</button>
   <div id="eco" class="vacio">— — —</div>
+  <button id="ecamara" class="cambia">Volver a la c&aacute;mara</button>
   <div id="teclas">
     <button>1</button><button>2</button><button>3</button>
     <button>4</button><button>5</button><button>6</button>
@@ -224,17 +236,65 @@ if('serviceWorker' in navigator){
 
   /* ── entrada con número ─────────────────────────────────────────── */
   var cap=document.getElementById('entrar'), eco=document.getElementById('eco'), buf='';
+  var visor=document.getElementById('visor'), video=document.getElementById('camara'),
+      bTeclado=document.getElementById('eteclado'), bCamara=document.getElementById('ecamara'),
+      teclas=document.getElementById('teclas'), epie=document.getElementById('epie');
+  var flujo=null, lazo=null;
+
+  function entraSala(n){
+    try{ localStorage.setItem('hcm_aula_sala', n); }catch(e){}
+    location.search='?sala='+encodeURIComponent(n);
+  }
+  function apagaCamara(){
+    if(lazo){ clearInterval(lazo); lazo=null; }
+    if(flujo){ flujo.getTracks().forEach(function(t){ t.stop(); }); flujo=null; }
+  }
+  function hayCamara(){
+    return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && ('BarcodeDetector' in window));
+  }
+  function verTeclado(){
+    apagaCamara();
+    visor.classList.remove('ver'); bTeclado.classList.remove('ver');
+    eco.classList.remove('oculto'); teclas.classList.remove('oculto');
+    bCamara.classList.toggle('ver', hayCamara());
+    epie.innerHTML='Teclea el n&uacute;mero que muestra la pantalla del sal&oacute;n.';
+  }
+  function verCamara(){
+    eco.classList.add('oculto'); teclas.classList.add('oculto'); bCamara.classList.remove('ver');
+    visor.classList.add('ver'); bTeclado.classList.add('ver');
+    epie.innerHTML='Apunta la c&aacute;mara al <b>QR</b> de la pantalla del sal&oacute;n.';
+    prendeCamara();
+  }
+  function prendeCamara(){
+    if(!hayCamara()){ verTeclado(); return; }
+    navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}}})
+      .then(function(st){
+        flujo=st; video.srcObject=st;
+        var det=new BarcodeDetector({formats:['qr_code']});
+        lazo=setInterval(function(){
+          if(!video.videoWidth) return;
+          det.detect(video).then(function(cs){
+            if(!cs || !cs.length) return;
+            var t=(cs[0].rawValue||'');
+            var m=/[?&]sala=([A-Za-z0-9]{2,8})/.exec(t);
+            if(m){ apagaCamara(); entraSala(m[1].toUpperCase()); }
+          }).catch(function(){});
+        }, 350);
+      })
+      .catch(function(){ verTeclado(); });
+  }
+  bTeclado.onclick=verTeclado;
+  bCamara.onclick=verCamara;
   function pintaEco(){ eco.textContent = buf || '— — —'; eco.classList.toggle('vacio', !buf); }
   document.querySelectorAll('#teclas button').forEach(function(b){
     b.onclick=function(){
       var k=b.dataset.k; try{ navigator.vibrate && navigator.vibrate(10); }catch(e){}
       if(k==='del'){ buf=buf.slice(0,-1); pintaEco(); return; }
-      if(k==='ok'){ if(buf.length<3) return; localStorage.setItem('hcm_aula_sala',buf);
-                    location.search='?sala='+encodeURIComponent(buf); return; }
+      if(k==='ok'){ if(buf.length<3) return; entraSala(buf); return; }
       if(buf.length<6){ buf+=b.textContent.trim(); pintaEco(); }
     };
   });
-  if(!sala){ cap.classList.add('ver'); pintaEco(); return; }
+  if(!sala){ cap.classList.add('ver'); pintaEco(); verCamara(); return; }
   localStorage.setItem('hcm_aula_sala', sala);
   document.getElementById('hsala').textContent = sala;
 

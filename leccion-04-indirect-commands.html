@@ -393,5 +393,15 @@ document.getElementById('clave').onclick=function(){
  document.querySelectorAll('.pista').forEach(function(p){p.classList.toggle('ver',v)});
  this.textContent=v?'Ocultar clave (docente)':'Mostrar clave (docente)';};
 </script>
+
+<style>
+#conherr{position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;align-items:center;gap:8px;
+ background:#6b1f2a;color:#fff;border:2px solid #c9a227;border-radius:30px;padding:12px 18px;
+ font:700 16px/1 system-ui,-apple-system,sans-serif;text-decoration:none;box-shadow:0 6px 18px rgba(0,0,0,.32)}
+#conherr:hover{background:#86283a}
+@media print{#conherr{display:none}}
+</style>
+<a id="conherr" href="aula.html?lec=leccion-04-indirect-commands.html">&#9999;&#65039; Abrir con herramientas</a>
+<script>if(window.top!==window.self){var _ch=document.getElementById('conherr'); if(_ch) _ch.remove();}</script>
 </body>
 </html>

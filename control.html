@@ -181,7 +181,10 @@ dialog .fin .no{background:var(--claro);color:#555}
   <div class="rej">
     <button data-op='{"t":"clic","v":"#clave"}'>Clave docente</button>
     <button id="m-cfg">Ajustes de conexi&oacute;n</button>
+    <button id="m-probar">Probar la conexi&oacute;n</button>
+    <button id="m-recargar">Bajar la versi&oacute;n nueva</button>
   </div>
+  <p id="m-res" style="font-size:14px;color:#555;margin:10px 0 0;line-height:1.45"></p>
   <div class="fin"><button class="no" id="m-cerrar">Cerrar</button></div>
 </div></dialog>
 
@@ -554,6 +557,38 @@ if('serviceWorker' in navigator){
       manda({t:'zoom', v:Math.round(z*100)/100});
       var dd=doc(); if(dd&&dd.body) dd.body.style.zoom=z; };
   });
+  var res=document.getElementById('m-res');
+  document.getElementById('m-probar').onclick=function(){
+    res.textContent='Probando\u2026 (5 segundos)';
+    var marca0 = ultimoEstoy;
+    manda({t:'hola'});
+    setTimeout(function(){
+      if(ultimoEstoy > marca0){
+        res.innerHTML='<b style="color:#2f7d32">La pantalla contest\u00f3.</b> Est\u00e1n enlazados en la sala '+sala+'.';
+      } else if(canal.estado.remoto==='conectado'){
+        res.innerHTML='<b style="color:#a4332a">El servidor s\u00ed responde, pero la pantalla no contesta.</b> '+
+          'Revisa que la pantalla del sal\u00f3n est\u00e9 abierta y que muestre el n\u00famero <b>'+sala+'</b>.';
+      } else if(!Canal.endpoint()){
+        res.innerHTML='<b style="color:#a4332a">Este aparato no encontr\u00f3 el servidor del HCM.</b> '+
+          'Usa el bot\u00f3n "Bajar la versi\u00f3n nueva" y vuelve a intentar.';
+      } else {
+        res.innerHTML='<b style="color:#a4332a">No se pudo hablar con el servidor.</b> Revisa el internet del aparato.';
+      }
+    }, 5000);
+  };
+  document.getElementById('m-recargar').onclick=function(){
+    res.textContent='Bajando la versi\u00f3n nueva\u2026';
+    var fin=function(){ location.href = 'control.html?sala='+encodeURIComponent(sala)+'&v='+Date.now(); };
+    try{
+      if('serviceWorker' in navigator){
+        navigator.serviceWorker.getRegistrations().then(function(rs){
+          return Promise.all(rs.map(function(r){ return r.unregister(); }));
+        }).then(function(){ return caches.keys(); })
+          .then(function(ks){ return Promise.all(ks.map(function(k){ return caches.delete(k); })); })
+          .then(fin).catch(fin);
+      } else fin();
+    }catch(e){ fin(); }
+  };
   document.getElementById('m-cfg').onclick=function(){
     document.getElementById('icsala').value=sala;
     document.getElementById('icep').value=Canal.endpoint();
@@ -567,11 +602,13 @@ if('serviceWorker' in navigator){
     location.search='?sala='+encodeURIComponent(ns);
   };
 
+  var ultimoEstoy = 0;
   /* ── lo que llega de la pantalla (o de otro control) ────────────── */
   function recibir(op){
     var d=doc();
     switch(op.t){
       case 'estoy':
+        ultimoEstoy = Date.now();
         if(op.v && marco.src.indexOf(op.v)<0){
           var L=LECCIONES.filter(function(x){return x.f===op.v;})[0];
           if(L){ actual=L; }
@@ -605,7 +642,8 @@ if('serviceWorker' in navigator){
   var luz=document.getElementById('luz'), rotulo=document.getElementById('rotulo');
   setInterval(function(){
     var r = canal.estado.remoto;
-    var ok = (r==='conectado');
+    var cerca = (Date.now() - ultimoEstoy) < 20000;     // la pantalla contestó hace poco
+    var ok = (r==='conectado') || cerca;
     luz.classList.toggle('ok', ok);
     rotulo.textContent = ok ? 'EN VIVO'
       : (r==='esperando' ? 'CONECTANDO…'

@@ -25,7 +25,28 @@ body.sinraton, body.sinraton *{cursor:none !important}
 @keyframes toc{from{opacity:.95;width:14px;height:14px}to{opacity:0;width:64px;height:64px}}
 #laser{position:absolute;width:26px;height:26px;z-index:6;border-radius:50%;background:rgba(255,40,40,.85);
   box-shadow:0 0 18px 6px rgba(255,40,40,.55);pointer-events:none;z-index:6;display:none;transform:translate(-50%,-50%)}
-#tapa{position:absolute;inset:0;background:#0b0b0b;z-index:7;display:none}
+#tapa{position:absolute;inset:0;background:#0b0b0b;z-index:9;display:none}
+#capaP{position:absolute;left:0;top:0;width:1280px;height:720px;z-index:7;display:none;touch-action:none}
+#abreh{position:absolute;left:16px;bottom:14px;z-index:10;background:rgba(99,17,50,.82);color:#fff;border:0;
+  border-radius:22px;padding:10px 18px;font:inherit;font-size:15px;font-weight:700;cursor:pointer;opacity:.45;
+  transition:opacity .2s}
+#abreh:hover{opacity:1}
+#herra{position:absolute;left:16px;bottom:14px;z-index:11;background:#241d20;border:2px solid var(--oro);
+  border-radius:16px;padding:10px;display:none;gap:8px;align-items:center;flex-wrap:wrap;max-width:min(96vw,980px)}
+#herra.ver{display:flex}
+#herra button{background:#3a2e33;border:0;border-bottom:3px solid #151013;color:#f3ecee;font:inherit;
+  font-weight:700;font-size:14px;border-radius:10px;padding:10px 14px;cursor:pointer}
+#herra button.on{background:var(--oro);color:#241d20;border-bottom-color:#7d5e13}
+#herra button.rojo{background:#a4332a;border-bottom-color:#5e1c17}
+#herra .tin{display:flex;gap:6px;align-items:center;margin-left:4px}
+#herra .tin i{width:26px;height:26px;border-radius:7px;border:3px solid transparent;cursor:pointer;display:block}
+#herra .tin i.sel{border-color:#fff}
+#dlec{border:0;border-radius:16px;padding:0;max-width:560px;width:92%}
+#dlec .in{padding:18px}
+#dlec h2{margin:0 0 10px;color:var(--vino);font-size:21px}
+#dlec button{display:block;width:100%;text-align:left;background:var(--claro);border:1px solid #e0d7db;
+  border-radius:10px;padding:13px 15px;font:inherit;font-weight:700;color:var(--vino);margin-bottom:8px;cursor:pointer}
+#dlec .cerrar2{background:var(--vino);color:#fff;text-align:center}
 #tapa span{position:absolute;bottom:40px;left:0;right:0;text-align:center;color:#555;font-size:18px}
 #barra{position:absolute;top:0;left:0;right:0;z-index:9;background:var(--vino);color:#fff;
   display:flex;align-items:center;gap:14px;padding:9px 16px;font-size:15px;transition:transform .3s;transform:translateY(-110%)}
@@ -76,6 +97,7 @@ body.sinraton, body.sinraton *{cursor:none !important}
   <div id="lienzo"></div>
   <canvas id="pizarra"></canvas>
   <div id="laser"></div>
+  <canvas id="capaP" width="1280" height="720"></canvas>
   <svg id="cursor" viewBox="0 0 24 24"><path d="M4 2l15 8.2-6.6 1.5L9.9 18z" fill="#fff" stroke="#631132" stroke-width="1.6" stroke-linejoin="round"/></svg>
 </div>
 <div id="tapa"><span>Pantalla en pausa</span></div>
@@ -85,6 +107,26 @@ body.sinraton, body.sinraton *{cursor:none !important}
   <span id="blec">—</span>
   <span class="der" id="bestado">esperando el control…</span>
 </div>
+<button id="abreh">&#9999; Herramientas</button>
+<div id="herra">
+  <button id="h-lec">&#128218; Lecci&oacute;n</button>
+  <button id="h-escribir">&#9999; Escribir</button>
+  <button id="h-lienzo">&#9634; Lienzo</button>
+  <button id="h-negro">&#9728; Negro</button>
+  <button id="h-deshacer">&#8630;</button>
+  <button id="h-borrar" class="rojo">&#10006;</button>
+  <span class="tin" id="h-tin">
+    <i data-c="#e11d2e" class="sel" style="background:#e11d2e"></i>
+    <i data-c="#631132" style="background:#631132"></i>
+    <i data-c="#1b6ac9" style="background:#1b6ac9"></i>
+    <i data-c="#2e9e4f" style="background:#2e9e4f"></i>
+    <i data-c="#AE8420" style="background:#AE8420"></i>
+    <i data-c="#111111" style="background:#111"></i>
+  </span>
+  <button id="h-cerrar">Cerrar</button>
+</div>
+<dialog id="dlec"><div class="in"><h2>Abrir una actividad</h2><div id="dlec-lista"></div>
+<button class="cerrar2" id="dlec-no">Cerrar</button></div></dialog>
 <button id="vinc">&#128279; Vincular celular</button>
 <div id="aviso">
   <button class="cerrar" id="acerrar">Cerrar</button>
@@ -177,7 +219,7 @@ body.sinraton, body.sinraton *{cursor:none !important}
       var dd=doc();
       if(dd){
         dd.documentElement.style.scrollBehavior='auto';
-        dd.defaultView.addEventListener('scroll', redibujar, {passive:true});
+        dd.defaultView.addEventListener('scroll', function(){ redibujar(); avisaPos(); }, {passive:true});
       }
     }catch(e){}
     var q=espera; espera=[];
@@ -242,6 +284,7 @@ body.sinraton, body.sinraton *{cursor:none !important}
 
   function aplicar(op){
     if(op.t!=='hola') aviso.style.display='none';
+    aplicando = Date.now();
     // si la lección aún está cargando, la orden espera su turno
     if(cargando && op.t!=='lec' && op.t!=='tapa' && op.t!=='borrar' && op.t!=='hola'){ espera.push(op); return; }
     var d = doc();
@@ -318,6 +361,95 @@ body.sinraton, body.sinraton *{cursor:none !important}
   }
   setInterval(function(){ if(aviso2.style.display!=='none') pintaEstado(); }, 2000);
   pintaEstado();
+
+  /* ── la pantalla también se maneja sola ─────────────────────────── */
+  var LECCIONES = [
+    ['clase-29-oct.html','Clase de hoy \u00b7 29 de octubre'],
+    ['leccion-06-should-could.html','Lecci\u00f3n 6 \u00b7 Should / could / adverbios'],
+    ['leccion-05-vocabulary.html','Lecci\u00f3n 5 \u00b7 Vocabulary'],
+    ['leccion-04-indirect-commands.html','Lecci\u00f3n 4 \u00b7 Indirect commands'],
+    ['index.html','\u00cdndice de actividades']
+  ];
+  var herra=document.getElementById('herra'), capaP=document.getElementById('capaP'),
+      px=capaP.getContext('2d'), dlec=document.getElementById('dlec');
+  var escribiendo=false, colorP='#e11d2e', grosorP=6, aplicando=0;
+
+  document.getElementById('abreh').onclick=function(){ herra.classList.add('ver'); };
+  document.getElementById('h-cerrar').onclick=function(){ herra.classList.remove('ver'); };
+
+  var lista=document.getElementById('dlec-lista');
+  LECCIONES.forEach(function(L){
+    var b=document.createElement('button'); b.textContent=L[1];
+    b.onclick=function(){ abrir(L[0]); canal.enviar({t:'lec', v:L[0]}); dlec.close(); };
+    lista.appendChild(b);
+  });
+  document.getElementById('h-lec').onclick=function(){ dlec.showModal(); };
+  document.getElementById('dlec-no').onclick=function(){ dlec.close(); };
+
+  function modoEscribir(v){
+    escribiendo=v;
+    capaP.style.display = v ? 'block' : 'none';
+    document.getElementById('h-escribir').classList.toggle('on', v);
+  }
+  document.getElementById('h-escribir').onclick=function(){ modoEscribir(!escribiendo); };
+  document.getElementById('h-lienzo').onclick=function(){
+    var v = lienzo.style.display!=='block';
+    lienzo.style.display = v ? 'block':'none';
+    this.classList.toggle('on', v);
+    canal.enviar({t:'lienzo', v:v});
+    if(v) modoEscribir(true);
+  };
+  document.getElementById('h-negro').onclick=function(){
+    var v = tapa.style.display!=='block';
+    tapa.style.display = v ? 'block':'none';
+    this.classList.toggle('on', v);
+    canal.enviar({t:'tapa', v:v});
+  };
+  document.getElementById('h-deshacer').onclick=function(){ trazos.pop(); redibujar(); canal.enviar({t:'deshacer'}); };
+  document.getElementById('h-borrar').onclick=function(){ trazos=[]; redibujar(); canal.enviar({t:'borrar'}); };
+  document.querySelectorAll('#h-tin i').forEach(function(c){
+    c.onclick=function(){ colorP=c.dataset.c; pluma={c:colorP,g:grosorP};
+      document.querySelectorAll('#h-tin i').forEach(function(x){x.classList.remove('sel')}); c.classList.add('sel');
+      canal.enviar({t:'pluma', c:colorP, g:grosorP}); modoEscribir(true); };
+  });
+
+  /* dibujar con el dedo o el mouse sobre la propia pantalla */
+  var pintando=false, colaP=[], ultimoP=0;
+  function puntoP(e){
+    var r=capaP.getBoundingClientRect();
+    return [Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),
+            Math.max(0,Math.min(1,(e.clientY-r.top)/r.height))];
+  }
+  capaP.addEventListener('pointerdown', function(e){
+    if(!escribiendo) return;
+    try{ capaP.setPointerCapture(e.pointerId); }catch(err){}
+    var n=puntoP(e), enL = lienzo.style.display==='block';
+    var ancla = enL ? 'pant' : 'doc';
+    var q = ancla==='doc' ? [n[0], n[1]*H + desp()] : n;
+    trazos.push({c:colorP, g:grosorP, a:ancla, p:[q]});
+    canal.enviar({t:'trazo', v:[q], c:colorP, g:grosorP, a:ancla});
+    pintando=true; colaP=[]; redibujar();
+  });
+  capaP.addEventListener('pointermove', function(e){
+    if(!pintando) return;
+    var n=puntoP(e), t0=trazos[trazos.length-1];
+    var q = (t0 && t0.a==='doc') ? [n[0], n[1]*H + desp()] : n;
+    if(t0) t0.p.push(q);
+    colaP.push(q); redibujar();
+    if(Date.now()-ultimoP>120 && colaP.length){ ultimoP=Date.now(); canal.enviar({t:'sigue', v:colaP}); colaP=[]; }
+  });
+  function sueltaP(){ if(colaP.length){ canal.enviar({t:'sigue', v:colaP}); colaP=[]; } pintando=false; }
+  capaP.addEventListener('pointerup', sueltaP);
+  capaP.addEventListener('pointercancel', sueltaP);
+
+  /* si alguien mueve la lección aquí, el celular la sigue */
+  var ultimoAviso=0;
+  function avisaPos(){
+    if(Date.now() < aplicando + 700) return;      // viene del celular: no rebotar
+    if(Date.now()-ultimoAviso < 120) return;
+    ultimoAviso=Date.now();
+    var d=doc(); if(d&&d.defaultView) canal.enviar({t:'pos', v:Math.round(d.defaultView.scrollY)});
+  }
 
   /* el puntero del mouse del salón estorba en la proyección: se esconde solo */
   var relojRaton=null;

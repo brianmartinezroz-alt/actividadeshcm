@@ -505,15 +505,38 @@ if('serviceWorker' in navigator){
     location.search='?sala='+encodeURIComponent(ns);
   };
 
-  /* ── lo que llega de la pantalla ────────────────────────────────── */
+  /* ── lo que llega de la pantalla (o de otro control) ────────────── */
   function recibir(op){
-    if(op.t==='estoy'){
-      if(op.v && marco.src.indexOf(op.v)<0){
-        var L=LECCIONES.filter(function(x){return x.f===op.v;})[0];
-        if(L) actual=L;
-        abrir(op.v, false);
-        setTimeout(function(){ var d=doc(); if(d&&d.defaultView) d.defaultView.scrollTo(0, op.s||0); }, 900);
-      }
+    var d=doc();
+    switch(op.t){
+      case 'estoy':
+        if(op.v && marco.src.indexOf(op.v)<0){
+          var L=LECCIONES.filter(function(x){return x.f===op.v;})[0];
+          if(L){ actual=L; }
+          abrir(op.v, false);
+          setTimeout(function(){ var dd=doc(); if(dd&&dd.defaultView) dd.defaultView.scrollTo(0, op.s||0); }, 900);
+        }
+        break;
+      case 'lec':
+        if(op.v && marco.src.indexOf(op.v)<0){
+          var L2=LECCIONES.filter(function(x){return x.f===op.v;})[0];
+          if(L2) actual=L2;
+          trazos=[]; redibujaTinta();
+          abrir(op.v, false);
+        }
+        break;
+      case 'pos':   if(d&&d.defaultView){ d.defaultView.scrollTo(0, op.v); redibujaTinta(); } break;
+      case 'ir':    if(d){ var e=d.querySelector(op.v); if(e) e.scrollIntoView({block:'start'}); } break;
+      case 'clic':  if(d){ var b2=d.querySelector(op.v); if(b2) b2.click(); } break;
+      case 'tap':   tocaLocal(op.v); break;
+      case 'pluma': color=op.c||color; grosor=op.g||grosor; break;
+      case 'trazo': trazos.push({c:op.c||color, g:op.g||grosor, a:op.a||'pant', p:op.v}); redibujaTinta(); break;
+      case 'sigue': var u=trazos[trazos.length-1]; if(u){ u.p=u.p.concat(op.v); redibujaTinta(); } break;
+      case 'borrar': trazos=[]; redibujaTinta(); break;
+      case 'deshacer': trazos.pop(); redibujaTinta(); break;
+      case 'lienzo': enLienzo=!!op.v; blanco.style.display=enLienzo?'block':'none';
+                     document.getElementById('b-lienzo').classList.toggle('on', enLienzo); break;
+      case 'tapa':   document.getElementById('b-negro').classList.toggle('on', !!op.v); break;
     }
   }
 

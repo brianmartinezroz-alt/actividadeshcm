@@ -7,6 +7,7 @@
   'use strict';
 
   function Canal(sala, rol, alRecibir) {
+    this.yo = (rol || 'x') + '-' + Math.random().toString(36).slice(2, 9);
     this.sala = String(sala || '301');
     this.rol = rol;                   // 'control' | 'pantalla'
     this.alRecibir = alRecibir || function () {};
@@ -31,14 +32,9 @@
       }
     });
 
-    if (rol === 'pantalla') {
-      var arranca = function () { if (Canal.endpoint() && !yo._sondeando) { yo._sondeando = true; yo.sondear(); } };
-      if (Canal.endpoint()) arranca(); else Canal.buscarServidor(function () {
-        yo.estado.remoto = 'esperando'; arranca();
-      });
-    } else if (!Canal.endpoint()) {
-      Canal.buscarServidor(function () { yo.estado.remoto = 'esperando'; });
-    }
+    var arranca = function () { if (Canal.endpoint() && !yo._sondeando) { yo._sondeando = true; yo.sondear(); } };
+    if (Canal.endpoint()) arranca();
+    else Canal.buscarServidor(function () { yo.estado.remoto = 'esperando'; arranca(); });
   }
 
   Canal._auto = '';          // servidor del HCM publicado en servidor.json
@@ -63,6 +59,7 @@
   /* ── salida ─────────────────────────────────────────────────────────────── */
   Canal.prototype.enviar = function (op) {
     op.t_ = Date.now();
+    op.o = this.yo;
     var paq = [op];
     if (this.bc) { try { this.bc.postMessage(paq); } catch (e) {} }
     try { localStorage.setItem(this.clave, JSON.stringify({ ops: paq, r: Math.random() })); } catch (e) {}
@@ -123,6 +120,7 @@
     for (var i = 0; i < ops.length; i++) {
       var op = ops[i];
       if (!op || !op.t) continue;
+      if (op.o && op.o === this.yo) continue;   // es un eco de uno mismo
       var id = (op.t_ || 0) + '|' + op.t + '|' + (op.n || '');
       this.vistos = this.vistos || {};
       if (this.vistos[id]) continue;        // no repetir lo que ya llegó por la otra vía

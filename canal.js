@@ -58,6 +58,7 @@
 
   /* ── salida ─────────────────────────────────────────────────────────────── */
   Canal.prototype.enviar = function (op) {
+    if (this.muerto) return;
     op.t_ = Date.now();
     op.o = this.yo;
     var paq = [op];
@@ -85,9 +86,14 @@
   };
 
   /* ── entrada (solo la pantalla sondea) ──────────────────────────────────── */
+  Canal.prototype.cerrar = function () {
+    this.muerto = true;
+    try { if (this.bc) this.bc.close(); } catch (e) {}
+  };
   Canal.prototype.sondear = function () {
     var yo = this;
     function vuelta() {
+      if (yo.muerto) return;
       yo.pedir({ accion: 'aula_get', sala: yo.sala, desde: yo.visto })
         .then(function (r) {
           if (r && r.ok) {

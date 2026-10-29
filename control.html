@@ -24,7 +24,14 @@ body{display:flex;flex-direction:column}
 #top b{letter-spacing:.5px;font-size:13.5px;opacity:.9}
 #luz{width:9px;height:9px;border-radius:50%;background:#c0392b;flex:none}
 #luz.ok{background:#49c06a}
-#top .sala{margin-left:auto;background:var(--oro);border-radius:14px;padding:2px 11px;font-weight:700;letter-spacing:2px;font-size:13.5px}
+#top .sala{margin-left:auto;background:var(--oro);border:0;color:#241d20;border-radius:14px;padding:4px 13px;
+  font:inherit;font-weight:700;letter-spacing:2px;font-size:14px;cursor:pointer}
+#grupos{position:absolute;top:40px;right:8px;z-index:30;background:#241d20;border:2px solid var(--oro);
+  border-radius:14px;padding:9px;display:none;gap:7px;flex-wrap:wrap;width:208px}
+#grupos.ver{display:flex}
+#grupos button{flex:1 1 56px;background:#3a2e33;border:0;border-bottom:3px solid #151013;color:#f3ecee;
+  font:inherit;font-weight:700;font-size:15px;border-radius:10px;padding:11px 0;letter-spacing:1px}
+#grupos button.on{background:var(--oro);color:#241d20;border-bottom-color:#7d5e13}
 #top .mas{background:rgba(255,255,255,.18);border:0;color:#fff;border-radius:7px;padding:4px 9px;font:inherit;font-size:15px}
 
 /* ── espejo de la pantalla del salón ──────────────────────────────── */
@@ -124,9 +131,11 @@ dialog .fin .no{background:var(--claro);color:#555}
 
 <div id="top">
   <div id="luz"></div><b id="rotulo">CONECTANDO&hellip;</b>
-  <span class="sala" id="hsala">301</span>
+  <button class="sala" id="hsala">301</button>
   <button class="mas" id="bmenu">&#9776;</button>
 </div>
+
+<div id="grupos"></div>
 
 <div id="espejo">
   <div id="mundo">
@@ -167,6 +176,8 @@ dialog .fin .no{background:var(--claro);color:#555}
 
 <dialog id="dmenu"><div class="in">
   <h2>Clase</h2>
+  <h3>Grupo</h3>
+  <div class="rej r3" id="m-grupos"></div>
   <h3>Abrir en la pantalla</h3>
   <div class="rej" id="m-lecs"></div>
   <h3>Ir a la secci&oacute;n</h3>
@@ -228,6 +239,36 @@ if('serviceWorker' in navigator){
 
   var canal = new Canal(sala, 'control', recibir);
   function manda(op){ canal.enviar(op); }
+
+  /* ── cambiar de grupo sin salir de la clase ─────────────────────── */
+  var GRUPOS = ['301','302','303','304','305','306'];
+  var cajaG = document.getElementById('grupos');
+  function pintaGrupos(){
+    cajaG.innerHTML='';
+    GRUPOS.forEach(function(g){
+      var b=document.createElement('button'); b.textContent=g;
+      if(g===sala) b.className='on';
+      b.onclick=function(){ cambiaGrupo(g); };
+      cajaG.appendChild(b);
+    });
+  }
+  function cambiaGrupo(g){
+    cajaG.classList.remove('ver');
+    if(g===sala) return;
+    try{ canal.cerrar(); }catch(e){}
+    sala = g;
+    try{ localStorage.setItem('hcm_aula_sala', sala); }catch(e){}
+    document.getElementById('hsala').textContent = sala;
+    try{ history.replaceState(null,'','control.html?sala='+sala); }catch(e){}
+    canal = new Canal(sala, 'control', recibir);
+    ultimoEstoy = 0;
+    trazos=[]; redibujaTinta();
+    pintaGrupos();
+    manda({t:'hola'});
+    avisa('Grupo '+sala);
+  }
+  document.getElementById('hsala').onclick=function(){ cajaG.classList.toggle('ver'); };
+  pintaGrupos();
   function vibra(){ try{ navigator.vibrate && navigator.vibrate(10); }catch(e){} }
 
   /* ── lecciones ──────────────────────────────────────────────────── */
@@ -524,6 +565,13 @@ if('serviceWorker' in navigator){
   /* ── menú ───────────────────────────────────────────────────────── */
   var dmenu=document.getElementById('dmenu'), dcfg=document.getElementById('dcfg');
   function pintaMenu(){
+    var cg=document.getElementById('m-grupos'); cg.innerHTML='';
+    GRUPOS.forEach(function(g){
+      var b=document.createElement('button'); b.textContent=g;
+      if(g===sala) b.style.background='var(--oro)', b.style.color='#fff';
+      b.onclick=function(){ cambiaGrupo(g); pintaMenu(); };
+      cg.appendChild(b);
+    });
     var cl=document.getElementById('m-lecs'); cl.innerHTML='';
     LECCIONES.forEach(function(L){
       var b=document.createElement('button'); b.textContent=L.n;

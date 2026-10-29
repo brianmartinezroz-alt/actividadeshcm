@@ -158,7 +158,8 @@ body.sinraton, body.sinraton *{cursor:none !important}
 (function(){
   var par = new URLSearchParams(location.search);
   var sala = (par.get('sala') || '301').toUpperCase();
-  var lec  = par.get('lec') || '';
+  var CLASE_HOY = 'clase-30-oct.html';
+  var lec  = par.get('lec') || CLASE_HOY;
   document.getElementById('asala').textContent = sala;
   document.getElementById('bsala').textContent = sala;
 
@@ -413,7 +414,8 @@ body.sinraton, body.sinraton *{cursor:none !important}
 
   /* ── la pantalla también se maneja sola ─────────────────────────── */
   var LECCIONES = [
-    ['clase-29-oct.html','Clase de hoy \u00b7 29 de octubre'],
+    ['clase-30-oct.html','Clase de hoy \u00b7 30 de octubre \u00b7 Lesson 7'],
+    ['clase-29-oct.html','Clase del 29 de octubre \u00b7 Lesson 6'],
     ['leccion-06-should-could.html','Lecci\u00f3n 6 \u00b7 Should / could / adverbios'],
     ['leccion-05-vocabulary.html','Lecci\u00f3n 5 \u00b7 Vocabulary'],
     ['leccion-04-indirect-commands.html','Lecci\u00f3n 4 \u00b7 Indirect commands'],

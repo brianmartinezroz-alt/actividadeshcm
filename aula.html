@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, user-scalable=yes">
 <title>Clase en vivo · Pantalla</title>
+<link rel="manifest" href="aula.webmanifest">
+<meta name="theme-color" content="#631132">
+<link rel="icon" href="control-192.png">
 <style>
 :root{--vino:#631132;--oro:#AE8420;--claro:#F5F1F3}
 *{box-sizing:border-box}
@@ -49,6 +52,19 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
   color:#fff;font:inherit;font-size:clamp(15px,1.4vw,20px);font-weight:700;border-radius:12px;
   padding:10px clamp(14px,1.6vw,24px);letter-spacing:1px;cursor:pointer}
 #aviso .grupos button.on{background:var(--oro)}
+#aviso .estado{margin-top:1.6vh;font-size:clamp(13px,1.2vw,17px);background:rgba(0,0,0,.22);
+  border-radius:12px;padding:9px 18px;display:inline-flex;align-items:center;gap:10px}
+#aviso .estado b{color:#ffd9e6}
+#aviso .estado.ok b{color:#9ff0b5}
+#aviso .srv{margin-top:1.4vh;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+#aviso .srv input{width:min(520px,70vw);font:inherit;font-size:14px;padding:9px 11px;border:0;border-radius:9px}
+#aviso .srv button{background:var(--oro);color:#fff;border:0;border-radius:9px;padding:9px 18px;font:inherit;font-weight:700;cursor:pointer}
+#aviso .cerrar{position:absolute;right:18px;top:14px;background:rgba(255,255,255,.16);border:0;color:#fff;
+  border-radius:10px;padding:9px 16px;font:inherit;font-weight:700;cursor:pointer}
+#vinc{position:absolute;right:16px;bottom:14px;z-index:9;background:rgba(99,17,50,.82);color:#fff;border:0;
+  border-radius:22px;padding:10px 18px;font:inherit;font-size:15px;font-weight:700;cursor:pointer;opacity:.45;
+  transition:opacity .2s}
+#vinc:hover{opacity:1}
 #aviso small{opacity:.72;display:block;margin-top:2.2vh;font-size:clamp(12px,1.1vw,15px);text-align:center;max-width:760px}
 </style>
 </head>
@@ -67,7 +83,9 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
   <span id="blec">—</span>
   <span class="der" id="bestado">esperando el control…</span>
 </div>
+<button id="vinc">&#128279; Vincular celular</button>
 <div id="aviso">
+  <button class="cerrar" id="acerrar">Cerrar</button>
   <h1>Clase en vivo</h1>
   <p class="sub">Toma tu celular y entra al control de esta pantalla.</p>
   <div class="caja">
@@ -82,6 +100,11 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
     </div>
   </div>
   <div class="grupos" id="agrupos"></div>
+  <div class="estado" id="aestado"><span>Servidor del HCM:</span><b>buscando&hellip;</b></div>
+  <div class="srv" id="asrv">
+    <input id="aep" placeholder="https://script.google.com/macros/s/&hellip;/exec" autocomplete="off" spellcheck="false">
+    <button id="aguardar">Guardar</button>
+  </div>
   <small>Al escanear, el celular entra directo a esta sala. Si lo escribes a mano, teclea el n&uacute;mero
   en el control. La primera orden que mandes desde el celular hace desaparecer esta portada.</small>
 </div>
@@ -204,7 +227,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
   }
 
   function aplicar(op){
-    aviso.style.display='none';
+    if(op.t!=='hola') aviso.style.display='none';
     // si la lección aún está cargando, la orden espera su turno
     if(cargando && op.t!=='lec' && op.t!=='tapa' && op.t!=='borrar' && op.t!=='hola'){ espera.push(op); return; }
     var d = doc();
@@ -246,6 +269,41 @@ html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:Calib
     barra.classList.add('ver'); clearTimeout(t); t=setTimeout(function(){barra.classList.remove('ver');},4000);
   });
   addEventListener('keydown', function(e){ if(e.key==='b'||e.key==='B') barra.classList.toggle('ver'); });
+
+  /* ── vincular el celular ────────────────────────────────────────── */
+  var aviso2=document.getElementById('aviso'), est=document.getElementById('aestado'),
+      inep=document.getElementById('aep');
+  function verAviso(v){ aviso2.style.display = v ? 'flex' : 'none'; if(v) pintaEstado(); }
+  document.getElementById('vinc').onclick=function(){ verAviso(true); };
+  document.getElementById('acerrar').onclick=function(){ verAviso(false); };
+  document.getElementById('aguardar').onclick=function(){
+    Canal.guardarEndpoint(inep.value);
+    pintaEstado();
+    setTimeout(function(){ location.reload(); }, 600);
+  };
+  function pintaEstado(){
+    var ep = Canal.endpoint();
+    inep.value = ep;
+    var r = canal.estado.remoto;
+    if(!ep){
+      est.className='estado';
+      est.innerHTML='<span>Servidor del HCM:</span><b>sin configurar</b>'+
+        '<span style="opacity:.8">&mdash; el control solo funciona en esta misma computadora</span>';
+    } else if(r==='conectado'){
+      est.className='estado ok';
+      est.innerHTML='<span>Servidor del HCM:</span><b>conectado</b>'+
+        '<span style="opacity:.8">&mdash; ya puedes controlar desde cualquier celular</span>';
+    } else if(r==='error'){
+      est.className='estado';
+      est.innerHTML='<span>Servidor del HCM:</span><b>no responde</b>'+
+        '<span style="opacity:.8">&mdash; revisa la direcci&oacute;n</span>';
+    } else {
+      est.className='estado';
+      est.innerHTML='<span>Servidor del HCM:</span><b>esperando al celular&hellip;</b>';
+    }
+  }
+  setInterval(function(){ if(aviso2.style.display!=='none') pintaEstado(); }, 2000);
+  pintaEstado();
 
   if(lec) abrir(lec);
 })();

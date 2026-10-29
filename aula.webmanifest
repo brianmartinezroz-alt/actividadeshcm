@@ -1,0 +1,15 @@
+{
+  "name": "Clase en vivo · HCM",
+  "short_name": "Clase en vivo",
+  "description": "Pantalla del salón para proyectar las actividades del Heroico Colegio Militar",
+  "start_url": "aula.html",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#631132",
+  "theme_color": "#631132",
+  "icons": [
+    { "src": "control-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "control-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

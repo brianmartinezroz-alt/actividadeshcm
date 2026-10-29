@@ -11,12 +11,12 @@
     this.rol = rol;                   // 'control' | 'pantalla'
     this.alRecibir = alRecibir || function () {};
     this.clave = 'hcm-aula-' + this.sala;
-    this.endpoint = Canal.endpoint();
+    /* el endpoint se consulta cada vez: puede llegar después, de servidor.json */
     this.visto = 0;
     this.cola = [];
     this.enviando = false;
     this.ultimoCambio = 0;
-    this.estado = { local: false, remoto: this.endpoint ? 'esperando' : 'apagado' };
+    this.estado = { local: false, remoto: Canal.endpoint() ? 'esperando' : 'apagado' };
     var yo = this;
 
     try {
@@ -31,11 +31,30 @@
       }
     });
 
-    if (rol === 'pantalla' && this.endpoint) this.sondear();
+    if (rol === 'pantalla') {
+      var arranca = function () { if (Canal.endpoint() && !yo._sondeando) { yo._sondeando = true; yo.sondear(); } };
+      if (Canal.endpoint()) arranca(); else Canal.buscarServidor(function () {
+        yo.estado.remoto = 'esperando'; arranca();
+      });
+    } else if (!Canal.endpoint()) {
+      Canal.buscarServidor(function () { yo.estado.remoto = 'esperando'; });
+    }
   }
 
+  Canal._auto = '';          // servidor del HCM publicado en servidor.json
   Canal.endpoint = function () {
-    try { return localStorage.getItem('hcm_aula_endpoint') || ''; } catch (e) { return ''; }
+    var g = '';
+    try { g = localStorage.getItem('hcm_aula_endpoint') || ''; } catch (e) {}
+    return g || Canal._auto || '';
+  };
+  /* Busca el servidor del Colegio sin que nadie tenga que configurarlo. */
+  Canal.buscarServidor = function (alTener) {
+    fetch('servidor.json?v=' + Date.now())
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (d && d.url) { Canal._auto = String(d.url).trim(); if (alTener) alTener(Canal._auto); }
+      })
+      .catch(function () {});
   };
   Canal.guardarEndpoint = function (url) {
     try { localStorage.setItem('hcm_aula_endpoint', (url || '').trim()); } catch (e) {}
@@ -47,7 +66,7 @@
     var paq = [op];
     if (this.bc) { try { this.bc.postMessage(paq); } catch (e) {} }
     try { localStorage.setItem(this.clave, JSON.stringify({ ops: paq, r: Math.random() })); } catch (e) {}
-    if (this.endpoint) { this.cola.push(op); this.vaciar(); }
+    if (Canal.endpoint()) { this.cola.push(op); this.vaciar(); }
   };
 
   Canal.prototype.vaciar = function () {
@@ -110,7 +129,7 @@
   };
 
   Canal.prototype.pedir = function (cuerpo) {
-    return fetch(this.endpoint, {
+    return fetch(Canal.endpoint(), {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(cuerpo)

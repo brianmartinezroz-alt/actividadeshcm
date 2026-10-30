@@ -27,10 +27,10 @@ body.sinraton, body.sinraton *{cursor:none !important}
   box-shadow:0 0 18px 6px rgba(255,40,40,.55);pointer-events:none;z-index:6;display:none;transform:translate(-50%,-50%)}
 #tapa{position:absolute;inset:0;background:#0b0b0b;z-index:9;display:none}
 #capaP{position:absolute;left:0;top:0;width:1280px;height:720px;z-index:7;display:none;touch-action:none}
-#abreh{position:fixed;left:16px;bottom:14px;z-index:10;background:var(--vino);color:#fff;
+#abreh{position:fixed;left:12px;top:12px;z-index:2147483000;background:var(--vino);color:#fff;
   border:2px solid var(--oro);border-radius:24px;padding:12px 20px;font:inherit;font-size:16px;font-weight:700;
   cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.45);transform-origin:left top}
-#herra{position:fixed;left:16px;bottom:14px;z-index:11;transform-origin:left top;background:#241d20;border:2px solid var(--oro);
+#herra{position:fixed;left:12px;top:12px;z-index:2147483001;transform-origin:left top;background:#241d20;border:2px solid var(--oro);
   border-radius:16px;padding:10px;display:none;gap:8px;align-items:center;flex-wrap:wrap;max-width:min(96vw,980px)}
 #herra.ver{display:flex}
 #herra button{background:#3a2e33;border:0;border-bottom:3px solid #151013;color:#f3ecee;font:inherit;
@@ -83,7 +83,7 @@ body.sinraton, body.sinraton *{cursor:none !important}
 #aviso .srv button{background:var(--oro);color:#fff;border:0;border-radius:9px;padding:9px 18px;font:inherit;font-weight:700;cursor:pointer}
 #aviso .cerrar{position:absolute;right:18px;top:14px;background:rgba(255,255,255,.16);border:0;color:#fff;
   border-radius:10px;padding:9px 16px;font:inherit;font-weight:700;cursor:pointer}
-#vinc{position:fixed;right:16px;bottom:14px;z-index:10;background:var(--vino);color:#fff;
+#vinc{position:fixed;right:12px;top:12px;z-index:2147483000;background:var(--vino);color:#fff;
   border:2px solid var(--oro);border-radius:24px;padding:12px 20px;font:inherit;font-size:16px;font-weight:700;
   cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.45);transform-origin:left top}
 #aviso small{opacity:.72;display:block;margin-top:2.2vh;font-size:clamp(12px,1.1vw,15px);text-align:center;max-width:760px}
@@ -563,14 +563,14 @@ body.sinraton, body.sinraton *{cursor:none !important}
     var bA=document.getElementById('abreh'), bV=document.getElementById('vinc'), bH=herra;
     function pega(){
       var s = 1 / (v.scale || 1);
-      var x = v.offsetLeft, y = v.offsetTop, w = v.width, h = v.height;
+      var x = v.offsetLeft, y = v.offsetTop, w = v.width;
       function pon(el, lado){
         if(!el || el.offsetWidth===0) return;
-        var an = el.offsetWidth * s, al = el.offsetHeight * s;
+        var an = el.offsetWidth * s;
         el.style.transform = 'scale(' + s + ')';
         el.style.bottom = 'auto'; el.style.right = 'auto';
-        el.style.top  = (y + h - al - 14) + 'px';
-        el.style.left = (lado==='der' ? (x + w - an - 16) : (x + 16)) + 'px';
+        el.style.top  = (y + 12) + 'px';
+        el.style.left = (lado==='der' ? (x + w - an - 12) : (x + 12)) + 'px';
       }
       pon(bA,'izq'); pon(bV,'der'); pon(bH,'izq');
     }

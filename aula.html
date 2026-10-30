@@ -472,8 +472,14 @@ body.sinraton, body.sinraton *{cursor:none !important}
       px=capaP.getContext('2d'), dlec=document.getElementById('dlec');
   var escribiendo=false, colorP='#e11d2e', grosorP=6, aplicando=0;
 
-  document.getElementById('abreh').onclick=function(){ herra.classList.add('ver'); };
-  document.getElementById('h-cerrar').onclick=function(){ herra.classList.remove('ver'); };
+  var bAbre = document.getElementById('abreh');
+  function verHerra(v){
+    herra.classList.toggle('ver', v);
+    bAbre.style.display = v ? 'none' : 'block';
+  }
+  bAbre.onclick=function(){ verHerra(true); };
+  document.getElementById('h-cerrar').onclick=function(){ verHerra(false); };
+  verHerra(true);   // arranca con los botones a la vista
 
   var lista=document.getElementById('dlec-lista');
   LECCIONES.forEach(function(L){

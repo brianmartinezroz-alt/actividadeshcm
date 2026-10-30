@@ -242,6 +242,7 @@ body.sinraton, body.sinraton *{cursor:none !important}
     var y0=null, s0=0, arrastra=false;
     destino.addEventListener('pointerdown', function(e){
       if(escribiendo || e.pointerType==='mouse') return;
+      if(e.target && e.target.closest && e.target.closest('#herra,#abreh,#vinc,#aviso,button,a,input,select,textarea,label')) return;
       y0=e.clientY; arrastra=false;
       var d=doc(); s0=(d&&d.defaultView)? d.defaultView.scrollY : 0;
     });

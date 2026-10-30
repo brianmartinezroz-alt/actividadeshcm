@@ -27,17 +27,25 @@ body.sinraton, body.sinraton *{cursor:none !important}
   box-shadow:0 0 18px 6px rgba(255,40,40,.55);pointer-events:none;z-index:6;display:none;transform:translate(-50%,-50%)}
 #tapa{position:absolute;inset:0;background:#0b0b0b;z-index:9;display:none}
 #capaP{position:absolute;left:0;top:0;width:1280px;height:720px;z-index:7;display:none;touch-action:none}
-#abreh{position:fixed;left:12px;top:12px;z-index:2147483000;background:var(--vino);color:#fff;
-  border:2px solid var(--oro);border-radius:24px;padding:12px 20px;font:inherit;font-size:16px;font-weight:700;
-  cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.45);transform-origin:left top}
-#herra{position:fixed;left:12px;top:12px;z-index:2147483001;transform-origin:left top;background:#241d20;border:2px solid var(--oro);
-  border-radius:16px;padding:10px;display:none;gap:8px;align-items:center;flex-wrap:wrap;max-width:min(96vw,980px)}
+#mando{position:fixed;left:12px;top:12px;z-index:2147483000;display:flex;align-items:flex-start;gap:8px;
+  touch-action:none}
+#mando.vert{flex-direction:column}
+#asa{background:#241d20;border:2px solid var(--oro);color:var(--oro);border-radius:14px;
+  width:46px;height:46px;font-size:19px;font-weight:700;cursor:grab;flex:none;line-height:1;
+  box-shadow:0 6px 18px rgba(0,0,0,.45);touch-action:none}
+#asa:active{cursor:grabbing}
+#abreh{background:var(--vino);color:#fff;border:2px solid var(--oro);border-radius:14px;padding:11px 16px;
+  font:inherit;font-size:16px;font-weight:700;cursor:pointer;flex:none;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+#herra{background:#241d20;border:2px solid var(--oro);border-radius:16px;padding:9px;display:none;gap:7px;
+  align-items:center;flex-wrap:wrap;max-width:min(92vw,900px);box-shadow:0 6px 18px rgba(0,0,0,.45)}
 #herra.ver{display:flex}
+#mando.vert #herra{flex-direction:column;align-items:stretch;max-width:200px}
+#mando.vert #herra button{text-align:left}
 #herra button{background:#3a2e33;border:0;border-bottom:3px solid #151013;color:#f3ecee;font:inherit;
-  font-weight:700;font-size:14px;border-radius:10px;padding:10px 14px;cursor:pointer}
+  font-weight:700;font-size:14px;border-radius:10px;padding:10px 13px;cursor:pointer}
 #herra button.on{background:var(--oro);color:#241d20;border-bottom-color:#7d5e13}
 #herra button.rojo{background:#a4332a;border-bottom-color:#5e1c17}
-#herra .tin{display:flex;gap:6px;align-items:center;margin-left:4px}
+#herra .tin{display:flex;gap:6px;align-items:center}
 #herra .tin i{width:26px;height:26px;border-radius:7px;border:3px solid transparent;cursor:pointer;display:block}
 #herra .tin i.sel{border-color:#fff}
 #dlec{border:0;border-radius:16px;padding:0;max-width:560px;width:92%}
@@ -105,6 +113,8 @@ body.sinraton, body.sinraton *{cursor:none !important}
   <span id="blec">—</span>
   <span class="der" id="bestado">esperando el control…</span>
 </div>
+<div id="mando">
+<button id="asa" title="Arrastra para mover la barra">&#10303;</button>
 <button id="abreh">&#9999; Herramientas</button>
 <div id="herra">
   <button id="h-lec">&#128218; Lecci&oacute;n</button>
@@ -121,7 +131,9 @@ body.sinraton, body.sinraton *{cursor:none !important}
     <i data-c="#AE8420" style="background:#AE8420"></i>
     <i data-c="#111111" style="background:#111"></i>
   </span>
+  <button id="h-giro">&#8645; Vertical</button>
   <button id="h-cerrar">Cerrar</button>
+</div>
 </div>
 <dialog id="dlec"><div class="in"><h2>Abrir una actividad</h2><div id="dlec-lista"></div>
 <button class="cerrar2" id="dlec-no">Cerrar</button></div></dialog>
@@ -242,7 +254,7 @@ body.sinraton, body.sinraton *{cursor:none !important}
     var y0=null, s0=0, arrastra=false;
     destino.addEventListener('pointerdown', function(e){
       if(escribiendo || e.pointerType==='mouse') return;
-      if(e.target && e.target.closest && e.target.closest('#herra,#abreh,#vinc,#aviso,button,a,input,select,textarea,label')) return;
+      if(e.target && e.target.closest && e.target.closest('#mando,#herra,#abreh,#asa,#vinc,#aviso,button,a,input,select,textarea,label')) return;
       y0=e.clientY; arrastra=false;
       var d=doc(); s0=(d&&d.defaultView)? d.defaultView.scrollY : 0;
     });
@@ -473,14 +485,58 @@ body.sinraton, body.sinraton *{cursor:none !important}
       px=capaP.getContext('2d'), dlec=document.getElementById('dlec');
   var escribiendo=false, colorP='#e11d2e', grosorP=6, aplicando=0;
 
-  var bAbre = document.getElementById('abreh');
-  function verHerra(v){
-    herra.classList.toggle('ver', v);
-    bAbre.style.display = v ? 'none' : 'block';
-  }
-  bAbre.onclick=function(){ verHerra(true); };
+  var mando = document.getElementById('mando'), bAbre = document.getElementById('abreh');
+  function verHerra(v){ herra.classList.toggle('ver', v); guarda(); }
+  bAbre.onclick=function(){ verHerra(!herra.classList.contains('ver')); };
   document.getElementById('h-cerrar').onclick=function(){ verHerra(false); };
-  verHerra(true);   // arranca con los botones a la vista
+  document.getElementById('h-giro').onclick=function(){
+    var v = mando.classList.toggle('vert');
+    this.innerHTML = v ? '\u21C4 Horizontal' : '\u21C5 Vertical';
+    dentro(); guarda();
+  };
+
+  /* ── la barra se mueve a donde quieras ─────────────────────────────────── */
+  function dentro(){
+    var r = mando.getBoundingClientRect();
+    var x = parseFloat(mando.style.left) || r.left;
+    var y = parseFloat(mando.style.top)  || r.top;
+    x = Math.max(4, Math.min(x, innerWidth  - Math.max(60, r.width)  - 4));
+    y = Math.max(4, Math.min(y, innerHeight - Math.max(50, r.height) - 4));
+    mando.style.left = x + 'px'; mando.style.top = y + 'px';
+    mando.style.right = 'auto'; mando.style.bottom = 'auto';
+  }
+  function guarda(){
+    try{ localStorage.setItem('hcm_mando', JSON.stringify({
+      x: parseFloat(mando.style.left)||12, y: parseFloat(mando.style.top)||12,
+      v: mando.classList.contains('vert'), a: herra.classList.contains('ver') })); }catch(e){}
+  }
+  (function recupera(){
+    var d=null; try{ d = JSON.parse(localStorage.getItem('hcm_mando')||'null'); }catch(e){}
+    if(d){
+      mando.style.left = (d.x||12)+'px'; mando.style.top = (d.y||12)+'px';
+      if(d.v){ mando.classList.add('vert'); document.getElementById('h-giro').innerHTML='\u21C4 Horizontal'; }
+      herra.classList.toggle('ver', d.a !== false);
+    } else { herra.classList.add('ver'); }
+    setTimeout(dentro, 60);
+  })();
+  (function arrastre(){
+    var asa=document.getElementById('asa'), dx=0, dy=0, activo=false;
+    asa.addEventListener('pointerdown', function(e){
+      activo=true; asa.setPointerCapture(e.pointerId);
+      var r=mando.getBoundingClientRect(); dx=e.clientX-r.left; dy=e.clientY-r.top;
+      e.preventDefault(); e.stopPropagation();
+    });
+    asa.addEventListener('pointermove', function(e){
+      if(!activo) return;
+      mando.style.left=(e.clientX-dx)+'px'; mando.style.top=(e.clientY-dy)+'px';
+      mando.style.right='auto'; mando.style.bottom='auto';
+      e.preventDefault(); e.stopPropagation();
+    });
+    function suelta(e){ if(!activo) return; activo=false; dentro(); guarda(); }
+    asa.addEventListener('pointerup', suelta);
+    asa.addEventListener('pointercancel', suelta);
+  })();
+  addEventListener('resize', dentro);
 
   var lista=document.getElementById('dlec-lista');
   LECCIONES.forEach(function(L){
@@ -556,29 +612,21 @@ body.sinraton, body.sinraton *{cursor:none !important}
     var d=doc(); if(d&&d.defaultView) canal.enviar({t:'pos', v:Math.round(d.defaultView.scrollY)});
   }
 
-  /* los botones flotan siempre, aunque la pantalla esté acercada */
+  /* el mando sigue el área visible cuando se hace zoom, sin repintar en bucle */
   (function(){
-    var v = window.visualViewport;
-    if(!v) return;
-    var bA=document.getElementById('abreh'), bV=document.getElementById('vinc'), bH=herra;
-    function pega(){
-      var s = 1 / (v.scale || 1);
-      var x = v.offsetLeft, y = v.offsetTop, w = v.width;
-      function pon(el, lado){
-        if(!el || el.offsetWidth===0) return;
-        var an = el.offsetWidth * s;
-        el.style.transform = 'scale(' + s + ')';
-        el.style.bottom = 'auto'; el.style.right = 'auto';
-        el.style.top  = (y + 12) + 'px';
-        el.style.left = (lado==='der' ? (x + w - an - 12) : (x + 12)) + 'px';
-      }
-      pon(bA,'izq'); pon(bV,'der'); pon(bH,'izq');
+    var v = window.visualViewport; if(!v) return;
+    var bV=document.getElementById('vinc');
+    function sigue(){
+      var s2 = 1/(v.scale||1);
+      mando.style.transform = 'scale('+s2+')';
+      if(bV){ bV.style.transform='scale('+s2+')';
+              bV.style.top=(v.offsetTop+12)+'px';
+              bV.style.left=(v.offsetLeft+v.width-bV.offsetWidth*s2-12)+'px';
+              bV.style.right='auto'; bV.style.bottom='auto'; }
     }
-    v.addEventListener('resize', pega);
-    v.addEventListener('scroll', pega);
-    addEventListener('resize', pega);
-    setInterval(pega, 700);
-    setTimeout(pega, 300);
+    v.addEventListener('resize', sigue);
+    v.addEventListener('scroll', sigue);
+    setTimeout(sigue, 400);
   })();
 
   /* el puntero del mouse del salón estorba en la proyección: se esconde solo */

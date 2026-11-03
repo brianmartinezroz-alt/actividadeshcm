@@ -233,6 +233,17 @@ h2 .reloj{background:#2b1a12;color:var(--oro)}
 .web .cajitas{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
 .web input{font:inherit;padding:9px 10px;border:1px solid #c7c0c3;border-radius:8px;width:100%;background:#fff}
 
+/* ── control de tamaño de la página ── */
+#zoomctl{position:fixed;left:14px;bottom:14px;z-index:2147482000;display:flex;align-items:center;
+  gap:2px;background:var(--vino);color:#fff;border-radius:999px;padding:4px;
+  box-shadow:0 4px 16px rgba(0,0,0,.3);font-family:inherit}
+#zoomctl button{font:inherit;font-weight:800;font-size:18px;line-height:1;width:36px;height:36px;
+  border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;cursor:pointer}
+#zoomctl button:hover{background:rgba(255,255,255,.28)}
+#zoomctl .pc{min-width:56px;text-align:center;font-size:14px;font-weight:700;letter-spacing:.02em}
+#zoomctl .re{width:auto;padding:0 12px;border-radius:999px;font-size:13px;letter-spacing:.04em}
+@media print{#zoomctl{display:none}}
+
 /* ── video de la lectura ── */
 .peli{width:100%;max-width:880px;display:block;margin:10px auto 18px;border-radius:14px;
   box-shadow:0 6px 24px rgba(0,0,0,.22);background:#0b0d12}
@@ -438,6 +449,58 @@ h2 .reloj{background:#2b1a12;color:var(--oro)}
 
 </main>
 <footer>Heroico Colegio Militar &middot; Campo Militar 1-C &middot; tinyurl.com/actividadeshcm</footer>
+<script>
+/* ── zoom de la página: pasos más chicos que los del navegador ── */
+(function(){
+  var PASOS = [40,50,60,70,80,90,100,115,130];
+  var i = 6, caja = null;
+  var regla = document.createElement('style'); document.head.appendChild(regla);
+
+  function envuelve(){
+    caja = document.createElement('div');
+    caja.id = 'lienzopag';
+    while(document.body.firstChild) caja.appendChild(document.body.firstChild);
+    document.body.appendChild(caja);
+  }
+  function aplica(){
+    var f = PASOS[i] / 100;
+    caja.style.zoom = f;
+    // al achicar, el contenido se ensancha para llenar la pantalla y que quepa más
+    caja.style.width = (window.innerWidth / f) + 'px';
+    // por debajo del 100% se suelta el ancho máximo, para que llene la pantalla
+    var tope = f < 1 ? Math.min(2200, Math.round(980 / f)) : 980;
+    regla.textContent = '#lienzopag main{max-width:' + tope + 'px}' +
+                        '#lienzopag header.top,#lienzopag nav{padding-left:4vw;padding-right:4vw}';
+    document.getElementById('zpc').textContent = PASOS[i] + '%';
+    try { localStorage.setItem('hcm_zoom', PASOS[i]); } catch(e){}
+  }
+  window.addEventListener('resize', function(){ if(caja) aplica(); });
+  function monta(){
+    var c = document.createElement('div'); c.id = 'zoomctl';
+    c.innerHTML = '<button type="button" id="zmen" title="Más chica">&minus;</button>' +
+                  '<span class="pc" id="zpc">100%</span>' +
+                  '<button type="button" id="zmas" title="Más grande">+</button>' +
+                  '<button type="button" class="re" id="zres">100%</button>';
+    document.body.appendChild(c);
+    document.getElementById('zmen').onclick = function(){ if(i>0){ i--; aplica(); } };
+    document.getElementById('zmas').onclick = function(){ if(i<PASOS.length-1){ i++; aplica(); } };
+    document.getElementById('zres').onclick = function(){ i = 6; aplica(); };
+  }
+  envuelve(); monta();
+  try {
+    var g = parseInt(localStorage.getItem('hcm_zoom'), 10);
+    var j = PASOS.indexOf(g);
+    if(j >= 0) i = j;
+  } catch(e){}
+  aplica();
+  document.addEventListener('keydown', function(e){
+    if(!(e.ctrlKey || e.metaKey)) return;
+    if(e.key === '-' || e.key === '_'){ e.preventDefault(); if(i>0){ i--; aplica(); } }
+    else if(e.key === '+' || e.key === '='){ e.preventDefault(); if(i<PASOS.length-1){ i++; aplica(); } }
+    else if(e.key === '0'){ e.preventDefault(); i = 6; aplica(); }
+  });
+})();
+</script>
 <script id="datos" type="application/json">{"videos": ["gas station", "gauge", "laundry", "pillow", "run out of gas"], "vocab": [["alarm clock", "despertador"], ["baggage", "equipaje"], ["gauge", "indicador de gasolina"], ["tank", "tanque"], ["laundry", "ropa sucia"], ["hanger", "gancho"], ["blanket", "cobija"], ["pillow", "almohada"], ["sheet", "sábana"], ["closet", "clóset"], ["bathtub", "tina"], ["bill", "la cuenta"], ["empty", "vacío"], ["full", "lleno"], ["soft", "suave"], ["hard", "duro"]], "carrera": [["Andrew checked the gas ______ and saw that the tank was almost empty.", ["gauge", "hanger", "pillow", "horoscope"], 0, "gauge = el indicador de gasolina."], ["They did the ______ because all their clothes were dirty.", ["laundry", "baggage", "blanket", "homework of the dog"], 0, "do the laundry = lavar la ropa."], ["He didn't want to ______ gas, so he stopped at a gas station.", ["run out of", "hang up", "fill up", "drink"], 0, "run out of = quedarse sin."], ["The motel was ______ . Many people were traveling that day.", ["full", "empty", "soft", "on vacation in Cancun"], 0, "full = lleno; empty = vacío."], ["She was putting clean ______ on the bed.", ["sheets", "hangers", "gauges", "tortillas"], 0, "sheets = sábanas."], ["Andrew ______ some of their clothes in the closet.", ["hung up", "took a bath", "ran out of", "ate"], 0, "hang / hung / hung up = colgar."], ["Alice filled up the ______ and stayed in the bath for 20 minutes.", ["bathtub", "tank", "closet", "swimming pool of the general"], 0, "bathtub = la tina."], ["In the morning they went to pay the motel ______ .", ["bill", "pillow", "gauge", "penalty"], 0, "bill = la cuenta."], ["I like to sleep with two soft ______ under my head.", ["pillows", "blankets", "hangers", "rifles"], 0, "pillow = almohada."], ["When Alice saw the pretty motel room, she was ______ .", ["pleased", "empty", "hard", "ready to go home"], 0, "pleased = contenta, satisfecha."]], "tf": [["Alice and Andrew arrived at the motel at 6:30.", true], ["There were a lot of empty rooms at the motel.", false], ["They were tired at the end of the day.", true], ["Alice took a shower in the bathtub.", false], ["She stayed in the bath for 20 minutes.", true], ["Andrew put some clothes in the closet.", true], ["There were a lot of hangers in the closet.", false], ["The alarm clock woke them up at 6:30.", false], ["After they got dressed, they paid their bill.", true]], "huecos": [["Some people take a lot of ______ when they travel.", ["baggage"]], ["I was late this morning. I didn't hear my ______ .", ["alarm clock", "alarm"]], ["Do you like to take a shower or a ______ in the morning?", ["bath"]], ["Pete had to leave his car on the side of the road and walk home because he ______ .", ["ran out of gas", "ran out of gasoline", "ran out of fuel"]], ["Please take the clothes out of the suitcase, and put them in the ______ .", ["closet"]], ["The children put a lot of water in the ______ , and the water went all over the floor.", ["bathtub"]], ["Beth has only one more test question to answer. She's ______ finished.", ["almost"]], ["I like to sleep with two ______ under my head.", ["pillows"]], ["Do you have any dirty clothes? I am going to do the ______ .", ["laundry"]]], "parejas": [["laundry", "dirty clothes to be washed"], ["gauge", "instrument for measurement"], ["bathe", "to take a bath"], ["blanket", "warm covering used on a bed"], ["run out of", "use up"], ["hang up", "put clothes on a hanger"], ["sheets", "covering used on a bed"], ["pleased", "happy, satisfied"]], "orden": [["Their clothes were dirty, so they washed and dried them.", ["1"]], ["After they finished the laundry, they packed their suitcases.", ["2"]], ["They put all the baggage in the car.", ["3"]], ["The alarm clock woke them up early the next morning.", ["4"]], ["They started the trip with a full tank of gasoline.", ["5"]], ["After five hours, Andrew checked the gas gauge.", ["6"]], ["He stopped at a gas station to fill up the car.", ["7"]], ["They asked the attendant where the restrooms were.", ["8"]]]}</script>
 <script>
 const D=JSON.parse(document.getElementById('datos').textContent);

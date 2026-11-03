@@ -1,0 +1,14 @@
+{
+  "name": "Lecturas · Inglés IV",
+  "short_name": "Lecturas",
+  "start_url": "lectura.html",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#17121a",
+  "theme_color": "#17121a",
+  "icons": [
+    { "src": "lectura-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "lectura-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

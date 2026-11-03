@@ -1,0 +1,246 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lecturas &middot; Ingl&eacute;s IV</title>
+<link rel="manifest" href="lectura.webmanifest">
+<meta name="theme-color" content="#17121a">
+<link rel="apple-touch-icon" href="lectura-180.png">
+<style>
+ :root{--vino:#631132;--oro:#c8a24a;--verde:#2f8f4e;--fondo:#17121a}
+ *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+ html,body{margin:0;height:100%;background:var(--fondo);color:#fff;overflow:hidden;
+   font-family:"Segoe UI",system-ui,-apple-system,sans-serif}
+ body{display:flex;flex-direction:column}
+ button{font:inherit;cursor:pointer;border:0;color:#fff}
+
+ /* ── elegir lectura ── */
+ #menu{position:absolute;inset:0;z-index:20;background:var(--fondo);display:flex;
+   flex-direction:column;align-items:center;justify-content:center;gap:26px;padding:30px}
+ #menu h1{margin:0;font-size:38px;font-weight:800;text-align:center}
+ #menu p{margin:0;color:#b3a4ad;font-size:19px;text-align:center}
+ .tarjetas{display:flex;flex-wrap:wrap;gap:18px;justify-content:center}
+ .tj{background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.16);border-radius:20px;
+   padding:26px 30px;width:330px;text-align:left}
+ .tj b{display:block;font-size:25px;margin-bottom:8px}
+ .tj span{color:#b3a4ad;font-size:16.5px;line-height:1.4}
+
+ /* ── video ── */
+ #cine{flex:1;position:relative;background:#000;display:flex;align-items:center;justify-content:center}
+ video{width:100%;height:100%;object-fit:contain;background:#000}
+ #capaplay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+   background:rgba(0,0,0,.42)}
+ #capaplay button{width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.9);
+   color:#17121a;font-size:62px;display:flex;align-items:center;justify-content:center;padding-left:10px}
+
+ /* ── controles ── */
+ .mandos{display:flex;align-items:center;gap:16px;padding:16px 22px;background:#1f1824}
+ .mandos button{background:rgba(255,255,255,.1);border-radius:16px;height:76px;
+   display:flex;align-items:center;justify-content:center;gap:9px;font-size:21px;font-weight:800}
+ .mandos button:active{background:rgba(255,255,255,.22)}
+ .m10{flex:0 0 132px}
+ .mpp{flex:0 0 150px;background:var(--vino)!important;font-size:25px}
+ .tiempo{flex:1;display:flex;align-items:center;gap:14px}
+ .tiempo input{flex:1;accent-color:var(--oro);height:34px}
+ .reloj{font-variant-numeric:tabular-nums;font-size:19px;font-weight:700;color:#cbbcc5;min-width:120px;
+   text-align:center}
+ .mq{flex:0 0 190px;background:var(--oro)!important;color:#2b1a12!important}
+
+ /* ── preguntas ── */
+ #preguntas{flex:0 0 auto;max-height:58vh;overflow:auto;background:#120e16;
+   border-top:3px solid var(--oro);
+   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:22px 42px}
+ body.conpreg #cine{flex:1 1 38vh;min-height:0}
+ .num{font-size:16px;letter-spacing:.2em;font-weight:800;color:var(--oro)}
+ .q{font-size:40px;font-weight:800;line-height:1.2;text-align:center;max-width:1280px}
+ .ops{display:flex;flex-direction:column;gap:14px;width:100%;max-width:1120px}
+ .op{display:flex;align-items:center;gap:18px;padding:13px 22px;border-radius:15px;
+   background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.17);font-size:26px;font-weight:600}
+ .op .l{flex:0 0 46px;height:46px;border-radius:11px;background:rgba(255,255,255,.16);
+   display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--oro)}
+ .op.si{background:rgba(70,190,110,.3);border-color:#7fe098;color:#e4ffe9}
+ .op.si .l{background:#7fe098;color:#0d2714}
+ .op.no{opacity:.3}
+ .qmandos{display:flex;gap:16px}
+ .qmandos button{background:rgba(255,255,255,.12);border-radius:13px;padding:12px 26px;
+   font-size:17px;font-weight:800}
+ .qmandos .pri{background:var(--vino)}
+ /* QR sobre el video, para enlazar el celular sin teclear */
+ #qrcaja{position:absolute;right:16px;bottom:16px;background:#fff;border-radius:14px;padding:9px;
+   text-align:center;box-shadow:0 6px 22px rgba(0,0,0,.45);z-index:6}
+ #qrcaja img{display:block;width:124px;height:124px}
+ #qrcaja b{display:block;font-size:13px;color:#2b1a12;margin-top:5px;letter-spacing:.07em}
+ #qrcaja.chico img{width:62px;height:62px}
+ #qrcaja.chico b{font-size:11px}
+ #enlazado{position:absolute;right:16px;bottom:16px;z-index:6;background:rgba(47,143,78,.92);
+   color:#fff;border-radius:999px;padding:8px 17px;font-size:14px;font-weight:800}
+
+ /* quién acertó */
+ .pastillas{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;max-width:1180px}
+ .pa{min-width:50px;height:44px;padding:0 9px;border-radius:10px;background:rgba(255,255,255,.1);
+   display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#cdbcc6}
+ .pa.ok{background:rgba(70,190,110,.36);color:#dfffe6}
+ .pa.mal{background:rgba(192,57,43,.38);color:#ffd9d4}
+ .pa.ya{background:rgba(200,162,74,.3);color:#ffeec4}
+ .conteo{font-size:19px;font-weight:800;color:#cbbcc5}
+
+ /* escáner del celular */
+ #scan{position:fixed;inset:0;z-index:40;background:#000;display:flex;flex-direction:column}
+ #scanv{flex:1;width:100%;object-fit:cover;background:#000}
+ .sctop{position:absolute;top:0;left:0;right:0;padding:12px 16px;display:flex;gap:12px;
+   align-items:center;background:linear-gradient(to bottom,rgba(0,0,0,.72),transparent);color:#fff}
+ .sctop b{font-size:21px}
+ .sctop span{flex:1;font-size:14px;opacity:.85}
+ .scchips{position:absolute;left:0;right:0;bottom:104px;display:flex;flex-wrap:wrap;gap:6px;
+   padding:0 14px;justify-content:center}
+ .scchip{background:rgba(47,143,78,.9);color:#fff;border-radius:999px;padding:5px 12px;
+   font-size:14px;font-weight:800}
+ .scbot{position:absolute;left:0;right:0;bottom:0;display:flex;gap:10px;padding:14px}
+ .scbot button{flex:1;padding:17px 0;border-radius:15px;font-size:17px;font-weight:800;
+   background:rgba(255,255,255,.16);color:#fff}
+ .scbot .pri{background:var(--vino)}
+ .scbot .oro{background:var(--oro);color:#2b1a12}
+ .oculto{display:none!important}
+ @media (max-width:760px){
+   .q{font-size:30px} .op{font-size:21px;padding:13px 17px} .op .l{flex:0 0 42px;height:42px}
+   .mandos{gap:9px;padding:11px 12px} .mandos button{height:62px;font-size:17px}
+   .m10{flex:0 0 92px} .mpp{flex:0 0 100px;font-size:20px} .mq{flex:0 0 120px;font-size:16px}
+   .reloj{min-width:96px;font-size:15px} #menu h1{font-size:27px} .tj{width:100%}
+ }
+</style></head><body>
+
+<div id="menu">
+  <h1>Lecturas en video</h1>
+  <p>Idioma Extranjero IV &middot; 3er a&ntilde;o L.A.M.</p>
+  <div class="tarjetas" id="tarjetas"></div>
+</div>
+
+<div id="cine">
+  <video id="v" playsinline preload="metadata"></video>
+  <div id="capaplay"><button id="bgrande" aria-label="Reproducir">&#9654;</button></div>
+  <div id="qrcaja" class="oculto"><img id="qrimg" alt="QR"><b id="qrsala">SALA 301</b></div>
+  <div id="enlazado" class="oculto">Celular enlazado &#10003;</div>
+</div>
+
+<div class="mandos">
+  <button class="m10" id="atras">&#8630; 10s</button>
+  <button class="mpp" id="pp">&#9654;</button>
+  <button class="m10" id="adelante">10s &#8631;</button>
+  <div class="tiempo">
+    <span class="reloj" id="reloj">0:00 / 0:00</span>
+    <input type="range" id="linea" min="0" max="1000" value="0">
+  </div>
+  <button class="mq" id="abrirq">Preguntas</button>
+</div>
+
+<div id="preguntas" class="oculto">
+  <div class="num" id="qnum"></div>
+  <div class="q" id="qtxt"></div>
+  <div class="ops" id="qops"></div>
+  <div class="conteo" id="conteo"></div>
+  <div class="pastillas" id="pastillas"></div>
+  <div class="qmandos">
+    <button id="qant">&#8592; Anterior</button>
+    <button class="pri" id="qrev">Revelar</button>
+    <button id="qsig">Siguiente &#8594;</button>
+    <button id="qcerrar">Cerrar preguntas</button>
+  </div>
+</div>
+
+<div id="scan" class="oculto">
+  <video id="scanv" playsinline autoplay muted></video>
+  <div class="sctop"><b id="sccount">0</b><span id="schint">Apunta a las tarjetas</span>
+    <b id="scsala"></b></div>
+  <div class="scchips" id="scchips"></div>
+  <div class="scbot">
+    <button id="scant">&#8592; Anterior</button>
+    <button class="oro" id="screv">Revelar</button>
+    <button class="pri" id="scsig">Siguiente &#8594;</button>
+  </div>
+</div>
+
+<script src="sala.js"></script>
+<script src="lecturas.js"></script>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var v=$('v'), L=null, qi=0, revelado=false;
+
+  /* ── menú ── */
+  $('tarjetas').innerHTML = LECTURAS.map(function(l,k){
+    return '<button class="tj" data-k="'+k+'"><b>'+l.titulo+'</b><span>'+l.pie+'</span></button>';
+  }).join('');
+  [].forEach.call($('tarjetas').children, function(b){
+    b.onclick = function(){ abre(LECTURAS[Number(b.dataset.k)]); };
+  });
+
+  function abre(l){
+    L = l; qi = 0; revelado = false;
+    v.src = l.video;
+    $('menu').classList.add('oculto');
+    v.load();
+  }
+
+  /* ── video ── */
+  function mmss(s){ s = Math.max(0, Math.floor(s||0));
+    return Math.floor(s/60) + ':' + ('0' + (s%60)).slice(-2); }
+  function pinta(){
+    $('reloj').textContent = mmss(v.currentTime) + ' / ' + mmss(v.duration);
+    if(v.duration) $('linea').value = Math.round(v.currentTime / v.duration * 1000);
+    var ico = v.paused ? '▶' : '❙❙';
+    $('pp').innerHTML = ico;
+    $('capaplay').classList.toggle('oculto', !v.paused);
+  }
+  v.addEventListener('timeupdate', pinta);
+  v.addEventListener('loadedmetadata', pinta);
+  v.addEventListener('play', pinta);
+  v.addEventListener('pause', pinta);
+  v.addEventListener('ended', pinta);
+
+  function alterna(){ if(v.paused) v.play(); else v.pause(); }
+  $('pp').onclick = alterna;
+  $('bgrande').onclick = alterna;
+  $('cine').onclick = function(e){ if(e.target === v) alterna(); };
+  $('atras').onclick    = function(){ v.currentTime = Math.max(0, v.currentTime - 10); pinta(); };
+  $('adelante').onclick = function(){ v.currentTime = Math.min(v.duration||0, v.currentTime + 10); pinta(); };
+  $('linea').oninput = function(){ if(v.duration) v.currentTime = v.duration * (this.value/1000); };
+
+  /* ── preguntas ── */
+  function etiquetas(p){ return L.tipo==='tf' ? ['TRUE','FALSE'] : p.ops; }
+  function letras(){ return L.tipo==='tf' ? ['T','F'] : ['A','B','C']; }
+  function correcta(p){ return L.tipo==='tf' ? (p.ok ? 0 : 1) : p.ok; }
+
+  function pintaQ(){
+    var p = L.preguntas[qi], et = etiquetas(p), le = letras();
+    $('qnum').textContent = (L.tipo==='tf' ? 'TRUE o FALSE · ' : 'PREGUNTA ') +
+      (qi+1) + ' DE ' + L.preguntas.length;
+    $('qtxt').textContent = p.q;
+    $('qops').innerHTML = et.map(function(t,j){
+      var cl = revelado ? (j===correcta(p) ? ' si' : ' no') : '';
+      return '<div class="op'+cl+'"><span class="l">'+le[j]+'</span><span>'+t+'</span></div>';
+    }).join('');
+    $('qrev').textContent = revelado ? 'Ocultar' : 'Revelar';
+  }
+  $('abrirq').onclick = function(){
+    revelado = false;
+    $('preguntas').classList.remove('oculto');
+    document.body.classList.add('conpreg');
+    pintaQ();
+  };
+  $('qcerrar').onclick = function(){
+    $('preguntas').classList.add('oculto');
+    document.body.classList.remove('conpreg');
+  };
+  $('qrev').onclick = function(){ revelado = !revelado; pintaQ(); };
+  $('qsig').onclick = function(){ if(qi < L.preguntas.length-1){ qi++; revelado=false; pintaQ(); } };
+  $('qant').onclick = function(){ if(qi > 0){ qi--; revelado=false; pintaQ(); } };
+
+  /* ── teclado, para clicker o teclado del salón ── */
+  document.addEventListener('keydown', function(e){
+    var enQ = !$('preguntas').classList.contains('oculto');
+    if(e.key === ' '){ e.preventDefault(); enQ ? $('qrev').click() : alterna(); }
+    else if(e.key === 'ArrowLeft'){ e.preventDefault(); enQ ? $('qant').click() : $('atras').click(); }
+    else if(e.key === 'ArrowRight'){ e.preventDefault(); enQ ? $('qsig').click() : $('adelante').click(); }
+    else if(e.key === 'Escape' && enQ){ $('qcerrar').click(); }
+    else if(e.key === 'q' || e.key === 'Q'){ enQ ? $('qcerrar').click() : $('abrirq').click(); }
+  });
+})();
+</script></body></html>

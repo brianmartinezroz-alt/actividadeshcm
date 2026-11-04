@@ -170,7 +170,27 @@ body.sinraton, body.sinraton *{cursor:none !important}
 (function(){
   var par = new URLSearchParams(location.search);
   var sala = (par.get('sala') || '301').toUpperCase();
-  var CLASE_HOY = 'clase-04-nov.html';
+  var CLASES_POR_FECHA = {
+    '2026-11-03':'clase-03-nov.html', '2026-11-04':'clase-04-nov.html',
+    '2026-11-05':'clase-05-nov.html', '2026-11-06':'clase-06-nov.html',
+    '2026-11-09':'clase-09-nov.html', '2026-11-10':'clase-10-nov.html',
+    '2026-11-11':'clase-11-nov.html'
+  };
+  var CLASE_HOY = (function(){
+    function p2(n){ return (n < 10 ? '0' : '') + n; }
+    var d = new Date();
+    var hoy = d.getFullYear() + '-' + p2(d.getMonth() + 1) + '-' + p2(d.getDate());
+    if(CLASES_POR_FECHA[hoy]) return CLASES_POR_FECHA[hoy];
+    var fs = [], k;
+    for(k in CLASES_POR_FECHA) fs.push(k);
+    fs.sort();
+    var sig = null, ult = fs[0];
+    for(var i = 0; i < fs.length; i++){
+      if(fs[i] > hoy && !sig) sig = fs[i];
+      if(fs[i] < hoy) ult = fs[i];
+    }
+    return CLASES_POR_FECHA[sig || ult];
+  })();
   var lec  = par.get('lec') || CLASE_HOY;
   document.getElementById('asala').textContent = sala;
   document.getElementById('bsala').textContent = sala;
@@ -474,7 +494,12 @@ body.sinraton, body.sinraton *{cursor:none !important}
 
   /* ── la pantalla también se maneja sola ─────────────────────────── */
   var LECCIONES = [
-    ['clase-04-nov.html','Clase de hoy \u00b7 4 de noviembre \u00b7 Lesson 7 gram\u00e1tica'],
+    ['clase-11-nov.html','Clase del 11 de noviembre \u00b7 Lesson 8 cierre'],
+    ['clase-10-nov.html','Clase del 10 de noviembre \u00b7 Lesson 8 gerundio'],
+    ['clase-09-nov.html','Clase del 9 de noviembre \u00b7 Lesson 8 adjetivo + that'],
+    ['clase-06-nov.html','Clase del 6 de noviembre \u00b7 Lesson 8 vocabulario'],
+    ['clase-05-nov.html','Clase del 5 de noviembre \u00b7 Lesson 7 cierre'],
+    ['clase-04-nov.html','Clase del 4 de noviembre \u00b7 Lesson 7 gram\u00e1tica'],
     ['clase-03-nov.html','Clase del 3 de noviembre \u00b7 Lesson 7 vocabulario'],
     ['clase-30-oct.html','Clase del 30 de octubre \u00b7 How'],
     ['clase-29-oct.html','Clase del 29 de octubre \u00b7 Lesson 6 gram\u00e1tica'],

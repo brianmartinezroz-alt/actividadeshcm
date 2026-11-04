@@ -1076,34 +1076,6 @@ function scDetectCards(det, img, kind){
 
 
 
-/* ── piezas tomadas del control de Tile Rush ──────────────────────────────── */
-const SC_IDS = (() => {
-  const out = [];
-  for (let id = 1; id < 1024 && out.length < 80; id++) {
-    let r = scBits(id), ok = true;
-    for (let k = 1; k < 4; k++) {
-      r = scRot(r);
-      if (scHam(r) === 0) {
-        ok = false;
-        break;
-      }
-    }
-    const ones = scBits(id).flat().reduce((a, b) => a + b, 0);
-    if (ok && ones >= 8 && ones <= 17) out.push(id);
-  }
-  return out;
-})();
-
-function scAnswer(c) {
-  const cx = (c[0].x + c[1].x + c[2].x + c[3].x) / 4, cy = (c[0].y + c[1].y + c[2].y + c[3].y) / 4, mx = (c[0].x + c[1].x) / 2, my = (c[0].y + c[1].y) / 2;
-  const a = Math.atan2(my - cy, mx - cx);
-  const deg = (a * 180 / Math.PI + 360) % 360;
-  if (deg >= 225 && deg < 315) return 0;
-  if (deg >= 315 || deg < 45) return 3;
-  if (deg >= 45 && deg < 135) return 2;
-  return 1;
-}
-
 /* el worker recibe cuadros y devuelve [{no, r}] */
 self.onmessage = function (e) {
   var d = e.data;

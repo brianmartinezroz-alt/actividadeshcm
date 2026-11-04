@@ -174,6 +174,8 @@
 
   function abre(l){
     L = l; qi = 0; revelado = false;
+    window.L_ACTUAL = l; window.QI_ACTUAL = 0; window.REV_ACTUAL = false;
+    if(window.abreSala) window.abreSala();
     v.src = l.video;
     $('menu').classList.add('oculto');
     v.load();
@@ -209,6 +211,7 @@
   function correcta(p){ return L.tipo==='tf' ? (p.ok ? 0 : 1) : p.ok; }
 
   function pintaQ(){
+    window.L_ACTUAL = L; window.QI_ACTUAL = qi; window.REV_ACTUAL = revelado;
     var p = L.preguntas[qi], et = etiquetas(p), le = letras();
     $('qnum').textContent = (L.tipo==='tf' ? 'TRUE o FALSE · ' : 'PREGUNTA ') +
       (qi+1) + ' DE ' + L.preguntas.length;
@@ -218,6 +221,7 @@
       return '<div class="op'+cl+'"><span class="l">'+le[j]+'</span><span>'+t+'</span></div>';
     }).join('');
     $('qrev').textContent = revelado ? 'Ocultar' : 'Revelar';
+    if(window.pintaResp) window.pintaResp();
   }
   $('abrirq').onclick = function(){
     revelado = false;
@@ -230,8 +234,10 @@
     document.body.classList.remove('conpreg');
   };
   $('qrev').onclick = function(){ revelado = !revelado; pintaQ(); };
-  $('qsig').onclick = function(){ if(qi < L.preguntas.length-1){ qi++; revelado=false; pintaQ(); } };
-  $('qant').onclick = function(){ if(qi > 0){ qi--; revelado=false; pintaQ(); } };
+  $('qsig').onclick = function(){ if(qi < L.preguntas.length-1){ qi++; revelado=false;
+    if(window.limpiaResp) window.limpiaResp(); pintaQ(); } };
+  $('qant').onclick = function(){ if(qi > 0){ qi--; revelado=false;
+    if(window.limpiaResp) window.limpiaResp(); pintaQ(); } };
 
   /* ── teclado, para clicker o teclado del salón ── */
   document.addEventListener('keydown', function(e){
@@ -243,4 +249,149 @@
     else if(e.key === 'q' || e.key === 'Q'){ enQ ? $('qcerrar').click() : $('abrirq').click(); }
   });
 })();
-</script></body></html>
+</script>
+<script>
+/* ══════════ Respuestas con tarjetas ══════════════════════════════════════
+   La pantalla crea sala y muestra el QR sobre el video.
+   El celular entra por ese QR y queda escaneando, sin teclear nada.      */
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var par = new URLSearchParams(location.search);
+  var ROL = par.get('rol') || '';
+  var SALA = par.get('sala') || '';
+
+  /* ── piezas compartidas ── */
+  function correctaDe(L, p){ return L.tipo==='tf' ? (p.ok ? 0 : 1) : p.ok; }
+
+  /* ══════════ CELULAR: escáner ══════════ */
+  if (ROL === 'scan' && SALA) {
+    document.body.innerHTML = '';
+    var cap = document.createElement('div'); cap.id='scan';
+    cap.innerHTML =
+      '<video id="scanv" playsinline autoplay muted></video>' +
+      '<div class="sctop"><b id="sccount">0</b><span id="schint">Apunta a las tarjetas</span>' +
+      '<b id="scsala">SALA ' + SALA + '</b></div>' +
+      '<div class="scchips" id="scchips"></div>' +
+      '<div class="scbot">' +
+      '<button id="scant">&#8592; Anterior</button>' +
+      '<button class="oro" id="screv">Revelar</button>' +
+      '<button class="pri" id="scsig">Siguiente &#8594;</button></div>';
+    document.body.appendChild(cap);
+
+    var sala = new Sala(SALA, function(m){
+      if(m.t==='preg'){ vistas = {}; pinta(); $('schint').textContent = 'Pregunta ' + (m.i+1); }
+    });
+    sala.escuchar();
+
+    var vistas = {}, nvistas = 0, worker = null, lienzo = document.createElement('canvas'),
+        ctx = lienzo.getContext('2d', { willReadFrequently: true }), ocupado = false, ac = null;
+
+    function bip(){
+      try { ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+        var o = ac.createOscillator(), g = ac.createGain();
+        o.frequency.value = 1250; o.connect(g); g.connect(ac.destination);
+        g.gain.setValueAtTime(0.09, ac.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.0008, ac.currentTime + 0.05);
+        o.start(); o.stop(ac.currentTime + 0.05);
+      } catch(e){}
+    }
+    function pinta(){
+      $('sccount').textContent = nvistas;
+      var ns = Object.keys(vistas).sort(function(a,b){return a-b});
+      $('scchips').innerHTML = ns.slice(-24).map(function(no){
+        return '<span class="scchip">' + no + '</span>'; }).join('');
+    }
+    function arranca(){
+      worker = new Worker('lector-vision.js');
+      worker.onmessage = function(e){
+        var d = e.data;
+        if(d.tipo === 'leidas'){
+          ocupado = false;
+          var nuevas = [];
+          d.v.forEach(function(x){
+            if(vistas[x.no] === undefined || vistas[x.no] !== x.r){
+              if(vistas[x.no] === undefined) nvistas++;
+              vistas[x.no] = x.r; nuevas.push({no:x.no, r:x.r});
+            }
+          });
+          if(nuevas.length){ bip(); pinta(); sala.manda({ t:'mando', a:'lote', v:nuevas }); }
+        }
+      };
+      worker.postMessage({ tipo:'arranca' });
+
+      navigator.mediaDevices.getUserMedia({ video:{ facingMode:'environment',
+          width:{ideal:1280}, height:{ideal:720} }, audio:false })
+        .then(function(st){
+          var v = $('scanv'); v.srcObject = st; v.play();
+          v.addEventListener('loadedmetadata', function(){
+            lienzo.width = 640;
+            lienzo.height = Math.round(640 * v.videoHeight / v.videoWidth);
+            lazo();
+          });
+        })
+        .catch(function(e){
+          $('schint').textContent = 'No se pudo abrir la cámara: ' + e.name;
+        });
+    }
+    function lazo(){
+      var v = $('scanv');
+      if(!ocupado && v.readyState >= 2){
+        ocupado = true;
+        ctx.drawImage(v, 0, 0, lienzo.width, lienzo.height);
+        var d = ctx.getImageData(0, 0, lienzo.width, lienzo.height);
+        worker.postMessage({ tipo:'cuadro', w:lienzo.width, h:lienzo.height, datos:d.data }, [d.data.buffer]);
+      }
+      requestAnimationFrame(lazo);
+    }
+    $('scsig').onclick = function(){ sala.manda({ t:'mando', a:'sig' }); vistas={}; nvistas=0; pinta(); };
+    $('scant').onclick = function(){ sala.manda({ t:'mando', a:'ant' }); vistas={}; nvistas=0; pinta(); };
+    $('screv').onclick = function(){ sala.manda({ t:'mando', a:'rev' }); };
+    arranca();
+    return;
+  }
+
+  /* ══════════ PANTALLA: sala, QR y quién acertó ══════════ */
+  window.RESP = { sala:null, nsala:'', resp:{}, enlazado:false };
+
+  window.abreSala = function(){
+    var n = '';
+    try { n = localStorage.getItem('hcm_sala_lect') || ''; } catch(e){}
+    if(!n){ n = String(301 + Math.floor(Math.random()*6)); try{ localStorage.setItem('hcm_sala_lect', n); }catch(e){} }
+    RESP.nsala = n;
+    $('qrimg').src = 'qr-scan-' + n + '.png';
+    $('qrsala').textContent = 'SALA ' + n;
+    $('qrcaja').classList.remove('oculto');
+    RESP.sala = new Sala(n, function(m){
+      if(m.t === 'mando'){
+        if(!RESP.enlazado){ RESP.enlazado = true;
+          $('qrcaja').classList.add('oculto'); $('enlazado').classList.remove('oculto');
+          setTimeout(function(){ $('enlazado').classList.add('oculto'); }, 3000); }
+        if(m.a === 'sig') $('qsig').click();
+        else if(m.a === 'ant') $('qant').click();
+        else if(m.a === 'rev') $('qrev').click();
+        else if(m.a === 'lote' && m.v){ m.v.forEach(function(x){ RESP.resp[x.no] = x.r; }); window.pintaResp(); }
+      }
+    });
+    RESP.sala.escuchar();
+  };
+
+  window.pintaResp = function(){
+    var L = window.L_ACTUAL, qi = window.QI_ACTUAL, rev = window.REV_ACTUAL;
+    var nos = Object.keys(RESP.resp).sort(function(a,b){return a-b});
+    if(!nos.length){ $('conteo').textContent=''; $('pastillas').innerHTML=''; return; }
+    if(!rev){
+      $('conteo').textContent = nos.length + ' ya respondieron';
+      $('pastillas').innerHTML = nos.map(function(no){
+        return '<span class="pa ya">' + no + '</span>'; }).join('');
+      return;
+    }
+    var c = correctaDe(L, L.preguntas[qi]), ok = 0;
+    nos.forEach(function(no){ if(RESP.resp[no] === c) ok++; });
+    $('conteo').textContent = ok + ' de ' + nos.length + ' acertaron';
+    $('pastillas').innerHTML = nos.map(function(no){
+      return '<span class="pa ' + (RESP.resp[no]===c ? 'ok' : 'mal') + '">' + no + '</span>'; }).join('');
+  };
+  window.limpiaResp = function(){ RESP.resp = {}; window.pintaResp(); };
+})();
+</script>
+</body></html>

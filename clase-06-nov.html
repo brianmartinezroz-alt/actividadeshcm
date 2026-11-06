@@ -265,6 +265,14 @@ h2 .reloj{background:#2b1a12;color:var(--oro)}
   text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.3);font-size:16px}
 @media print{#conherr,#zoomctl{display:none}}
 @media (max-width:820px){.vfila,.bloque.gr{grid-template-columns:1fr}}
+.juego{display:flex;align-items:center;gap:16px;background:#f2f7f1;border:1.5px solid #a8c9a8;
+  border-radius:14px;padding:16px 18px;margin:10px 0;flex-wrap:wrap}
+.juego .jt{flex:1 1 380px;font-size:16.5px;line-height:1.6}
+.jboton{background:var(--vino);color:#fff;text-decoration:none;font-weight:800;border-radius:12px;
+  padding:13px 22px;font-size:16.5px;white-space:nowrap}
+.refuerzo{margin:18px 0;background:var(--claro);border-radius:12px;padding:10px 16px}
+.refuerzo summary{cursor:pointer;font-weight:800;color:var(--vino);font-size:16.5px;padding:6px 0}
+
 
 #zoomctl{position:fixed;left:14px;bottom:14px;z-index:2147482000;display:flex;align-items:center;
   gap:2px;background:var(--vino);color:#fff;border-radius:999px;padding:4px;
@@ -290,63 +298,85 @@ h2 .reloj{background:#2b1a12;color:var(--oro)}
 <main>
 
 <div class="plan">
-  <b>Tiempos de la sesi&oacute;n (50 min).</b>
-  <b>Introducci&oacute;n 10 min:</b> pregunta detonadora y presentaci&oacute;n del producto &middot;
-  <b>Desarrollo 25 min:</b> vocabulario de la p. 89, los cuatro di&aacute;logos y el Exercise A
-  de la p. 90 &middot;
-  <b>Evaluaci&oacute;n 10 min:</b> el intercambio de disculpa y respuesta con lista de cotejo &middot;
+  <b>Sesi&oacute;n PPP de vocabulario (50 min).</b>
+  <b>Presentation 15 min:</b> pregunta detonadora, vocabulario de la p. 89 con su significado y los
+  cuatro di&aacute;logos como modelo &middot;
+  <b>Practice 20 min:</b> dos juegos por equipos, Baamboozle de vocabulario y la carrera de tarjetas
+  QR con listenings &middot;
+  <b>Production 10 min:</b> el intercambio de disculpa y respuesta con lista de cotejo &middot;
   <b>Cierre 5 min:</b> errores frecuentes, metacognici&oacute;n y tarea.
 </div>
 
 <section id="p1">
-<h2>Presentation <span class="etapa">STAGE 1</span><span class="reloj">10 min</span></h2>
-<p class="sub">Empieza la lecci&oacute;n 8: pedir disculpas</p>
+<h2>Presentation <span class="etapa">STAGE 1</span><span class="reloj">15 min</span></h2>
+<p class="sub">Empieza la lecci&oacute;n 8: el vocabulario para pedir disculpas</p>
 
-<h3>Warm up &middot; preguntas detonadoras <span class="reloj">4 min</span></h3>
+<h3>Warm up &middot; preguntas detonadoras <span class="reloj">3 min</span></h3>
 <div class="deto">En espa&ntilde;ol, &iquest;c&oacute;mo te disculpas cuando pisas a alguien sin querer? &iquest;Y cuando le fallas a un amigo? <b>&iquest;Usas las mismas palabras?</b></div><div class="deto">Solo tienes la palabra &ldquo;sorry&rdquo;. <b>&iquest;Alcanza?</b> &iquest;Qu&eacute; m&aacute;s necesita escuchar la otra persona para dar el asunto por cerrado?</div>
 
-<h3>El producto de hoy <span class="reloj">2 min</span></h3>
+<h3>El producto de hoy <span class="reloj">1 min</span></h3>
 <div class="deto">Al final de la sesi&oacute;n vas a sostener con un compa&ntilde;ero un
   <b>intercambio de disculpa y respuesta</b>: &eacute;l se disculpa, t&uacute; respondes, y se cambian
   los papeles. Hay que distinguir el <b>accidente</b> de la <b>falta</b>.</div>
 
-<h3>Vocabulary: an apology <span class="reloj">4 min</span></h3>
+<h3>Vocabulary: an apology <span class="reloj">5 min</span></h3>
 <div class="pg">Student Text &middot; p&aacute;gina 89 &middot; <i>Repeat the new words.</i></div>
 <div class="vlista"><div class="vfila"><div class="vpal">step on</div><div class="vsig">pisar algo o a alguien</div><div class="vej">Don&rsquo;t <b>step on</b> my shoes.</div></div><div class="vfila"><div class="vpal">sorry</div><div class="vsig">apenado, arrepentido</div><div class="vej">I&rsquo;m <b>sorry</b>.</div></div><div class="vfila"><div class="vpal">mean to</div><div class="vsig">tener la intenci&oacute;n de hacer algo</div><div class="vej">I didn&rsquo;t <b>mean to</b> step on your shoes.</div></div><div class="vfila"><div class="vpal">spill</div><div class="vsig">derramar un l&iacute;quido</div><div class="vej">I didn&rsquo;t mean to <b>spill</b> cold water on you.</div></div><div class="vfila"><div class="vpal">worry</div><div class="vsig">preocuparse</div><div class="vej">Don&rsquo;t <b>worry</b>. It was an accident.</div></div><div class="vfila"><div class="vpal">worried</div><div class="vsig">preocupado</div><div class="vej">You look <b>worried</b>.</div></div><div class="vfila"><div class="vpal">apologize</div><div class="vsig">disculparse, ofrecer una disculpa</div><div class="vej">I want to <b>apologize</b> to you.</div></div><div class="vfila"><div class="vpal">forgive</div><div class="vsig">perdonar</div><div class="vej">I hope you&rsquo;ll <b>forgive</b> me.</div></div></div><h4 class="sub2">Frases que se usan completas</h4><div class="vlista"><div class="vfila fr"><div class="vpal">It was an accident.</div><div class="vsig">Fue un accidente.</div><div class="vej"></div></div><div class="vfila fr"><div class="vpal">I didn&rsquo;t mean to&hellip;</div><div class="vsig">No fue mi intenci&oacute;n&hellip;</div><div class="vej"></div></div><div class="vfila fr"><div class="vpal">Don&rsquo;t worry.</div><div class="vsig">No te preocupes.</div><div class="vej"></div></div><div class="vfila fr"><div class="vpal">I forgive you.</div><div class="vsig">Te perdono.</div><div class="vej"></div></div><div class="vfila fr"><div class="vpal">I&rsquo;m ready to forget it.</div><div class="vsig">Ya lo doy por olvidado.</div><div class="vej"></div></div></div>
+
+<h3>El vocabulario en contexto &middot; read the dialogs <span class="reloj">6 min</span></h3>
+<div class="pg">Student Text &middot; p&aacute;gina 89 &middot;
+  <i>Repeat the new words; then read the dialogs.</i></div>
+<p class="nota2">En parejas, cada quien toma un papel. Los di&aacute;logos 1 y 2 son <b>accidentes</b>;
+  el 4 es una <b>falta</b>: f&iacute;jense en qu&eacute; cambia.</p>
+<div class="dia"><div class="dian">Dialog 1</div><div class="li a"><b>Jimmy</b><span>Don&rsquo;t <b>step on</b> my shoes. You&rsquo;ll get them dirty. I just washed these tennis shoes.</span></div><div class="li b"><b>Freddy</b><span>I&rsquo;m <b>sorry</b>. I didn&rsquo;t <b>mean to</b> step on your shoes. It&rsquo;s so crowded in here.</span></div></div><div class="dia"><div class="dian">Dialog 2</div><div class="li a"><b>Waitress</b><span>I&rsquo;m sorry. I didn&rsquo;t mean to <b>spill</b> cold water on you.</span></div><div class="li b"><b>Customer</b><span>Don&rsquo;t <b>worry</b>. It was an accident.</span></div></div><div class="dia"><div class="dian">Dialog 3</div><div class="li a"><b>Chuck</b><span>You look <b>worried</b>.</span></div><div class="li b"><b>Tony</b><span>I am. I didn&rsquo;t study for the test.</span></div><div class="li a"><b>Chuck</b><span>You should be worried. Mr. Ames said it was going to be a difficult test. Maybe next time you should study more and worry less.</span></div></div><div class="dia"><div class="dian">Dialog 4</div><div class="li a"><b>Dan</b><span>I need to talk to you, Tom. I want to <b>apologize</b> to you.</span></div><div class="li b"><b>Tom</b><span>You should. You really made me angry! I thought we were good friends. Why did you tell Bill that I took his wallet?</span></div><div class="li a"><b>Dan</b><span>Well, I saw you with his jacket at Cathy&rsquo;s party.</span></div><div class="li b"><b>Tom</b><span>Cathy asked me to hang up everyone&rsquo;s jackets. I was just taking them to the closet.</span></div><div class="li a"><b>Dan</b><span>Then, when Bill was getting ready to go, he said his wallet was gone.</span></div><div class="li b"><b>Tom</b><span>Yes, and when he got home, he realized it was in his gray pants hanging in his closet.</span></div><div class="li a"><b>Dan</b><span>I really am sorry. I hope you&rsquo;ll <b>forgive</b> me.</span></div><div class="li b"><b>Tom</b><span>Yes, I forgive you. I was very angry, but I&rsquo;m ready to forget it.</span></div></div>
+<h4 class="sub2">Escucha a hablantes reales</h4>
+<div class="yg"><button data-q="I didn't mean to">I didn't mean to</button><button data-q="I apologize for">I apologize for</button><button data-q="don't worry about it">don't worry about it</button><button data-q="forgive me">forgive me</button><button data-q="I'm sorry that">I'm sorry that</button></div>
+<div class="caja" id="ygcaja">Toca una frase de arriba para ver videos de hablantes reales.</div>
 
 </section>
 
 <section id="p2">
-<h2>Practice <span class="etapa">STAGE 2</span><span class="reloj">25 min</span></h2>
-<p class="sub">Los di&aacute;logos del libro y los ejercicios de la p&aacute;gina 90</p>
+<h2>Practice <span class="etapa">STAGE 2</span><span class="reloj">20 min</span></h2>
+<p class="sub">Dos juegos por equipos con el vocabulario de la lecci&oacute;n</p>
 
-<h3>Read the dialogs <span class="reloj">10 min</span></h3>
-<div class="pg">Student Text &middot; p&aacute;gina 89 &middot;
-  <i>Repeat the new words; then read the dialogs.</i></div>
-<p class="nota2">En parejas, cada quien toma un papel. Los di&aacute;logos 1 y 2 son <b>accidentes</b>;
-  el 4 es una <b>falta</b>: fíjense en qu&eacute; cambia.</p>
-<div class="dia"><div class="dian">Dialog 1</div><div class="li a"><b>Jimmy</b><span>Don&rsquo;t <b>step on</b> my shoes. You&rsquo;ll get them dirty. I just washed these tennis shoes.</span></div><div class="li b"><b>Freddy</b><span>I&rsquo;m <b>sorry</b>. I didn&rsquo;t <b>mean to</b> step on your shoes. It&rsquo;s so crowded in here.</span></div></div><div class="dia"><div class="dian">Dialog 2</div><div class="li a"><b>Waitress</b><span>I&rsquo;m sorry. I didn&rsquo;t mean to <b>spill</b> cold water on you.</span></div><div class="li b"><b>Customer</b><span>Don&rsquo;t <b>worry</b>. It was an accident.</span></div></div><div class="dia"><div class="dian">Dialog 3</div><div class="li a"><b>Chuck</b><span>You look <b>worried</b>.</span></div><div class="li b"><b>Tony</b><span>I am. I didn&rsquo;t study for the test.</span></div><div class="li a"><b>Chuck</b><span>You should be worried. Mr. Ames said it was going to be a difficult test. Maybe next time you should study more and worry less.</span></div></div><div class="dia"><div class="dian">Dialog 4</div><div class="li a"><b>Dan</b><span>I need to talk to you, Tom. I want to <b>apologize</b> to you.</span></div><div class="li b"><b>Tom</b><span>You should. You really made me angry! I thought we were good friends. Why did you tell Bill that I took his wallet?</span></div><div class="li a"><b>Dan</b><span>Well, I saw you with his jacket at Cathy&rsquo;s party.</span></div><div class="li b"><b>Tom</b><span>Cathy asked me to hang up everyone&rsquo;s jackets. I was just taking them to the closet.</span></div><div class="li a"><b>Dan</b><span>Then, when Bill was getting ready to go, he said his wallet was gone.</span></div><div class="li b"><b>Tom</b><span>Yes, and when he got home, he realized it was in his gray pants hanging in his closet.</span></div><div class="li a"><b>Dan</b><span>I really am sorry. I hope you&rsquo;ll <b>forgive</b> me.</span></div><div class="li b"><b>Tom</b><span>Yes, I forgive you. I was very angry, but I&rsquo;m ready to forget it.</span></div></div>
+<h3>Juego 1 &middot; Baamboozle de vocabulario <span class="reloj">10 min</span></h3>
+<div class="juego">
+  <div class="jt"><b>HCM L8 &middot; Apologies vocabulary (30)</b><br>
+  Opci&oacute;n m&uacute;ltiple por equipos: significado de las palabras, completar la frase con
+  <i>step on, spill, mean to, worry, apologize, forgive</i>, qu&eacute; contestar a una disculpa y los
+  adjetivos de la p. 90.</div>
+  <a class="jboton" href="https://www.baamboozle.com/mygames" target="_blank" rel="noopener">Abrir en Baamboozle</a>
+</div>
+<p class="nota2">Si prefieres el tablero propio, las mismas 30 est&aacute;n en Tile Rush como
+  <b>U8 &middot; Express (30) &middot; Apologies vocabulary</b>.</p>
 
-<h3>Videos &middot; escucha a hablantes reales <span class="reloj">3 min</span></h3>
-<div class="yg"><button data-q="I didn't mean to">I didn't mean to</button><button data-q="I apologize for">I apologize for</button><button data-q="don't worry about it">don't worry about it</button><button data-q="forgive me">forgive me</button><button data-q="I'm sorry that">I'm sorry that</button></div>
-<div class="caja" id="ygcaja">Toca una frase de arriba para ver videos de hablantes reales.</div>
+<h3>Juego 2 &middot; carrera de tarjetas QR con listening <span class="reloj">10 min</span></h3>
+<div class="juego">
+  <div class="jt"><b>&#11088; U8 &middot; Carrera (10) &middot; Apologies &middot; 6 con audio</b><br>
+  Seis di&aacute;logos cortos con dos voces, hombre y mujer: escuchan, leen la pregunta y levantan la
+  tarjeta girada hacia su respuesta. Luego cuatro de <i>put the sentence in order</i>.</div>
+  <a class="jboton" href="https://brianmartinezroz-alt.github.io/hcm-ingles-iv/juego.html" target="_blank" rel="noopener">Abrir Tile Rush</a>
+</div>
+<p class="nota2">En Tile Rush: <b>Questions</b> &rarr; elige el set U8 &middot; Carrera &rarr;
+  <b>Games</b> &rarr; el modo de tarjetas. El audio suena solo en cada pregunta.</p>
 
-<h3>Exercise A &mdash; match the expressions <span class="reloj">7 min</span></h3>
+<details class="refuerzo"><summary>Refuerzo del libro &middot; p&aacute;gina 90 (si sobra tiempo o de tarea)</summary>
+
+<h3>Exercise A &mdash; match the expressions</h3>
 <div class="pg">Student Text &middot; p&aacute;gina 90 &middot;
   <i>Match the expressions to the group of phrases that complete them.</i></div>
 <div class="expres"><b>Expressions</b><span class="ex">I&rsquo;m pleased (that) &hellip;</span><span class="ex">I hope (that) &hellip;</span><span class="ex">Sorry, I didn&rsquo;t mean to &hellip;</span><span class="ex">I&rsquo;m sorry (that) &hellip;</span></div><div class="bloque gr"><div class="grz"><span class="num2">1</span><select id="ea0"><option value="-1">&mdash; elige la expresi&oacute;n &mdash;</option><option value="0">I&rsquo;m pleased (that) &hellip;</option><option value="1">I hope (that) &hellip;</option><option value="2">Sorry, I didn&rsquo;t mean to &hellip;</option><option value="3">I&rsquo;m sorry (that) &hellip;</option></select></div><ul class="grd"><li>I hurt your feelings.</li><li>I spilled water on you.</li><li>I stepped on your toes.</li><li>I came in late.</li></ul></div><div class="bloque gr"><div class="grz"><span class="num2">2</span><select id="ea1"><option value="-1">&mdash; elige la expresi&oacute;n &mdash;</option><option value="0">I&rsquo;m pleased (that) &hellip;</option><option value="1">I hope (that) &hellip;</option><option value="2">Sorry, I didn&rsquo;t mean to &hellip;</option><option value="3">I&rsquo;m sorry (that) &hellip;</option></select></div><ul class="grd"><li>your mother is better.</li><li>you got a good grade on your test.</li><li>you came to the party.</li><li>I met you.</li></ul></div><div class="bloque gr"><div class="grz"><span class="num2">3</span><select id="ea2"><option value="-1">&mdash; elige la expresi&oacute;n &mdash;</option><option value="0">I&rsquo;m pleased (that) &hellip;</option><option value="1">I hope (that) &hellip;</option><option value="2">Sorry, I didn&rsquo;t mean to &hellip;</option><option value="3">I&rsquo;m sorry (that) &hellip;</option></select></div><ul class="grd"><li>you have a nice trip.</li><li>you get a good grade on your test.</li><li>you find your wallet.</li><li>I didn&rsquo;t hurt your feelings.</li></ul></div><div class="bloque gr"><div class="grz"><span class="num2">4</span><select id="ea3"><option value="-1">&mdash; elige la expresi&oacute;n &mdash;</option><option value="0">I&rsquo;m pleased (that) &hellip;</option><option value="1">I hope (that) &hellip;</option><option value="2">Sorry, I didn&rsquo;t mean to &hellip;</option><option value="3">I&rsquo;m sorry (that) &hellip;</option></select></div><ul class="grd"><li>step on your toes.</li><li>worry you.</li><li>spill water on you.</li><li>come in late.</li></ul></div>
 <div class="barra"><button class="principal" id="rev-ea">Revisar</button>
 <button class="secundario" id="res-ea">Limpiar</button><span class="marcador" id="sc-ea"></span></div>
 
-<h3>Exercise B &mdash; questions and answers <span class="reloj">5 min</span></h3>
+<h3>Exercise B &mdash; questions and answers</h3>
 <div class="pg">Student Text &middot; p&aacute;gina 90 &middot;
   <i>Use the adjectives in the box to make questions and answers.</i></div>
 <div class="adj"><button data-a="worried">worried</button><button data-a="sick">sick</button><button data-a="cold">cold</button><button data-a="sorry">sorry</button><button data-a="busy">busy</button><button data-a="upset">upset</button><button data-a="bored">bored</button><button data-a="interesting">interesting</button></div>
 <div class="tablero" id="tablero"><b>Student 1:</b> Are you sick?<br>
   <b>Student 2:</b> No, but I&rsquo;m very busy.</div>
 <div class="barra"><button class="principal" id="dado">Otro adjetivo</button></div>
-<p class="nota2">El libro trae el ejemplo con <i>sick</i> y <i>busy</i>. Toca un adjetivo o usa el
-  bot&oacute;n para que salga al azar, y practiquen por parejas.</p>
+</details>
 
 </section>
 

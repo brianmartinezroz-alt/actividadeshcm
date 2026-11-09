@@ -296,7 +296,12 @@ textarea{font:inherit;font-size:16.5px;width:100%;margin-top:10px;padding:12px 1
 .jboton{background:var(--vino);color:#fff;text-decoration:none;font-weight:800;border-radius:12px;
   padding:13px 22px;font-size:16.5px;white-space:nowrap}
 .bloque select{margin:0 4px}
-@media (max-width:820px){.dos{grid-template-columns:1fr}}
+.dadas{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:16px;background:#fff;border-radius:8px;padding:5px 12px;border:1.5px solid #e0cfa8}
+.bloque.gr{display:grid;grid-template-columns:1fr 1.25fr;gap:16px;align-items:center}
+.grz{display:flex;align-items:center;gap:4px}
+.grz .iz2{font-weight:600;font-size:16.5px}
+.bloque.gr select{width:100%}
+@media (max-width:820px){.dos,.bloque.gr{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -311,8 +316,8 @@ textarea{font:inherit;font-size:16.5px;width:100%;margin-top:10px;padding:12px 1
   <b>Sesi&oacute;n PPP de gram&aacute;tica (50 min).</b>
   <b>Presentation 12 min:</b> pregunta detonadora, el cuadro <i>apologize to</i> + persona /
   <i>forgive</i> + persona y el di&aacute;logo de Dan y Tom &middot;
-  <b>Practice 23 min:</b> pr&aacute;ctica r&aacute;pida <i>to</i> / nada / <i>for</i> y dos juegos por equipos
-  &middot;
+  <b>Practice 23 min:</b> pr&aacute;ctica r&aacute;pida <i>to</i> / nada / <i>for</i>, Exercises B y C de la p. 94,
+  di&aacute;logos de la p. 95 y Exercise B de la p. 96 &middot;
   <b>Production 10 min:</b> disculpas del Colegio por escrito, con respuesta del compa&ntilde;ero &middot;
   <b>Cierre 5 min:</b> errores frecuentes, metacognici&oacute;n y tarea.
 </div>
@@ -357,32 +362,41 @@ textarea{font:inherit;font-size:16.5px;width:100%;margin-top:10px;padding:12px 1
 
 <section id="p2">
 <h2>Practice <span class="etapa">STAGE 2</span><span class="reloj">23 min</span></h2>
-<p class="sub">Primero una revisi&oacute;n r&aacute;pida y despu&eacute;s los juegos por equipos</p>
+<p class="sub">Ejercicios del libro &middot; p&aacute;ginas 94, 95 y 96</p>
 
 <h3>Pr&aacute;ctica r&aacute;pida &middot; &iquest;<i>to</i>, nada o <i>for</i>? <span class="reloj">3 min</span></h3>
 <div class="bloque"><p class="linea2"><span class="num2">1</span>I want to apologize <select id="rp0"><option value="-1">&mdash; elige &mdash;</option><option value="0">to</option><option value="1">&mdash; (nada)</option><option value="2">for</option></select> you.</p></div><div class="bloque"><p class="linea2"><span class="num2">2</span>Please forgive <select id="rp1"><option value="-1">&mdash; elige &mdash;</option><option value="0">to</option><option value="1">&mdash; (nada)</option><option value="2">for</option></select> me.</p></div><div class="bloque"><p class="linea2"><span class="num2">3</span>She apologized <select id="rp2"><option value="-1">&mdash; elige &mdash;</option><option value="0">to</option><option value="1">&mdash; (nada)</option><option value="2">for</option></select> her teacher yesterday.</p></div><div class="bloque"><p class="linea2"><span class="num2">4</span>Forgive me <select id="rp3"><option value="-1">&mdash; elige &mdash;</option><option value="0">to</option><option value="1">&mdash; (nada)</option><option value="2">for</option></select> being late.</p></div><div class="bloque"><p class="linea2"><span class="num2">5</span>Did he apologize <select id="rp4"><option value="-1">&mdash; elige &mdash;</option><option value="0">to</option><option value="1">&mdash; (nada)</option><option value="2">for</option></select> the sergeant?</p></div><div class="bloque"><p class="linea2"><span class="num2">6</span>I forgive <select id="rp5"><option value="-1">&mdash; elige &mdash;</option><option value="0">to</option><option value="1">&mdash; (nada)</option><option value="2">for</option></select> you. Don&rsquo;t worry.</p></div><div class="bloque"><p class="linea2"><span class="num2">7</span>The waiter apologized <select id="rp6"><option value="-1">&mdash; elige &mdash;</option><option value="0">to</option><option value="1">&mdash; (nada)</option><option value="2">for</option></select> the customer.</p></div><div class="bloque"><p class="linea2"><span class="num2">8</span>Will you forgive <select id="rp7"><option value="-1">&mdash; elige &mdash;</option><option value="0">to</option><option value="1">&mdash; (nada)</option><option value="2">for</option></select> me?</p></div>
 <div class="barra"><button class="principal" id="rev-rp">Revisar</button>
 <button class="secundario" id="res-rp">Limpiar</button><span class="marcador" id="sc-rp"></span></div>
 
-<h3>Juego 1 &middot; Baamboozle de gram&aacute;tica <span class="reloj">10 min</span></h3>
-<div class="juego">
-  <div class="jt"><b>HCM L8 &middot; apologize to / forgive me (30)</b><br>
-  Opci&oacute;n m&uacute;ltiple por equipos: <i>to</i> o sin <i>to</i>, la oraci&oacute;n correcta, qui&eacute;n se
-  disculp&oacute; y qui&eacute;n perdon&oacute;, negativo, pregunta y el pasado <i>forgave</i>.</div>
-  <a class="jboton" href="https://www.baamboozle.com/mygames" target="_blank" rel="noopener">Abrir en Baamboozle</a>
-</div>
-<p class="nota2">Las mismas 30 est&aacute;n en Tile Rush como <b>U8 &middot; Express (30) &middot; apologize to /
-  forgive me</b>.</p>
+<h3>Exercise B &mdash; write a sentence with the words given <span class="reloj">6 min</span></h3>
+<div class="pg">Student Text &middot; p&aacute;gina 94 &middot;
+  <i>Write a sentence using the words given and the model.</i></div>
+<div class="regla"><b>Modelo:</b> apologize &middot; <b>(to someone)</b> &middot; for (not) verb + ing &nbsp;&mdash;
+  f&iacute;jate en el <b>to</b> antes de la persona.</div>
+<div class="bloque"><p><span class="num2">1</span><span class="dadas">waitress / apologize / Mary / spill / orange juice</span></p><input type="text" class="larga" id="eb0" autocomplete="off" spellcheck="false" placeholder="la oraci&oacute;n completa: apologized to + persona + for + -ing"><p class="pista" id="keb0">&#10003; The waitress apologized to Mary for spilling the orange juice.</p></div><div class="bloque"><p><span class="num2">2</span><span class="dadas">I / apologize / instructor / be / late</span></p><input type="text" class="larga" id="eb1" autocomplete="off" spellcheck="false" placeholder="la oraci&oacute;n completa: apologized to + persona + for + -ing"><p class="pista" id="keb1">&#10003; I apologized to the instructor for being late.</p></div><div class="bloque"><p><span class="num2">3</span><span class="dadas">Lora / apologize / brother / break / watch</span></p><input type="text" class="larga" id="eb2" autocomplete="off" spellcheck="false" placeholder="la oraci&oacute;n completa: apologized to + persona + for + -ing"><p class="pista" id="keb2">&#10003; Lora apologized to her brother for breaking his watch.</p></div><div class="bloque"><p><span class="num2">4</span><span class="dadas">Sam / apologize / boss / arrive / late</span></p><input type="text" class="larga" id="eb3" autocomplete="off" spellcheck="false" placeholder="la oraci&oacute;n completa: apologized to + persona + for + -ing"><p class="pista" id="keb3">&#10003; Sam apologized to his boss for arriving late.</p></div><div class="bloque"><p><span class="num2">5</span><span class="dadas">Cindy / apologize / sister / hurt / feelings</span></p><input type="text" class="larga" id="eb4" autocomplete="off" spellcheck="false" placeholder="la oraci&oacute;n completa: apologized to + persona + for + -ing"><p class="pista" id="keb4">&#10003; Cindy apologized to her sister for hurting her feelings.</p></div>
+<div class="barra"><button class="principal" id="rev-eb">Revisar</button>
+<button class="secundario" id="res-eb">Limpiar</button><span class="marcador" id="sc-eb"></span></div>
 
-<h3>Juego 2 &middot; carrera de tarjetas QR con listening <span class="reloj">10 min</span></h3>
-<div class="juego">
-  <div class="jt"><b>&#11088; U8 &middot; Carrera (10) &middot; apologize to / forgive me &middot; 6 con audio</b><br>
-  Seis di&aacute;logos cortos con voz de hombre y de mujer: a qui&eacute;n se disculp&oacute;, qui&eacute;n perdon&oacute;
-  y por qu&eacute;. Despu&eacute;s cuatro de <i>put the sentence in order</i>.</div>
-  <a class="jboton" href="https://brianmartinezroz-alt.github.io/hcm-ingles-iv/juego.html" target="_blank" rel="noopener">Abrir Tile Rush</a>
-</div>
-<p class="nota2">En Tile Rush: <b>Questions</b> &rarr; elige el set U8 &middot; Carrera &middot; apologize to
-  &rarr; <b>Games</b> &rarr; el modo de tarjetas.</p>
+<h3>Exercise C &mdash; question and answer with <i>apologize</i> <span class="reloj">5 min</span></h3>
+<div class="pg">Student Text &middot; p&aacute;gina 94 &middot;
+  <i>Work with a partner. Write a question and answer with apologize.</i></div>
+<div class="bloque"><p><span class="num2">1</span>The travel agent lost our airline tickets. He apologized.</p><textarea rows="2" placeholder="Student 1 (question)&#10;Student 2 (answer)"></textarea><p class="pista ec" id="kec0">&#10003; <b>Q:</b> What did the travel agent apologize for?<br>&nbsp;&nbsp;&nbsp;<b>A:</b> He apologized for losing our airline tickets.</p></div><div class="bloque"><p><span class="num2">2</span>The barber cut Roy&rsquo;s ear. He is apologizing.</p><textarea rows="2" placeholder="Student 1 (question)&#10;Student 2 (answer)"></textarea><p class="pista ec" id="kec1">&#10003; <b>Q:</b> What is the barber apologizing for?<br>&nbsp;&nbsp;&nbsp;<b>A:</b> He&rsquo;s apologizing for cutting Roy&rsquo;s ear.</p></div><div class="bloque"><p><span class="num2">3</span>Sara was sleeping in class. She apologized to the teacher.</p><textarea rows="2" placeholder="Student 1 (question)&#10;Student 2 (answer)"></textarea><p class="pista ec" id="kec2">&#10003; <b>Q:</b> What did Sara apologize to the teacher for?<br>&nbsp;&nbsp;&nbsp;<b>A:</b> She apologized for sleeping in class.</p></div>
+<div class="barra"><button class="secundario" id="ver-ec">Ver los modelos</button></div>
+
+<h3>Exercise A &mdash; repeat and read the dialogs <span class="reloj">4 min</span></h3>
+<div class="pg">Student Text &middot; p&aacute;gina 95 &middot;
+  <i>Repeat the dialogs; then read the dialog with a partner.</i></div>
+<p class="nota2">En parejas. En el di&aacute;logo 2 aparece <b>forgive me</b> y su respuesta <b>I&rsquo;ll forgive you</b>;
+  en el 3, <b>apologize</b>. Identifiquen qui&eacute;n se disculpa y qui&eacute;n perdona.</p>
+<div class="dia"><div class="dian">Dialog 1</div><div class="li a"><b>Waiter</b><span>I&rsquo;m sorry, ma&rsquo;am. Did I get any coffee on you?</span></div><div class="li b"><b>Amy</b><span>No, don&rsquo;t worry about it. Nothing spilled on me.</span></div></div><div class="dia"><div class="dian">Dialog 2</div><div class="li a"><b>Mike</b><span>Can you <b>forgive me</b>, Sue? I didn&rsquo;t mean to hurt your feelings.</span></div><div class="li b"><b>Sue</b><span>Sure, I know that you didn&rsquo;t mean it. Yes, <b>I&rsquo;ll forgive you</b>.</span></div></div><div class="dia"><div class="dian">Dialog 3</div><div class="li a"><b>Simon</b><span>I want to <b>apologize</b> for not calling you yesterday. I was very busy all day.</span></div><div class="li b"><b>Roger</b><span>That&rsquo;s all right. I&rsquo;m glad you had time to call me today.</span></div></div><div class="dia"><div class="dian">Dialog 4</div><div class="li a"><b>Jim</b><span>Excuse me. I didn&rsquo;t realize that you were sitting here. I&rsquo;ll move over.</span></div><div class="li b"><b>Carla</b><span>No problem. Take your time.</span></div></div><div class="dia"><div class="dian">Dialog 5</div><div class="li a"><b>Betty</b><span>I&rsquo;m sorry I&rsquo;m late. I hope you didn&rsquo;t wait long.</span></div><div class="li b"><b>Sandy</b><span>That&rsquo;s okay. I arrived just a few minutes ago.</span></div></div>
+
+<h3>Exercise B &mdash; match the response with the apology <span class="reloj">5 min</span></h3>
+<div class="pg">Student Text &middot; p&aacute;gina 96 &middot;
+  <i>Match the response on the right with the apology on the left.</i></div>
+<div class="bloque gr"><div class="grz"><span class="num2">1</span><span class="iz2">I&rsquo;m sorry I&rsquo;m late. The traffic was very bad.</span></div><select id="m960"><option value="-1">&mdash; elige la respuesta &mdash;</option><option value="0">a) That&rsquo;s all right. But be more careful.</option><option value="1">b) I understand. Just watch your words next time.</option><option value="2">c) Don&rsquo;t worry about it. Sometimes I forget names too.</option><option value="3">d) That&rsquo;s okay. You may need to think about leaving earlier from home.</option><option value="4">e) No problem. We&rsquo;ll take another table.</option></select></div><div class="bloque gr"><div class="grz"><span class="num2">2</span><span class="iz2">Excuse me. I didn&rsquo;t mean to step on your foot.</span></div><select id="m961"><option value="-1">&mdash; elige la respuesta &mdash;</option><option value="0">a) That&rsquo;s all right. But be more careful.</option><option value="1">b) I understand. Just watch your words next time.</option><option value="2">c) Don&rsquo;t worry about it. Sometimes I forget names too.</option><option value="3">d) That&rsquo;s okay. You may need to think about leaving earlier from home.</option><option value="4">e) No problem. We&rsquo;ll take another table.</option></select></div><div class="bloque gr"><div class="grz"><span class="num2">3</span><span class="iz2">I&rsquo;m sorry. I didn&rsquo;t mean to hurt your feelings.</span></div><select id="m962"><option value="-1">&mdash; elige la respuesta &mdash;</option><option value="0">a) That&rsquo;s all right. But be more careful.</option><option value="1">b) I understand. Just watch your words next time.</option><option value="2">c) Don&rsquo;t worry about it. Sometimes I forget names too.</option><option value="3">d) That&rsquo;s okay. You may need to think about leaving earlier from home.</option><option value="4">e) No problem. We&rsquo;ll take another table.</option></select></div><div class="bloque gr"><div class="grz"><span class="num2">4</span><span class="iz2">I apologize. I didn&rsquo;t realize this was your table.</span></div><select id="m963"><option value="-1">&mdash; elige la respuesta &mdash;</option><option value="0">a) That&rsquo;s all right. But be more careful.</option><option value="1">b) I understand. Just watch your words next time.</option><option value="2">c) Don&rsquo;t worry about it. Sometimes I forget names too.</option><option value="3">d) That&rsquo;s okay. You may need to think about leaving earlier from home.</option><option value="4">e) No problem. We&rsquo;ll take another table.</option></select></div><div class="bloque gr"><div class="grz"><span class="num2">5</span><span class="iz2">I apologize. I just couldn&rsquo;t remember your name.</span></div><select id="m964"><option value="-1">&mdash; elige la respuesta &mdash;</option><option value="0">a) That&rsquo;s all right. But be more careful.</option><option value="1">b) I understand. Just watch your words next time.</option><option value="2">c) Don&rsquo;t worry about it. Sometimes I forget names too.</option><option value="3">d) That&rsquo;s okay. You may need to think about leaving earlier from home.</option><option value="4">e) No problem. We&rsquo;ll take another table.</option></select></div>
+<div class="barra"><button class="principal" id="rev-m96">Revisar</button>
+<button class="secundario" id="res-m96">Limpiar</button><span class="marcador" id="sc-m96"></span></div>
 
 </section>
 
@@ -406,14 +420,14 @@ textarea{font:inherit;font-size:16.5px;width:100%;margin-top:10px;padding:12px 1
 
 <h3>Cierre &middot; metacognici&oacute;n <span class="reloj">5 min</span></h3>
 <div class="deto">&iquest;Por qu&eacute; <i>apologize</i> lleva <i>to</i> y <i>forgive</i> no?<br>
-  &iquest;Qu&eacute; error se repiti&oacute; m&aacute;s en el juego?<br>
+  &iquest;Qu&eacute; error se repiti&oacute; m&aacute;s en los ejercicios?<br>
   &iquest;A qui&eacute;n le debes una disculpa esta semana, en ingl&eacute;s?</div>
 <p class="nota2"><b>Tarea.</b> Escribir cuatro oraciones con <i>apologize to</i> y cuatro con
   <i>forgive</i>, y repasar en tinyurl.com/actividadeshcm.</p>
 
 </section>
 </main>
-<script id="datos" type="application/json">{"rap": [0, 1, 0, 2, 0, 1, 0, 1]}</script>
+<script id="datos" type="application/json">{"rap": [0, 1, 0, 2, 0, 1, 0, 1], "eb": [["the waitress apologized to mary for spilling the orange juice", "the waitress apologized to mary for spilling orange juice", "the waitress apologized to mary for spilling her orange juice"], ["i apologized to the instructor for being late", "i apologize to the instructor for being late", "i apologized to my instructor for being late"], ["lora apologized to her brother for breaking his watch", "lora apologized to her brother for breaking the watch", "lora apologized to her brother for breaking her brothers watch"], ["sam apologized to his boss for arriving late", "sam apologized to the boss for arriving late"], ["cindy apologized to her sister for hurting her feelings", "cindy apologized to her sister for hurting her sisters feelings"]], "m96": [3, 0, 1, 4, 2]}</script>
 <script>
 var D = JSON.parse(document.getElementById('datos').textContent);
 
@@ -493,6 +507,11 @@ function limpiaSel(pre, claves, salida){
 <script>
 document.getElementById('rev-rp').onclick = function(){ revisaSel('rp', D.rap, 'sc-rp'); };
 document.getElementById('res-rp').onclick = function(){ limpiaSel('rp', D.rap, 'sc-rp'); };
+document.getElementById('rev-eb').onclick = function(){ revisaTexto('eb', D.eb, 'sc-eb'); };
+document.getElementById('res-eb').onclick = function(){ limpiaTexto('eb', D.eb, 'sc-eb'); };
+(function(){var b=document.getElementById('ver-ec'),ab=false;b.onclick=function(){ab=!ab;[].forEach.call(document.querySelectorAll('.pista.ec'),function(p){p.classList.toggle('ver',ab);});b.textContent=ab?'Ocultar modelos':'Ver los modelos';};})();
+document.getElementById('rev-m96').onclick = function(){ revisaSel('m96', D.m96, 'sc-m96'); };
+document.getElementById('res-m96').onclick = function(){ limpiaSel('m96', D.m96, 'sc-m96'); };
 </script>
 <script>
 /* ── zoom de la página: pasos más chicos que los del navegador ── */

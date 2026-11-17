@@ -311,7 +311,7 @@ body.sinraton, body.sinraton *{cursor:none !important}
     if(!archivo) return;
     lecActual = archivo;
     cargando = true; espera = [];
-    marco.src = archivo;
+    marco.src = archivo + (archivo.indexOf('?')<0 ? '?v=' : '&v=') + Date.now();
     blec.textContent = archivo.replace('.html','').replace(/-/g,' ');
     aviso.style.display='none';
   }
